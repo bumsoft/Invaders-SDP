@@ -593,13 +593,13 @@ public final class DrawManager {
 			backBufferGraphics.setColor(Color.GREEN);
 		else
 			backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen, item1String + "level: "+ s_i.getBullet_speed(),
+		drawCenteredRegularString(screen, item1String + "  LV. "+ s_i.getBullet_speed(),
 				screen.getHeight() / 3 * 2);
 		if (option == 2)
 			backBufferGraphics.setColor(Color.GREEN);
 		else
 			backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen, item2String+ "level: "+ s_i.getShot_freq(), screen.getHeight()
+		drawCenteredRegularString(screen, item2String+ "  LV. "+ s_i.getShot_freq(), screen.getHeight()
 				/ 3 * 2 + fontRegularMetrics.getHeight() * 2);
 		if (option == 3)
 			backBufferGraphics.setColor(Color.GREEN);
