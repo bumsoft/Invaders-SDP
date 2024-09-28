@@ -26,6 +26,7 @@ public class Ship extends Entity {
 	// C: bullet speed; -12 / shooting interval; 800
 	// ex. 코인으로 한 번 압그레이드 시킬 때
 	// bulletspeed * 1.2 / shooting interval * 0.9 - 따로따로 업그레이드
+	// 업그레이드는 최대 3번 까지만 허용
 
 	/** Time between shots. */
 	// Shooting interval, bullet speed 값 보면서 변경
