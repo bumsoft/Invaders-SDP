@@ -14,8 +14,21 @@ import engine.DrawManager.SpriteType;
  * 
  */
 public class Ship extends Entity {
+	// 게임 시작 시 플레이어가 함선을 선택하고 시작하는 방향으로 갈 듯. 
+	// 함선별로 초기 값이 달라서 다른 팀에서 제공해주면 shooting interval, bullet speed 우리가 재설정
+	// 단계별 업그레이드 수치를 얼마로 할지. - 몇 단계를 max로 할 지
+	//(ship 엔티티의 SHOOTING_INTERVAL & BULLET_SPEED 계속 수정 및 플레이 해보면서 값 정하기)
+
+	// 함선 종류는 여러개, 코인으로 함선의 총알 속도, 슈팅 인터벌 업그레이드
+	// 함선 : A, B, C
+	// A: bullet speed; -6 / shooting interval; 750
+	// B: bullet speed; -4 / shooting interval; 700
+	// C: bullet speed; -12 / shooting interval; 800
+	// ex. 코인으로 한 번 압그레이드 시킬 때
+	// bulletspeed * 1.2 / shooting interval * 0.9 - 따로따로 업그레이드
 
 	/** Time between shots. */
+	// Shooting interval, bullet speed 값 보면서 변경
 	private static final int SHOOTING_INTERVAL = 750;
 	/** Speed of the bullets shot by the ship. */
 	private static final int BULLET_SPEED = -6;
