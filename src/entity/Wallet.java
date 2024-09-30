@@ -38,6 +38,46 @@ public class Wallet {
         return coin;
     }
 
+    public int getBullet_lv()
+    {
+        return bullet_lv;
+    }
+
+    public int getShot_lv()
+    {
+        return shot_lv;
+    }
+
+    public int getLives_lv()
+    {
+        return lives_lv;
+    }
+
+    public int getCoin_lv()
+    {
+        return coin_lv;
+    }
+
+    public void setBullet_lv(int bullet_lv)
+    {
+        this.bullet_lv = bullet_lv;
+    }
+
+    public void setShot_lv(int shot_lv)
+    {
+        this.shot_lv = shot_lv;
+    }
+
+    public void setLives_lv(int lives_lv)
+    {
+        this.lives_lv = lives_lv;
+    }
+
+    public void setCoin_lv(int coin_lv)
+    {
+        this.coin_lv = coin_lv;
+    }
+
     public boolean deposit(int amount)
     {
         if(amount <= 0) return false;
