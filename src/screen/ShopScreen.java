@@ -43,14 +43,12 @@ public class ShopScreen extends Screen {
     /**
      * Starts the action.
      *
-     * @return Next screen code.
+     * @return Next screen code(MainMenu).
      */
     public final int run() {
         super.run();
-        //스페이스 입력으로, Screen.run()에서 this.update()실행이 끝나고, Screen.run()이 종료되면 여기로 나옴
 
-        //위에서 바뀐 returnCode로 다음 스크린번호 반환
-        return 1;
+        return 1; //메뉴화면으로
     }
 
     /**
@@ -128,9 +126,6 @@ public class ShopScreen extends Screen {
             this.selected_item--;
     }
 
-    /**
-     * Draws the elements associated with the screen.
-     */
     private void draw() {
         drawManager.initDrawing(this);
 
