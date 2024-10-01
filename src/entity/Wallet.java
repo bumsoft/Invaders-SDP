@@ -18,10 +18,10 @@ public class Wallet {
     public Wallet()
     {
         this.coin = 0;
-        this.bullet_lv = 1;
-        this.shot_lv = 1;
-        this.lives_lv = 1;
-        this.coin_lv = 1;
+        this.bullet_lv = 0;
+        this.shot_lv = 0;
+        this.lives_lv = 0;
+        this.coin_lv = 0;
     }
 
     public Wallet(int coin, int bullet_lv, int shot_lv, int lives_lv, int coin_lv)
