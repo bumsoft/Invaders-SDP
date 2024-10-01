@@ -301,15 +301,15 @@ public final class FileManager {
 
 			logger.info("Saving user wallet.");
 
-			bufferedWriter.write(newWallet.getCoin());
+			bufferedWriter.write(newWallet.getCoin() + "");
 			bufferedWriter.newLine();
-			bufferedWriter.write(newWallet.getBullet_lv());
+			bufferedWriter.write(newWallet.getBullet_lv() + "");
 			bufferedWriter.newLine();
-			bufferedWriter.write(newWallet.getShot_lv());
+			bufferedWriter.write(newWallet.getShot_lv() + "");
 			bufferedWriter.newLine();
-			bufferedWriter.write(newWallet.getLives_lv());
+			bufferedWriter.write(newWallet.getLives_lv() + "");
 			bufferedWriter.newLine();
-			bufferedWriter.write(newWallet.getCoin_lv());
+			bufferedWriter.write(newWallet.getCoin_lv() + "");
 			bufferedWriter.newLine();
 
 		} finally {

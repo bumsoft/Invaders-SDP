@@ -1,5 +1,9 @@
 package entity;
 
+import engine.Core;
+
+import java.io.IOException;
+
 public class Wallet {
     private int coin;
 
@@ -101,6 +105,13 @@ public class Wallet {
     //Core.fileManager 등 활용해서, 현재 지갑상태를 파일에 저장하는 메서드 구현필요
     public boolean writeWallet()
     {
+        Wallet newWallet = new Wallet(getCoin(), getBullet_lv(), getShot_lv(), getLives_lv(), getCoin_lv());
+        try {
+            Core.getFileManager().saveWallet(newWallet);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+            //logger.warning("Couldn't load high scores!");
+        }
         return true;
     }
 
