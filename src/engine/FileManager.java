@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import engine.DrawManager.SpriteType;
+import entity.Wallet;
 
 /**
  * Manages files used in the application.
@@ -172,7 +173,7 @@ public final class FileManager {
 
 	/**
 	 * Loads high scores from file, and returns a sorted list of pairs score -
-	 * value.
+	 * value
 	 * 
 	 * @return Sorted list of scores - players.
 	 * @throws IOException
@@ -268,6 +269,48 @@ public final class FileManager {
 				bufferedWriter.newLine();
 				savedCount++;
 			}
+
+		} finally {
+			if (bufferedWriter != null)
+				bufferedWriter.close();
+		}
+	}
+
+	public void saveWallet(final Wallet newWallet)
+			throws IOException {
+		OutputStream outputStream = null;
+		BufferedWriter bufferedWriter = null;
+
+		try {
+			String jarPath = FileManager.class.getProtectionDomain()
+					.getCodeSource().getLocation().getPath();
+			jarPath = URLDecoder.decode(jarPath, "UTF-8"); // 현재 파일 실행 경로
+
+			String walletPath = new File(jarPath).getParent(); // 상위 파일 경로
+			walletPath += File.separator; // 파일 경로에 '/' 또는 '\' 추가( 환경마다 다름
+			walletPath += "wallet";
+
+			File walletFile = new File(walletPath);
+
+			if (!walletFile.exists())
+				walletFile.createNewFile(); //파일이 없으면 새로 만듦
+
+			outputStream = new FileOutputStream(walletFile); //덮어쓰기
+			bufferedWriter = new BufferedWriter(new OutputStreamWriter(
+					outputStream, Charset.forName("UTF-8")));
+
+			logger.info("Saving user wallet.");
+
+			bufferedWriter.write(newWallet.getCoin());
+			bufferedWriter.newLine();
+			bufferedWriter.write(newWallet.getBullet_lv());
+			bufferedWriter.newLine();
+			bufferedWriter.write(newWallet.getShot_lv());
+			bufferedWriter.newLine();
+			bufferedWriter.write(newWallet.getLives_lv());
+			bufferedWriter.newLine();
+			bufferedWriter.write(newWallet.getCoin_lv());
+			bufferedWriter.newLine();
 
 		} finally {
 			if (bufferedWriter != null)
