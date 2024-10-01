@@ -169,6 +169,8 @@ public final class Core {
 				wallet.deposit(gameState.getScore()/10);
 				LOGGER.info("Total coin: " + wallet.getCoin());
 
+				wallet.writeWallet();
+
 				returnCode = frame.setScreen(currentScreen);
 				LOGGER.info("Closing score screen.");
 				break;
