@@ -66,21 +66,25 @@ public class Wallet {
     public void setBullet_lv(int bullet_lv)
     {
         this.bullet_lv = bullet_lv;
+        writeWallet();
     }
 
     public void setShot_lv(int shot_lv)
     {
         this.shot_lv = shot_lv;
+        writeWallet();
     }
 
     public void setLives_lv(int lives_lv)
     {
         this.lives_lv = lives_lv;
+        writeWallet();
     }
 
     public void setCoin_lv(int coin_lv)
     {
         this.coin_lv = coin_lv;
+        writeWallet();
     }
 
     public boolean deposit(int amount)
@@ -92,6 +96,7 @@ public class Wallet {
             return true;
         }
         coin += amount;
+        writeWallet();
         return true;
     }
 
@@ -100,6 +105,7 @@ public class Wallet {
         if(amount <= 0) return false;
         if(coin - amount < 0) return false;
         coin -= amount;
+        writeWallet();
         return true;
     }
 
