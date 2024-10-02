@@ -104,11 +104,11 @@ public class Wallet {
 
     //Core.fileManager 등 활용해서, 현재 지갑상태를 파일에 저장하는 메서드 구현필요
     //저장방식: coin, bullet_lv, shot_lv, lives_lv, coin_lv 순으로 한줄씩 저장
-    public boolean writeWallet()
+    private boolean writeWallet()
     {
-        Wallet newWallet = new Wallet(getCoin(), getBullet_lv(), getShot_lv(), getLives_lv(), getCoin_lv());
+//        Wallet newWallet = new Wallet(getCoin(), getBullet_lv(), getShot_lv(), getLives_lv(), getCoin_lv());
         try {
-            Core.getFileManager().saveWallet(newWallet);
+            Core.getFileManager().saveWallet(this);
         } catch (IOException e) {
             throw new RuntimeException(e);
             //logger.warning("Couldn't load high scores!");
