@@ -317,4 +317,22 @@ public final class FileManager {
 				bufferedWriter.close();
 		}
 	}
+
+	public BufferedReader loadWallet() throws IOException {
+		String jarPath = FileManager.class.getProtectionDomain()
+				.getCodeSource().getLocation().getPath();
+		jarPath = URLDecoder.decode(jarPath, "UTF-8");
+
+		String walletPath = new File(jarPath).getParent();
+		walletPath += File.separator;
+		walletPath += "wallet"; // 지갑 파일 경로
+
+		File walletFile = new File(walletPath);
+		if (!walletFile.exists()) {
+			return null; // 파일이 없으면 null 반환
+		}
+
+		InputStream inputStream = new FileInputStream(walletFile);
+		return new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
+	}
 }
