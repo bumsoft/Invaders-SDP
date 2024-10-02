@@ -4,8 +4,10 @@ import engine.Core;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 public class Wallet {
+    private static Logger logger;
     private int coin;
 
     //bullet speed level
@@ -27,6 +29,7 @@ public class Wallet {
         this.shot_lv = 0;
         this.lives_lv = 0;
         this.coin_lv = 0;
+        logger = Core.getLogger();
     }
 
     public Wallet(int coin, int bullet_lv, int shot_lv, int lives_lv, int coin_lv)
@@ -36,6 +39,7 @@ public class Wallet {
         this.shot_lv = shot_lv;
         this.lives_lv = lives_lv;
         this.coin_lv = coin_lv;
+        logger = Core.getLogger();
     }
 
     public int getCoin()
@@ -67,24 +71,28 @@ public class Wallet {
     {
         this.bullet_lv = bullet_lv;
         writeWallet();
+        logger.info("Upgrade Bullet Speed " + (bullet_lv-1) + "to " + bullet_lv);
     }
 
     public void setShot_lv(int shot_lv)
     {
         this.shot_lv = shot_lv;
         writeWallet();
+        logger.info("Upgrade Shop Frequency  " + (shot_lv-1) + "to " + shot_lv);
     }
 
     public void setLives_lv(int lives_lv)
     {
         this.lives_lv = lives_lv;
         writeWallet();
+        logger.info("Upgrade Additional Lives " + (lives_lv-1) + "to " + lives_lv);
     }
 
     public void setCoin_lv(int coin_lv)
     {
         this.coin_lv = coin_lv;
         writeWallet();
+        logger.info("Upgrade Gain Coin " + (coin_lv-1) + "to " + coin_lv);
     }
 
     public boolean deposit(int amount)
@@ -97,15 +105,21 @@ public class Wallet {
         }
         coin += amount;
         writeWallet();
+        logger.info("Deposit completed. Your coin: " + this.coin);
         return true;
     }
 
     public boolean withdraw(int amount)
     {
         if(amount <= 0) return false;
-        if(coin - amount < 0) return false;
+        if(coin - amount < 0)
+        {
+            logger.info("Insufficient coin");
+            return false;
+        }
         coin -= amount;
         writeWallet();
+        logger.info("Withdraw completed. Your coin: " + this.coin);
         return true;
     }
 
@@ -113,12 +127,10 @@ public class Wallet {
     //저장방식: coin, bullet_lv, shot_lv, lives_lv, coin_lv 순으로 한줄씩 저장
     private boolean writeWallet()
     {
-//        Wallet newWallet = new Wallet(getCoin(), getBullet_lv(), getShot_lv(), getLives_lv(), getCoin_lv());
         try {
             Core.getFileManager().saveWallet(this);
         } catch (IOException e) {
             throw new RuntimeException(e);
-            //logger.warning("Couldn't load high scores!");
         }
         return true;
     }
@@ -134,7 +146,8 @@ public class Wallet {
 
             // 파일이 존재하지 않으면 기본값으로 지갑 생성
             if (bufferedReader == null) {
-                System.out.println("Wallet file does not exist, initializing with default values.");
+                logger.info("Wallet file does not exist, initializing with default values.");
+
                 return new Wallet();
             }
 
@@ -150,7 +163,7 @@ public class Wallet {
 
         } catch (IOException | NumberFormatException e) {
             // 파일을 읽지 못하거나 손상된 경우 기본값으로 반환
-            System.out.println("Error loading wallet data. Initializing with default values.");
+            logger.info("Error loading wallet data. Initializing with default values.");
             return new Wallet();
         } finally {
             // 파일 리소스 해제
