@@ -2,6 +2,7 @@ package entity;
 
 import engine.Core;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 
 public class Wallet {
@@ -118,8 +119,43 @@ public class Wallet {
 
     //Core.fileManager 등 활용해, 파일에 적힌 정보로 지갑 생성하는 메서드 구현필요
     //만약 파일이 손상되어 읽을 수 없다면 초기값(0)으로 생성하기
-    public static Wallet getWallet()
-    {
-        return new Wallet();
+    public static Wallet getWallet() {
+        BufferedReader bufferedReader = null;
+
+        try {
+            // FileManager를 통해 파일에서 지갑 데이터를 불러옴
+            bufferedReader = Core.getFileManager().loadWallet();
+
+            // 파일이 존재하지 않으면 기본값으로 지갑 생성
+            if (bufferedReader == null) {
+                System.out.println("Wallet file does not exist, initializing with default values.");
+                return new Wallet();
+            }
+
+            // 파일에서 각 줄을 읽어와서 값 설정
+            int coin = Integer.parseInt(bufferedReader.readLine());
+            int bullet_lv = Integer.parseInt(bufferedReader.readLine());
+            int shot_lv = Integer.parseInt(bufferedReader.readLine());
+            int lives_lv = Integer.parseInt(bufferedReader.readLine());
+            int coin_lv = Integer.parseInt(bufferedReader.readLine());
+
+            // 읽어온 값으로 새로운 Wallet 객체를 생성해 반환
+            return new Wallet(coin, bullet_lv, shot_lv, lives_lv, coin_lv);
+
+        } catch (IOException | NumberFormatException e) {
+            // 파일을 읽지 못하거나 손상된 경우 기본값으로 반환
+            System.out.println("Error loading wallet data. Initializing with default values.");
+            return new Wallet();
+        } finally {
+            // 파일 리소스 해제
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
+
 }
