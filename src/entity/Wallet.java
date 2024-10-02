@@ -128,7 +128,7 @@ public class Wallet {
 
             // 파일이 존재하지 않으면 기본값으로 지갑 생성
             if (bufferedReader == null) {
-                System.out.println("Wallet file does not exist, initializing with default values.");
+                Core.getLogger().warning("Wallet file does not exist, initializing with default values.");
                 return new Wallet();
             }
 
@@ -143,8 +143,8 @@ public class Wallet {
             return new Wallet(coin, bullet_lv, shot_lv, lives_lv, coin_lv);
 
         } catch (IOException | NumberFormatException e) {
-            // 파일을 읽지 못하거나 손상된 경우 기본값으로 반환
-            System.out.println("Error loading wallet data. Initializing with default values.");
+            // 파일을 읽지 못하거나 손상된 경우 기본값으로 반환, 에러 로깅
+            Core.getLogger().severe("Error loading wallet data: " + e.getMessage());
             return new Wallet();
         } finally {
             // 파일 리소스 해제
@@ -152,7 +152,7 @@ public class Wallet {
                 try {
                     bufferedReader.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Core.getLogger().severe("Error closing wallet file: " + e.getMessage());
                 }
             }
         }
