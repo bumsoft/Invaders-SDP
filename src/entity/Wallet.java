@@ -130,7 +130,8 @@ public class Wallet {
         try {
             Core.getFileManager().saveWallet(this);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+//            throw new RuntimeException(e);
+            logger.warning("Couldn't load wallet!");
         }
         return true;
     }
