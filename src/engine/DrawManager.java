@@ -562,25 +562,36 @@ public final class DrawManager {
 	}
 
 	//목록 위치좀 조정할필요 있을듯
-	public void drawShop(final Screen screen, final int option, final Wallet wallet, final boolean lesscoin, final boolean overlv) {
+	public void drawShop(final Screen screen, final int option, final Wallet wallet, final Cooldown money_alertcooldown, final Cooldown max_alertcooldown) {
 
 		String shopString = "Shop";
 		String instructionsString = "COIN: " + wallet.getCoin();
 		String exitinfo = "press esc to exit";
 		String coststring = "cost";
-		String costlv0 = "LV1 : 2000";
-		String costlv1 = "LV2 : 4000";
-		String costlv2 = "LV3 : 8000";
+		String[] costs = new String[] {"0", "2000", "4000", "8000", "MAX LEVEL"};
 
 		backBufferGraphics.setColor(Color.GRAY);
 		drawCenteredRegularString(screen,exitinfo,(screen.getHeight()/20)*5);
 		drawCenteredRegularString(screen, instructionsString,
 				(screen.getHeight() / 20)*6);
 		drawCenteredRegularString(screen,coststring,screen.getHeight() /20 *8 );
-		drawCenteredRegularString(screen,costlv0,screen.getHeight() /20 *9 );
-		drawCenteredRegularString(screen,costlv1,screen.getHeight() /20 *10 );
-		drawCenteredRegularString(screen,costlv2,screen.getHeight() /20 *11 );
 
+		if(option==1)
+		{
+			drawCenteredRegularString(screen,costs[wallet.getBullet_lv()],screen.getHeight() /20 *9 );
+		}
+		else if(option==2)
+		{
+			drawCenteredRegularString(screen,costs[wallet.getShot_lv()],screen.getHeight() /20 *9 );
+		}
+		else if(option==3)
+		{
+			drawCenteredRegularString(screen,costs[wallet.getLives_lv()],screen.getHeight() /20 *9 );
+		}
+		else if(option==4)
+		{
+			drawCenteredRegularString(screen,costs[wallet.getCoin_lv()],screen.getHeight() /20 *9 );
+		}
 
 		backBufferGraphics.setColor(Color.GREEN);
 		drawCenteredBigString(screen, shopString, screen.getHeight() / 20*3);
@@ -619,25 +630,20 @@ public final class DrawManager {
 		drawCenteredRegularString(screen, item4String+ " LV. "+ wallet.getCoin_lv() , screen.getHeight() / 3
 				* 2 + fontRegularMetrics.getHeight() * 6);
 
-		if (lesscoin)
+		if (!money_alertcooldown.checkFinished())
 		{
 			backBufferGraphics.setColor(Color.red);
-			drawCenteredRegularString(screen,"Less coin", screen.getHeight()/20*13);
-		}
-		else
-		{
+			backBufferGraphics.fillRect((screen.getWidth()-300)/2, (screen.getHeight()-100)/2, 300, 80); // 알림창 배경색
 			backBufferGraphics.setColor(Color.black);
-			drawCenteredRegularString(screen,"Less coin", screen.getHeight()/20*13);
-			if(overlv)
-			{
-				backBufferGraphics.setColor(Color.red);
-				drawCenteredRegularString(screen,"Current Max Level", screen.getHeight()/20*13);
-			}
-			else
-			{
-				backBufferGraphics.setColor(Color.black);
-				drawCenteredRegularString(screen,"Current Max Level", screen.getHeight()/20*13);
-			}
+			drawCenteredBigString(screen, "Insufficient coin", screen.getHeight()/2); // 중앙에 텍스트
+		}
+		if(!max_alertcooldown.checkFinished())
+		{
+			backBufferGraphics.setColor(Color.red);
+			backBufferGraphics.fillRect((screen.getWidth()-300)/2, (screen.getHeight()-100)/2, 300, 80); // 알림창 배경색
+			backBufferGraphics.setColor(Color.black);
+			drawCenteredBigString(screen, "Already max level", screen.getHeight()/2); // 중앙에 텍스트
+
 		}
 	}
 
