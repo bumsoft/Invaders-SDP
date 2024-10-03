@@ -309,10 +309,10 @@ public final class DrawManager {
 	 * @param option
 	 *            Option selected.
 	 */
-	public void drawMenu(final Screen screen, final int option) {
+	public void drawMenu(final Screen screen, final int option, final int coin) {
 		String playString = "Play";
 		String shopString = "SHOP";
-		String coinString = "YOUR COIN: 000"; /*fileManager.getcoin();*/
+		String coinString = "YOUR COIN: " + coin;
 		String achievementString = "ACHIEVEMENT";
 		String settingString = "SETTING";
 		String exitString = "EXIT";
