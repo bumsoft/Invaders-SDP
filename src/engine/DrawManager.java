@@ -568,9 +568,9 @@ public final class DrawManager {
 		String instructionsString = "COIN: " + wallet.getCoin();
 		String exitinfo = "press esc to exit";
 		String coststring = "cost";
-		String costlv0 = "LV0 : 2000";
-		String costlv1 = "LV1 : 4000";
-		String costlv2 = "LV2 : 8000";
+		String costlv0 = "LV1 : 2000";
+		String costlv1 = "LV2 : 4000";
+		String costlv2 = "LV3 : 8000";
 
 		backBufferGraphics.setColor(Color.GRAY);
 		drawCenteredRegularString(screen,exitinfo,(screen.getHeight()/20)*5);
