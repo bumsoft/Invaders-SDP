@@ -18,6 +18,8 @@ public class GameState {
 	private int bulletsShot;
 	/** Ships destroyed until now. */
 	private int shipsDestroyed;
+	/** Number of coins earned in the game */
+	private int coinsEarned;
 
 	/**
 	 * Constructor.
@@ -78,4 +80,11 @@ public class GameState {
 		return shipsDestroyed;
 	}
 
+
+	/**
+	 * @return the coninsEarned
+	 */
+	public int getCoinsEarned() {
+		return coinsEarned;
+	}
 }

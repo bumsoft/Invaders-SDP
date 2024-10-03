@@ -13,7 +13,7 @@ import engine.Score;
  * @author <a href="mailto:RobertoIA1987@gmail.com">Roberto Izquierdo Amo</a>
  * 
  */
-public class HighScoreScreen extends Screen {
+public class AchievementScreen extends Screen {
 
 	/** List of past high scores. */
 	private List<Score> highScores;
@@ -28,7 +28,7 @@ public class HighScoreScreen extends Screen {
 	 * @param fps
 	 *            Frames per second, frame rate at which the game is run.
 	 */
-	public HighScoreScreen(final int width, final int height, final int fps) {
+	public AchievementScreen(final int width, final int height, final int fps) {
 		super(width, height, fps);
 
 		this.returnCode = 1;
@@ -69,7 +69,7 @@ public class HighScoreScreen extends Screen {
 	private void draw() {
 		drawManager.initDrawing(this);
 
-		drawManager.drawHighScoreMenu(this);
+		drawManager.drawAchievementMenu(this);
 		drawManager.drawHighScores(this, this.highScores);
 
 		drawManager.completeDrawing(this);
