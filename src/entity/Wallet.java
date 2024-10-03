@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 public class Wallet {
-    private static Logger logger;
+    private static Logger logger = Core.getLogger();
     private int coin;
 
     //bullet speed level
@@ -25,11 +25,10 @@ public class Wallet {
     public Wallet()
     {
         this.coin = 0;
-        this.bullet_lv = 0;
-        this.shot_lv = 0;
-        this.lives_lv = 0;
-        this.coin_lv = 0;
-        logger = Core.getLogger();
+        this.bullet_lv = 1;
+        this.shot_lv = 1;
+        this.lives_lv = 1;
+        this.coin_lv = 1;
     }
 
     public Wallet(int coin, int bullet_lv, int shot_lv, int lives_lv, int coin_lv)
@@ -39,7 +38,6 @@ public class Wallet {
         this.shot_lv = shot_lv;
         this.lives_lv = lives_lv;
         this.coin_lv = coin_lv;
-        logger = Core.getLogger();
     }
 
     public int getCoin()

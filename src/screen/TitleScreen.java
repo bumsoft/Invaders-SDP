@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 
 import engine.Cooldown;
 import engine.Core;
+import entity.Wallet;
 
 /**
  * Implements the title screen.
@@ -19,6 +20,8 @@ public class TitleScreen extends Screen {
 	/** Time between changes in user selection. */
 	private Cooldown selectionCooldown;
 
+	private Wallet wallet;
+
 	/**
 	 * Constructor, establishes the properties of the screen.
 	 * 
@@ -28,14 +31,17 @@ public class TitleScreen extends Screen {
 	 *            Screen height.
 	 * @param fps
 	 *            Frames per second, frame rate at which the game is run.
+	 * @param wallet
+	 * 			  Player's wallet
 	 */
-	public TitleScreen(final int width, final int height, final int fps) {
+	public TitleScreen(final int width, final int height, final int fps, final Wallet wallet) {
 		super(width, height, fps);
 
 		// Defaults to play.
 		this.returnCode = 6;
 		this.selectionCooldown = Core.getCooldown(SELECTION_TIME);
 		this.selectionCooldown.reset();
+		this.wallet = wallet;
 	}
 
 	/**
@@ -115,7 +121,7 @@ public class TitleScreen extends Screen {
 		drawManager.initDrawing(this);
 
 		drawManager.drawTitle(this);
-		drawManager.drawMenu(this, this.returnCode);
+		drawManager.drawMenu(this, this.returnCode, wallet.getCoin());
 
 		drawManager.completeDrawing(this);
 	}

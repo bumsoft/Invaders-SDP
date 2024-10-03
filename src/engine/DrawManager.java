@@ -309,10 +309,10 @@ public final class DrawManager {
 	 * @param option
 	 *            Option selected.
 	 */
-	public void drawMenu(final Screen screen, final int option) {
+	public void drawMenu(final Screen screen, final int option, final int coin) {
 		String playString = "Play";
 		String shopString = "SHOP";
-		String coinString = "YOUR COIN: 000"; /*fileManager.getcoin();*/
+		String coinString = "YOUR COIN: " + coin;
 		String achievementString = "ACHIEVEMENT";
 		String settingString = "SETTING";
 		String exitString = "EXIT";
@@ -716,24 +716,56 @@ public final class DrawManager {
 		drawCenteredRegularString(screen, startString, screen.getHeight() / 100 * 98);
 	}
 
-
-
-	//목록 위치좀 조정할필요 있을듯
-	public void drawShop(final Screen screen, final int option, final Wallet wallet) {
+	/**
+	 *  draw shop
+	 * @param screen
+	 * 				Screen to draw on.
+	 * @param option
+	 * 				selected shop item
+	 * @param wallet
+	 * 				player's wallet
+	 * @param money_alertcooldown
+	 * 				cooldown for insufficient coin alert
+	 * @param max_alertcooldown
+	 * 				cooldown for max level alert
+	 */
+	public void drawShop(final Screen screen, final int option, final Wallet wallet, final Cooldown money_alertcooldown, final Cooldown max_alertcooldown) {
 
 		String shopString = "Shop";
 		String instructionsString = "COIN: " + wallet.getCoin();
+		String exitinfo = "press esc to exit";
+		String coststring = "cost";
+		String[] costs = new String[] {"0", "2000", "4000", "8000", "MAX LEVEL"};
 
 		backBufferGraphics.setColor(Color.GRAY);
+		drawCenteredRegularString(screen,exitinfo,(screen.getHeight()/20)*5);
 		drawCenteredRegularString(screen, instructionsString,
-				screen.getHeight() / 2);
+				(screen.getHeight() / 20)*6);
+		drawCenteredRegularString(screen,coststring,screen.getHeight() /20 *8 );
+
+		if(option==1)
+		{
+			drawCenteredRegularString(screen,costs[wallet.getBullet_lv()],screen.getHeight() /20 *9 );
+		}
+		else if(option==2)
+		{
+			drawCenteredRegularString(screen,costs[wallet.getShot_lv()],screen.getHeight() /20 *9 );
+		}
+		else if(option==3)
+		{
+			drawCenteredRegularString(screen,costs[wallet.getLives_lv()],screen.getHeight() /20 *9 );
+		}
+		else if(option==4)
+		{
+			drawCenteredRegularString(screen,costs[wallet.getCoin_lv()],screen.getHeight() /20 *9 );
+		}
 
 		backBufferGraphics.setColor(Color.GREEN);
-		drawCenteredBigString(screen, shopString, screen.getHeight() / 3);
+		drawCenteredBigString(screen, shopString, screen.getHeight() / 20*3);
 
 
 		String item1String = "bullet_speed";
-		String item2String = "shot_freq";
+		String item2String = "shot_interval";
 		String item3String = "additional_life";
 		String item4String = "coin_gain";
 
@@ -764,5 +796,21 @@ public final class DrawManager {
 			backBufferGraphics.setColor(Color.WHITE);
 		drawCenteredRegularString(screen, item4String+ " LV. "+ wallet.getCoin_lv() , screen.getHeight() / 3
 				* 2 + fontRegularMetrics.getHeight() * 6);
+
+		if (!money_alertcooldown.checkFinished())
+		{
+			backBufferGraphics.setColor(Color.red);
+			backBufferGraphics.fillRect((screen.getWidth()-300)/2, (screen.getHeight()-100)/2, 300, 80); // 알림창 배경색
+			backBufferGraphics.setColor(Color.black);
+			drawCenteredBigString(screen, "Insufficient coin", screen.getHeight()/2); // 중앙에 텍스트
+		}
+		if(!max_alertcooldown.checkFinished())
+		{
+			backBufferGraphics.setColor(Color.red);
+			backBufferGraphics.fillRect((screen.getWidth()-300)/2, (screen.getHeight()-100)/2, 300, 80); // 알림창 배경색
+			backBufferGraphics.setColor(Color.black);
+			drawCenteredBigString(screen, "Already max level", screen.getHeight()/2); // 중앙에 텍스트
+
+		}
 	}
 }

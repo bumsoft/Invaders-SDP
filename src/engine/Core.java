@@ -121,7 +121,7 @@ public final class Core {
 			switch (returnCode) {
 			case 1:
 				// Main menu.
-				currentScreen = new TitleScreen(width, height, FPS);
+				currentScreen = new TitleScreen(width, height, FPS, wallet);
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 						+ " title screen at " + FPS + " fps.");
 				returnCode = frame.setScreen(currentScreen);
@@ -173,10 +173,11 @@ public final class Core {
 			case 3:
 				//Shop
 
-				/* Please fill in this case state as you finish your work on Shop Screen.*/
-
-				LOGGER.warning("Shop screen has to come out. Please implement shop screen.");
-				returnCode = 1;
+				currentScreen = new ShopScreen(width, height, FPS, wallet);
+				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
+						+ " Shop screen at " + FPS + " fps.");
+				returnCode = frame.setScreen(currentScreen);
+				LOGGER.info("Closing Shop screen.");
 				break;
 
 			case 4:
