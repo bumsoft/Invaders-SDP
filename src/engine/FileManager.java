@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import engine.DrawManager.SpriteType;
+import entity.Wallet;
 
 /**
  * Manages files used in the application.
@@ -273,5 +274,66 @@ public final class FileManager {
 			if (bufferedWriter != null)
 				bufferedWriter.close();
 		}
+	}
+
+	public void saveWallet(final Wallet newWallet)
+			throws IOException {
+		OutputStream outputStream = null;
+		BufferedWriter bufferedWriter = null;
+
+		try {
+			String jarPath = FileManager.class.getProtectionDomain()
+					.getCodeSource().getLocation().getPath();
+			jarPath = URLDecoder.decode(jarPath, "UTF-8"); // 현재 파일 실행 경로. Current file execution path
+
+			String walletPath = new File(jarPath).getParent(); // 상위 파일 경로. Parent file path
+			walletPath += File.separator; // 파일 경로에 '/' 또는 '\' 추가(환경마다 다름). Add '/' or '\' to the file path (depends on the environment)
+			walletPath += "wallet";
+
+			File walletFile = new File(walletPath);
+
+			if (!walletFile.exists())
+				walletFile.createNewFile(); //파일이 없으면 새로 만듦. If the file does not exist, create a new one.
+
+			outputStream = new FileOutputStream(walletFile); //덮어쓰기. Overwrite
+			bufferedWriter = new BufferedWriter(new OutputStreamWriter(
+					outputStream, Charset.forName("UTF-8")));
+
+			logger.info("Saving user wallet.");
+
+			bufferedWriter.write(newWallet.getCoin() + "");
+			bufferedWriter.newLine();
+			bufferedWriter.write(newWallet.getBullet_lv() + "");
+			bufferedWriter.newLine();
+			bufferedWriter.write(newWallet.getShot_lv() + "");
+			bufferedWriter.newLine();
+			bufferedWriter.write(newWallet.getLives_lv() + "");
+			bufferedWriter.newLine();
+			bufferedWriter.write(newWallet.getCoin_lv() + "");
+			bufferedWriter.newLine();
+
+		} finally {
+			if (bufferedWriter != null)
+				bufferedWriter.close();
+		}
+	}
+
+	public BufferedReader loadWallet() throws IOException {
+		String jarPath = FileManager.class.getProtectionDomain()
+				.getCodeSource().getLocation().getPath();
+		jarPath = URLDecoder.decode(jarPath, "UTF-8");
+
+		String walletPath = new File(jarPath).getParent();
+		walletPath += File.separator;
+		walletPath += "wallet"; // 지갑 파일 경로. Wallet file path
+
+		File walletFile = new File(walletPath);
+		if (!walletFile.exists()) {
+			Core.getLogger().warning("Wallet file not found at " + walletPath);
+			return null; // 파일이 없으면 null 반환. If the file does not exist, return null.
+		}
+
+		InputStream inputStream = new FileInputStream(walletFile);
+		return new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
 	}
 }
