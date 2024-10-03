@@ -173,7 +173,7 @@ public final class FileManager {
 
 	/**
 	 * Loads high scores from file, and returns a sorted list of pairs score -
-	 * value
+	 * value.
 	 * 
 	 * @return Sorted list of scores - players.
 	 * @throws IOException
