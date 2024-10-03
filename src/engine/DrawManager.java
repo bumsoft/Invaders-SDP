@@ -561,7 +561,19 @@ public final class DrawManager {
 					+ fontBigMetrics.getHeight() / 3);
 	}
 
-	//목록 위치좀 조정할필요 있을듯
+	/**
+	 *  draw shop
+	 * @param screen
+	 * 				Screen to draw on.
+	 * @param option
+	 * 				selected shop item
+	 * @param wallet
+	 * 				player's wallet
+	 * @param money_alertcooldown
+	 * 				cooldown for insufficient coin alert
+	 * @param max_alertcooldown
+	 * 				cooldown for max level alert
+	 */
 	public void drawShop(final Screen screen, final int option, final Wallet wallet, final Cooldown money_alertcooldown, final Cooldown max_alertcooldown) {
 
 		String shopString = "Shop";
