@@ -19,6 +19,21 @@ public class ShopScreen extends Screen {
     /** 1-bullet speed 2-shot frequency 3-additional lives 4-gain coin upgrade */
     private int selected_item;
 
+    //레벨별 코스트
+    private int lv1cost = 2000;
+    private int lv2cost = 4000;
+    private int lv3cost = 8000;
+
+    //예외처리 변수
+    private boolean lesscoin = false;
+    private boolean overlv = false;
+
+    //경고문구동안 조작금지위한 타이머
+    private boolean timer = false;
+    private int count = 0;
+    private int maxcount = 100;
+
+
     /**
      * Constructor, establishes the properties of the screen.
      *
@@ -74,33 +89,64 @@ public class ShopScreen extends Screen {
                 this.selectionCooldown.reset();//동작 뒤 현재시간 갱신
             }
 
-            if (inputManager.isKeyDown(KeyEvent.VK_SPACE))
+            if (inputManager.isKeyDown(KeyEvent.VK_SPACE) && !this.timer)
             {
-                //화폐 처리 여기서 구현하기.
-                //..
-
-                //Max업그레이드 정도에 따른 예외처리 해주기
-                if (selected_item == 1)
-                {
-                    wallet.setBullet_lv(wallet.getBullet_lv() + 1);
-                } else if (selected_item == 2)
-                {
-                    wallet.setShot_lv(wallet.getShot_lv() + 1);
-                } else if (selected_item == 3)//추가 라이프
-                {
-                    wallet.setLives_lv(wallet.getLives_lv() + 1);
-                } else
-                {
-                    wallet.setCoin_lv(wallet.getCoin_lv() + 1);
+                //화폐 처리 및 레벨 처리
+                switch (selected_item) {
+                    case 1:
+                        if (usecoinforupgrade(wallet.getBullet_lv())) {
+                            wallet.setBullet_lv(wallet.getBullet_lv() + 1);
+                        }
+                        break;
+                    case 2:
+                        if (usecoinforupgrade(wallet.getShot_lv())) {
+                            wallet.setShot_lv(wallet.getShot_lv() + 1);
+                        }
+                        break;
+                    case 3:
+                        if (usecoinforupgrade(wallet.getLives_lv())) {
+                            wallet.setLives_lv(wallet.getLives_lv() + 1);
+                        }
+                        break;
+                    case 4:
+                        if (usecoinforupgrade(wallet.getCoin_lv())) {
+                            wallet.setCoin_lv(wallet.getCoin_lv() + 1);
+                        }
+                        break;
+                    default:
+                        break;
                 }
             }
-
             this.selectionCooldown.reset();//동작 뒤 현재시간 갱신
 
-
             //esc누르면 running false
-            if (inputManager.isKeyDown(KeyEvent.VK_ESCAPE))
+            if (inputManager.isKeyDown(KeyEvent.VK_ESCAPE) && !this.timer)
                 this.isRunning = false;
+
+            //조작정지를 위한 타이머
+            if(this.timer)
+            {
+                if(this.count == this.maxcount)
+                {
+                    this.timer = false;
+                    this.count = 0;
+                    if(this.lesscoin)
+                    {
+                        this.lesscoin = false;
+                        logger.info("made false");
+                    }
+                    else if(this.overlv)
+                    {
+                        this.overlv = false;
+                        logger.info("made lv false");
+                    }
+                }
+                else
+                {
+                    this.count += 1;
+                    logger.info("timer : "+this.count);
+                }
+            }
         }
     }
 
@@ -130,8 +176,70 @@ public class ShopScreen extends Screen {
         drawManager.initDrawing(this);
 
 
-        drawManager.drawShop(this,selected_item,wallet);
+        drawManager.drawShop(this,selected_item,wallet,this.lesscoin,this.overlv);
 
         drawManager.completeDrawing(this);
+    }
+
+    public boolean usecoinforupgrade(int level)
+    {
+        if(level == 1)
+        {
+            if(wallet.withdraw(lv1cost))
+            {
+                logger.info("currentcoin : " + wallet.getCoin());
+                return true;
+            }
+            else
+            {
+                logger.info("currentcoin : " + wallet.getCoin());
+                this.lesscoin = true;
+                logger.info("made true");
+                this.timer = true;
+                return false;
+            }
+        }
+        else if(level == 2)
+        {
+            if(wallet.withdraw(lv2cost))
+            {
+                logger.info("currentcoin : " + wallet.getCoin());
+                return true;
+            }
+            else
+            {
+                logger.info("currentcoin : " + wallet.getCoin());
+                this.lesscoin = true;
+                logger.info("made true");
+                this.timer = true;
+                return false;
+            }
+        }
+        else if(level == 3)
+        {
+            if(wallet.withdraw(lv3cost))
+            {
+                logger.info("currentcoin : " + wallet.getCoin());
+                return true;
+            }
+            else
+            {
+                logger.info("currentcoin : " + wallet.getCoin());
+                this.lesscoin = true;
+                logger.info("made true");
+                this.timer = true;
+                return false;
+            }
+        }
+        else if(level==4)
+        {
+            logger.info("over lv");
+            this.overlv = true;
+            logger.info("made lv true");
+            this.timer = true;
+            return false;
+        }
+        logger.info("currentcoin : " + wallet.getCoin());
+        return false;
     }
 }
