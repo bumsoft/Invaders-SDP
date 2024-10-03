@@ -123,8 +123,8 @@ public class Wallet {
         return true;
     }
 
-    //Core.fileManager 등 활용해서, 현재 지갑상태를 파일에 저장하는 메서드 구현필요
-    //저장방식: coin, bullet_lv, shot_lv, lives_lv, coin_lv 순으로 한줄씩 저장
+    //현재 지갑상태를 파일에 저장. 저장방식: coin, bullet_lv, shot_lv, lives_lv, coin_lv 순으로 한줄씩 저장
+    //Save the current wallet state to a file. Save format: coin, bullet_lv, shot_lv, lives_lv, coin_lv, each in one line
     private boolean writeWallet()
     {
         try {
@@ -136,38 +136,40 @@ public class Wallet {
         return true;
     }
 
-    //Core.fileManager 등 활용해, 파일에 적힌 정보로 지갑 생성하는 메서드 구현필요
-    //만약 파일이 손상되어 읽을 수 없다면 초기값(0)으로 생성하기
+    // 파일에 적힌 정보로 지갑 생성. 만약 파일이 손상되어 읽을 수 없다면 초기값(0)으로 생성하기
+    //Create a wallet using the information written in the file. If the file is damaged or unreadable, create it with initial values (0)
     public static Wallet getWallet() {
         BufferedReader bufferedReader = null;
 
         try {
-            // FileManager를 통해 파일에서 지갑 데이터를 불러옴
+            //FileManager를 통해 파일에서 지갑 데이터를 불러옴
+            //Load wallet data from the file via FileManager
             bufferedReader = Core.getFileManager().loadWallet();
 
-            // 파일이 존재하지 않으면 기본값으로 지갑 생성
             if (bufferedReader == null) {
                 logger.info("Wallet file does not exist, initializing with default values.");
 
                 return new Wallet();
             }
 
-            // 파일에서 각 줄을 읽어와서 값 설정
+            //파일에서 각 줄을 읽어와서 값 설정
+            //Read each line from the file and set the values
             int coin = Integer.parseInt(bufferedReader.readLine());
             int bullet_lv = Integer.parseInt(bufferedReader.readLine());
             int shot_lv = Integer.parseInt(bufferedReader.readLine());
             int lives_lv = Integer.parseInt(bufferedReader.readLine());
             int coin_lv = Integer.parseInt(bufferedReader.readLine());
 
-            // 읽어온 값으로 새로운 Wallet 객체를 생성해 반환
             return new Wallet(coin, bullet_lv, shot_lv, lives_lv, coin_lv);
 
         } catch (IOException | NumberFormatException e) {
-            // 파일을 읽지 못하거나 손상된 경우 기본값으로 반환
+            //파일을 읽지 못하거나 손상된 경우 기본값으로 반환
+            //If there is an error reading the file or if it's corrupted, return with default values
             logger.info("Error loading wallet data. Initializing with default values.");
             return new Wallet();
         } finally {
-            // 파일 리소스 해제
+            //파일 리소스 해제
+            //Release file resources
             if (bufferedReader != null) {
                 try {
                     bufferedReader.close();
