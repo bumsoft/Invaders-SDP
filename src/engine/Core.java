@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+import entity.Wallet;
 import screen.*;
 
 
@@ -111,6 +112,8 @@ public final class Core {
 		
 		GameState gameState;
 
+		Wallet wallet = Wallet.getWallet();
+
 		int returnCode = 1;
 		do {
 			gameState = new GameState(1, 0, MAX_LIVES, 0, 0);
@@ -157,6 +160,12 @@ public final class Core {
 						+ gameState.getBulletsShot() + " bullets shot and "
 						+ gameState.getShipsDestroyed() + " ships destroyed.");
 				currentScreen = new ScoreScreen(width, height, FPS, gameState);
+
+				/** translate 10% of score to coin */
+				wallet.deposit(gameState.getScore()/10);
+				LOGGER.info("Total coin: " + wallet.getCoin());
+
+
 				returnCode = frame.setScreen(currentScreen);
 				LOGGER.info("Closing score screen.");
 				break;
