@@ -5,10 +5,10 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-import engine.Cooldown;
 import engine.Core;
 import engine.GameState;
 import engine.Score;
+import entity.Wallet;
 
 /**
  * Implements the score screen.
@@ -18,14 +18,9 @@ import engine.Score;
  */
 public class ScoreScreen extends Screen {
 
-	/** Milliseconds between changes in user selection. */
-	private static final int SELECTION_TIME = 200;
 	/** Maximum number of high scores. */
 	private static final int MAX_HIGH_SCORE_NUM = 7;
-	/** Code of first mayus character. */
-	private static final int FIRST_CHAR = 65;
-	/** Code of last mayus character. */
-	private static final int LAST_CHAR = 90;
+
 
 	/** Current score. */
 	private int score;
@@ -39,12 +34,11 @@ public class ScoreScreen extends Screen {
 	private List<Score> highScores;
 	/** Checks if current score is a new high score. */
 	private boolean isNewRecord;
-	/** Player name for record input. */
-	private char[] name;
-	/** Character of players name selected for change. */
-	private int nameCharSelected;
-	/** Time between changes in user selection. */
-	private Cooldown selectionCooldown;
+	/** Number of coins earned in the game */
+	private int coinsEarned;
+	/** Player's name */
+	private String name1, name2;
+
 
 	/**
 	 * Constructor, establishes the properties of the screen.
@@ -59,18 +53,20 @@ public class ScoreScreen extends Screen {
 	 *            Current game state.
 	 */
 	public ScoreScreen(final int width, final int height, final int fps,
-			final GameState gameState) {
+			final GameState gameState, final Wallet wallet) {
 		super(width, height, fps);
+
+		this.name1 = name1;
+		this.name2 = name2;
 
 		this.score = gameState.getScore();
 		this.livesRemaining = gameState.getLivesRemaining();
 		this.bulletsShot = gameState.getBulletsShot();
 		this.shipsDestroyed = gameState.getShipsDestroyed();
+		this.coinsEarned = gameState.getScore()/10;
+		wallet.deposit(coinsEarned);
+
 		this.isNewRecord = false;
-		this.name = "AAA".toCharArray();
-		this.nameCharSelected = 0;
-		this.selectionCooldown = Core.getCooldown(SELECTION_TIME);
-		this.selectionCooldown.reset();
 
 		try {
 			this.highScores = Core.getFileManager().loadHighScores();
@@ -117,32 +113,6 @@ public class ScoreScreen extends Screen {
 					saveScore();
 			}
 
-			if (this.isNewRecord && this.selectionCooldown.checkFinished()) {
-				if (inputManager.isKeyDown(KeyEvent.VK_RIGHT)) {
-					this.nameCharSelected = this.nameCharSelected == 2 ? 0
-							: this.nameCharSelected + 1;
-					this.selectionCooldown.reset();
-				}
-				if (inputManager.isKeyDown(KeyEvent.VK_LEFT)) {
-					this.nameCharSelected = this.nameCharSelected == 0 ? 2
-							: this.nameCharSelected - 1;
-					this.selectionCooldown.reset();
-				}
-				if (inputManager.isKeyDown(KeyEvent.VK_UP)) {
-					this.name[this.nameCharSelected] =
-							(char) (this.name[this.nameCharSelected]
-									== LAST_CHAR ? FIRST_CHAR
-							: this.name[this.nameCharSelected] + 1);
-					this.selectionCooldown.reset();
-				}
-				if (inputManager.isKeyDown(KeyEvent.VK_DOWN)) {
-					this.name[this.nameCharSelected] =
-							(char) (this.name[this.nameCharSelected]
-									== FIRST_CHAR ? LAST_CHAR
-							: this.name[this.nameCharSelected] - 1);
-					this.selectionCooldown.reset();
-				}
-			}
 		}
 
 	}
@@ -151,7 +121,7 @@ public class ScoreScreen extends Screen {
 	 * Saves the score as a high score.
 	 */
 	private void saveScore() {
-		highScores.add(new Score(new String(this.name), score));
+		//highScores.add(new Score(new String(this.name1), score));
 		Collections.sort(highScores);
 		if (highScores.size() > MAX_HIGH_SCORE_NUM)
 			highScores.remove(highScores.size() - 1);
@@ -173,10 +143,7 @@ public class ScoreScreen extends Screen {
 				this.isNewRecord);
 		drawManager.drawResults(this, this.score, this.livesRemaining,
 				this.shipsDestroyed, (float) this.shipsDestroyed
-						/ this.bulletsShot, this.isNewRecord);
-
-		if (this.isNewRecord)
-			drawManager.drawNameInput(this, this.name, this.nameCharSelected);
+						/ this.bulletsShot, this.isNewRecord, this.coinsEarned);
 
 		drawManager.completeDrawing(this);
 	}

@@ -18,6 +18,7 @@ public class GameState {
 	private int bulletsShot;
 	/** Ships destroyed until now. */
 	private int shipsDestroyed;
+	/** Number of coins earned in the game */
 
 	/**
 	 * Constructor.
