@@ -22,9 +22,9 @@ import screen.*;
 public final class Core {
 
 	/** Width of current screen. */
-	private static final int WIDTH = 448;
+	private static final int WIDTH = 600;
 	/** Height of current screen. */
-	private static final int HEIGHT = 520;
+	private static final int HEIGHT = 650;
 	/** Max fps of current screen. */
 	private static final int FPS = 60;
 

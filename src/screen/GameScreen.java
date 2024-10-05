@@ -136,6 +136,7 @@ public class GameScreen extends Screen {
 		super.run();
 
 		this.score += LIFE_SCORE * (this.lives - 1);
+		if(this.lives == 0) this.score += 100;
 		this.logger.info("Screen cleared with a score of " + this.score);
 
 		return this.returnCode;
