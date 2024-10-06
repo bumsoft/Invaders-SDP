@@ -1,6 +1,7 @@
 package entity;
 
 import java.awt.Color;
+import java.util.Random;
 import java.util.Set;
 
 import engine.Cooldown;
@@ -135,6 +136,48 @@ public class Ship extends Entity {
 	// 발사 빈도 getter
 	public int getShootingInterval(){
 		return shootingInterval;
+	}
+
+	// ship random select 메소드
+	public static Ship randomSelectShip(int positionX, int positionY, Wallet wallet) {
+		Random random = new Random();
+		int shipType = random.nextInt(3); // 0-A / 1-B / 2-C 중 하나
+
+		Ship selectedShip;
+
+		switch(shipType){
+			case 0:
+				selectedShip = new Ship(positionX, positionY, wallet);
+				selectedShip.setBulletSpeed(-6);
+				selectedShip.setShootingInterval(750);
+				selectedShip.spriteType = SpriteType.ShipA; // A의 스프라이트 설정
+				System.out.println("Ship A selected");
+				break;
+			case 1:
+				selectedShip = new Ship(positionX, positionY, wallet);
+				selectedShip.setBulletSpeed(-6);
+				selectedShip.setShootingInterval(750);
+				selectedShip.spriteType = SpriteType.ShipB; // B의 스프라이트 설정
+				System.out.println("Ship B selected");
+				break;
+			case 2:
+				selectedShip = new Ship(positionX, positionY, wallet);
+				selectedShip.setBulletSpeed(-6);
+				selectedShip.setShootingInterval(750);
+				selectedShip.spriteType = SpriteType.ShipC; // C의 스프라이트 설정
+				System.out.println("Ship C selected");
+				break;
+		}
+		return selectedShip;
+	}
+
+	private void setShootingInterval(int i) {
+		shootingInterval = SHOOTING_INTERVAL_LV[i];
+	}
+
+	// bullet speed setter
+	private void setBulletSpeed(int i) {
+		bulletSpeed = BULLET_SPEED_LV[i];
 	}
 
 	/**
