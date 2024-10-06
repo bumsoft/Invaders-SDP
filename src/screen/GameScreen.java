@@ -69,25 +69,20 @@ public class GameScreen extends Screen {
 	private Wallet wallet;
 
     /**
-	 * Constructor, establishes the properties of the screen.
-	 * 
-	 * @param gameState
-	 *            Current game state.
-	 * @param gameSettings
-	 *            Current game settings.
-	 * @param bonusLife
-	 *            Checks if a bonus life is awarded this level.
-	 * @param width
-	 *            Screen width.
-	 * @param height
-	 *            Screen height.
-	 * @param fps
-	 *            Frames per second, frame rate at which the game is run.
-	 */
+     * Constructor, establishes the properties of the screen.
+     *
+     * @param gameState    Current game state.
+     * @param gameSettings Current game settings.
+     * @param bonusLife    Checks if a bonus life is awarded this level.
+     * @param width        Screen width.
+     * @param height       Screen height.
+     * @param fps          Frames per second, frame rate at which the game is run.
+     * @param playerShip
+     */
 	// Gamescreen 생성자에 wallet 객체 추가
 	public GameScreen(final GameState gameState,
-			final GameSettings gameSettings, final boolean bonusLife,
-			final int width, final int height, final int fps, Wallet wallet) {
+                      final GameSettings gameSettings, final boolean bonusLife,
+                      final int width, final int height, final int fps, Wallet wallet, Ship playerShip) {
 		super(width, height, fps);
 
 		this.gameSettings = gameSettings;
@@ -101,6 +96,7 @@ public class GameScreen extends Screen {
 			this.lives++;
 		this.bulletsShot = gameState.getBulletsShot();
 		this.shipsDestroyed = gameState.getShipsDestroyed();
+		this.ship = playerShip;
 	}
 
 	/**
@@ -111,7 +107,7 @@ public class GameScreen extends Screen {
 
 		enemyShipFormation = new EnemyShipFormation(this.gameSettings);
 		enemyShipFormation.attach(this);
-		this.ship = new Ship(this.width / 2, this.height - 30, this.wallet);
+		this.ship = this.ship != null ? this.ship : new Ship(this.width / 2, this.height - 30, this.wallet);
 		// Appears each 10-30 seconds.
 		this.enemyShipSpecialCooldown = Core.getVariableCooldown(
 				BONUS_SHIP_INTERVAL, BONUS_SHIP_VARIANCE);

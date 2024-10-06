@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+import entity.Ship;
 import entity.Wallet;
 import screen.*;
 
@@ -117,8 +118,15 @@ public final class Core {
 		// wallet 객체를 Gamescreen으로 넘겨줘야함
 		Wallet wallet = Wallet.getWallet();
 
-		MAX_LIVES += wallet.getLives_lv();
 		// lives_lv 의미 파악 후 추후 수정
+		MAX_LIVES += wallet.getLives_lv();
+
+		// 랜덤 함선 선택 부분 추가
+		Ship playerShip = Ship.randomSelectShip(width / 2, height - 30, wallet);
+
+		// 랜덤으로 선택된 함선 출력
+		System.out.println("selected ship: " + playerShip.getSpriteType());
+
 
 		int returnCode = 1;
 		do {
@@ -142,7 +150,7 @@ public final class Core {
 							&& gameState.getLivesRemaining() < MAX_LIVES;
 					currentScreen = new GameScreen(gameState,
 							gameSettings.get(gameState.getLevel() - 1),
-							bonusLife, width, height, FPS, wallet);
+							bonusLife, width, height, FPS, wallet, playerShip);
 					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 							+ " game screen at " + FPS + " fps.");
 					frame.setScreen(currentScreen);
