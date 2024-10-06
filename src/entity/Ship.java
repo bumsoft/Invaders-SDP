@@ -39,6 +39,9 @@ public class Ship extends Entity {
 	private static final double[] BULLET_SPEED_LV = {-6, -7.2, -8.7, -10.4};
 	private double bulletSpeed;
 
+	// 업그레이드 단계 별로 필요한 코인 수 정의 - lv1->lv2; 2000C / lv2->lv3; 3000c / lv3->lv4; 4000c
+	public static final int[] UPGRADE_COST = {2000, 4000, 8000};
+
 	/** Movement of the ship for each unit of time. */
 	private static final int SPEED = 2;
 	
@@ -75,8 +78,25 @@ public class Ship extends Entity {
 		if(bullet_lv < 1 || bullet_lv > 4){
 			bullet_lv = 1;
 		}
-		this.bulletSpeed = BULLET_SPEED_LV[bullet_lv-1];
-		System.out.println("Bullet speed updated to: " + this.bulletSpeed);
+		// 최대 lv.4까지 업그레이드 가능
+		if(bullet_lv == 4){
+			System.out.println("Bullet speed is already at the MAX level!");
+			return;
+		}
+		// 업그레이드 비용 확인
+		int upgradeCost = UPGRADE_COST[bullet_lv-1];
+		if(wallet.getCoin() >= upgradeCost){
+			// 코인 차감
+			wallet.withdraw(upgradeCost);
+			wallet.setBullet_lv(bullet_lv+1);
+			// 레벨 +1
+			this.bulletSpeed = BULLET_SPEED_LV[bullet_lv];
+			System.out.println("Bullet speed updated to: " + this.bulletSpeed);
+		}
+		else{
+			System.out.println("Not enough coin to upgrade bullet speed!");
+		}
+
 	}
 
 	// 총알 속도 getter
@@ -91,8 +111,25 @@ public class Ship extends Entity {
 		if(shot_lv < 1 || shot_lv > 4){
 			shot_lv = 1;
 		}
-		this.shootingInterval =SHOOTING_INTERVAL_LV[shot_lv-1];
-		System.out.println("Shooting interval updated to: " + this.shootingInterval);
+		// 최대 lv.4까지 업그레이드 가능
+		if(shot_lv == 4){
+			System.out.println("Shot speed is already at the MAX level!");
+			return;
+		}
+		// 업그레이드 비용 확인
+		int upgradeCost = UPGRADE_COST[shot_lv-1];
+		if (wallet.getCoin() >= upgradeCost){
+			// 코인 차감
+			wallet.withdraw(upgradeCost);
+			// 레벨 +1
+			wallet.setShot_lv(shot_lv+1);
+			this.shootingInterval = SHOOTING_INTERVAL_LV[shot_lv];
+			System.out.println("Shooting interval updated to: " + this.shootingInterval);
+		}
+		else{
+			System.out.println("Not enough coin to upgrade shooting interval!");
+		}
+
 	}
 
 	// 발사 빈도 getter
