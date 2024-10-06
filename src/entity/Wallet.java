@@ -16,7 +16,7 @@ public class Wallet {
     //shot frequency level
     private int shot_lv;
 
-    //additional lives level
+    //additional lives level //상점에서 구매한 추가 목숨
     private int lives_lv;
 
     //coin gain level
