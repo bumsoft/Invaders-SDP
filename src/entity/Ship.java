@@ -14,8 +14,7 @@ import engine.DrawManager.SpriteType;
  * 
  */
 public class Ship extends Entity {
-	// 게임 시작 시 플레이어가 함선을 선택하고 시작하는 방향으로 갈 듯. 
-	// 함선별로 초기 값이 달라서 다른 팀에서 제공해주면 shooting interval, bullet speed 우리가 재설정
+	// 게임 시작 시 함선3 종류 중 랜덤하게 하나가 선택되도록.
 	// 단계별 업그레이드 수치를 얼마로 할지. - 몇 단계를 max로 할 지
 	// (ship 엔티티의 SHOOTING_INTERVAL & BULLET_SPEED 계속 수정 및 플레이 해보면서 값 정하기)
 
@@ -52,6 +51,7 @@ public class Ship extends Entity {
 	private Wallet wallet;
 	/**
 	 * Constructor, establishes the ship's properties.
+	 *
 	 * 
 	 * @param positionX
 	 *            Initial position of the ship in the X axis.
@@ -69,7 +69,7 @@ public class Ship extends Entity {
 	}
 
 	// upgrade_bullet_speed 메소드 (총알 속도 업그레이드 메소드)
-	public void upgrade_bullet_speed(){
+	public void upgradeBulletSpeed(){
 		int bullet_lv = wallet.getBullet_lv();
 		// 만약, 범위 밖의 값이 설정된다면 기본 값으로 재설정
 		if(bullet_lv < 1 || bullet_lv > 4){
@@ -85,7 +85,7 @@ public class Ship extends Entity {
 	}
 
 	// upgrade_shooting_interval 메소드 (총알 발사 빈도 업그레이드 메소드)
-	public void upgrade_shooting_interval(){
+	public void upgradeShootingInterval(){
 		int shot_lv = wallet.getShot_lv();
 		// 만약, 범위 밖의 값이 설정된다면 기본 값으로 재설정
 		if(shot_lv < 1 || shot_lv > 4){
