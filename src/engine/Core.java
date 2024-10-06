@@ -29,9 +29,9 @@ public final class Core {
 	private static final int FPS = 60;
 
 	/** Max lives. */
-	private static final int MAX_LIVES = 3;
+	private static int MAX_LIVES = 3;
 	/** Levels between extra life. */
-	private static final int EXTRA_LIFE_FRECUENCY = 3;
+	private static int EXTRA_LIFE_FRECUENCY = 3;
 	/** Total number of levels. */
 	private static final int NUM_LEVELS = 7;
 	
@@ -96,6 +96,8 @@ public final class Core {
 			e.printStackTrace();
 		}
 
+
+
 		frame = new Frame(WIDTH, HEIGHT);
 		DrawManager.getInstance().setFrame(frame);
 		int width = frame.getWidth();
@@ -114,6 +116,9 @@ public final class Core {
 
 		// wallet 객체를 Gamescreen으로 넘겨줘야함
 		Wallet wallet = Wallet.getWallet();
+
+		MAX_LIVES += wallet.getLives_lv();
+		// lives_lv 의미 파악 후 추후 수정
 
 		int returnCode = 1;
 		do {
