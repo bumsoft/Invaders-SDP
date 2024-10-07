@@ -153,12 +153,17 @@ public class Wallet {
             //파일에서 각 줄을 읽어와서 값 설정
             //Read each line from the file and set the values
             int coin = Integer.parseInt(bufferedReader.readLine());
-            int bullet_lv = Integer.parseInt(bufferedReader.readLine());
-            int shot_lv = Integer.parseInt(bufferedReader.readLine());
-            int lives_lv = Integer.parseInt(bufferedReader.readLine());
-            int coin_lv = Integer.parseInt(bufferedReader.readLine());
+            int levelSeq [] = new int[4]; //bullet_lv, shot_lv, lives_lv, coin_lv
+            for (int i = 0; i < 4; i++) {
+                int level = Integer.parseInt(bufferedReader.readLine());
+                if(level > 4){
+                    logger.info("Weird level. Initializing with default values.");
+                    return new Wallet();
+                }
+                levelSeq[i] = level;
+            }
 
-            return new Wallet(coin, bullet_lv, shot_lv, lives_lv, coin_lv);
+            return new Wallet(coin, levelSeq[0], levelSeq[1], levelSeq[2], levelSeq[3]);
 
         } catch (IOException | NumberFormatException e) {
             //파일을 읽지 못하거나 손상된 경우 기본값으로 반환
