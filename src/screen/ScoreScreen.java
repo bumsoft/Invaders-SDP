@@ -39,6 +39,8 @@ public class ScoreScreen extends Screen {
 	/** Player's name */
 	private String name1, name2;
 
+	// coin_lv 별 비율 설정 - lv1, lv2, lv3, lv4 단계 순서로 배열에 넣고 꺼내쓸거임 ex. lv1;score 100 * 0.1
+	private static final double[] COIN_RATIOS = {0.1, 0.13, 0.16, 0.19};
 
 	/**
 	 * Constructor, establishes the properties of the screen.
@@ -63,7 +65,18 @@ public class ScoreScreen extends Screen {
 		this.livesRemaining = gameState.getLivesRemaining();
 		this.bulletsShot = gameState.getBulletsShot();
 		this.shipsDestroyed = gameState.getShipsDestroyed();
-		this.coinsEarned = gameState.getScore()/10;
+
+		// 사용자의 coin_lv 가져오기
+		int coin_lv = wallet.getCoin_lv();
+
+		// coin_lv에 따라서 다른 비율 적용
+		double coin_ratio = COIN_RATIOS[coin_lv-1];
+
+		// 게임 단계 업그레이드 단계 별 점수에 따른 코인 획득 비율 조정
+		// - 코인 단위는 정수로 떨어지니까 소수점 이라 반올림 시켜서 int로 변환
+		this.coinsEarned = (int)Math.round(gameState.getScore() * coin_ratio);
+
+		// wallet에 획득한 코인 저축
 		wallet.deposit(coinsEarned);
 
 		this.isNewRecord = false;
