@@ -29,7 +29,7 @@ public final class Core {
 	private static final int FPS = 60;
 
 	/** Max lives. */
-	private static final int MAX_LIVES = 3;
+	private static int MAX_LIVES;
 	/** Levels between extra life. */
 	private static final int EXTRA_LIFE_FRECUENCY = 3;
 	/** Total number of levels. */
@@ -117,6 +117,7 @@ public final class Core {
 
 		int returnCode = 1;
 		do {
+			MAX_LIVES = wallet.getLives_lv()+2;
 			gameState = new GameState(1, 0, MAX_LIVES, 0, 0);
 
 			switch (returnCode) {
