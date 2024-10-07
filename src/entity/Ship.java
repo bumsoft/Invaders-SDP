@@ -16,9 +16,9 @@ import engine.DrawManager.SpriteType;
 public class Ship extends Entity {
 
 	/** Time between shots. */
-	private static final int SHOOTING_INTERVAL = 750;
+	private static int SHOOTING_INTERVAL = 750;
 	/** Speed of the bullets shot by the ship. */
-	private static final int BULLET_SPEED = -6;
+	private static int BULLET_SPEED = -6;
 	/** Movement of the ship for each unit of time. */
 	private static final int SPEED = 2;
 	
@@ -109,5 +109,46 @@ public class Ship extends Entity {
 	 */
 	public final int getSpeed() {
 		return SPEED;
+	}
+
+	public void applyItem(Wallet wallet){
+		int bulletLv = wallet.getBullet_lv();
+		switch (bulletLv){
+			case 1:
+				BULLET_SPEED = -6;
+				break;
+			case 2:
+				BULLET_SPEED = -7;
+				break;
+			case 3:
+				BULLET_SPEED = -9;
+				break;
+			case 4:
+				BULLET_SPEED = -10;
+				break;
+			default:
+				BULLET_SPEED = -6;
+		}
+
+		int intervalLv = wallet.getShot_lv();
+		switch (intervalLv){
+			case 1: //생성자에서 이미 초기화함
+				break;
+			case 2:
+				SHOOTING_INTERVAL = 675;
+				shootingCooldown = Core.getCooldown(SHOOTING_INTERVAL);
+				break;
+			case 3:
+				SHOOTING_INTERVAL = 607;
+				shootingCooldown = Core.getCooldown(SHOOTING_INTERVAL);
+				break;
+			case 4:
+				SHOOTING_INTERVAL = 546;
+				shootingCooldown = Core.getCooldown(SHOOTING_INTERVAL);
+				break;
+			default:
+				SHOOTING_INTERVAL = 750;
+				shootingCooldown = Core.getCooldown(SHOOTING_INTERVAL);
+		}
 	}
 }
