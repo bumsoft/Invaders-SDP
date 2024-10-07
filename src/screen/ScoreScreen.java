@@ -39,6 +39,9 @@ public class ScoreScreen extends Screen {
 	/** Player's name */
 	private String name1, name2;
 
+	// Set ratios for each coin_lv - placed in an array in the order of lv1, lv2, lv3, lv4, and will be used accordingly,
+	// e.g., lv1; score 100 * 0.1
+	private static final double[] COIN_RATIOS = {0.1, 0.13, 0.16, 0.19};
 
 	/**
 	 * Constructor, establishes the properties of the screen.
@@ -63,7 +66,18 @@ public class ScoreScreen extends Screen {
 		this.livesRemaining = gameState.getLivesRemaining();
 		this.bulletsShot = gameState.getBulletsShot();
 		this.shipsDestroyed = gameState.getShipsDestroyed();
-		this.coinsEarned = gameState.getScore()/10;
+
+		// Get the user's coin_lv
+		int coin_lv = wallet.getCoin_lv();
+
+		// Apply different ratios based on coin_lv
+		double coin_ratio = COIN_RATIOS[coin_lv-1];
+
+		// Adjust coin earning ratios based on the game level upgrade stage score
+		// Since coins are in integer units, round the decimal points and convert to int
+		this.coinsEarned = (int)Math.round(gameState.getScore() * coin_ratio);
+
+		// deposit the earned coins to wallet
 		wallet.deposit(coinsEarned);
 
 		this.isNewRecord = false;
