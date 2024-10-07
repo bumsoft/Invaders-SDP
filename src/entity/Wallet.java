@@ -156,7 +156,7 @@ public class Wallet {
             int levelSeq [] = new int[4]; //bullet_lv, shot_lv, lives_lv, coin_lv
             for (int i = 0; i < 4; i++) {
                 int level = Integer.parseInt(bufferedReader.readLine());
-                if(level > 4 || level < 0){
+                if(level > 4 || level <= 0){
                     logger.info("Weird level. Initializing with default values.");
                     return new Wallet();
                 }
