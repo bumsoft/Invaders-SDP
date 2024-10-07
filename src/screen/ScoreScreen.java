@@ -39,7 +39,8 @@ public class ScoreScreen extends Screen {
 	/** Player's name */
 	private String name1, name2;
 
-	// coin_lv 별 비율 설정 - lv1, lv2, lv3, lv4 단계 순서로 배열에 넣고 꺼내쓸거임 ex. lv1;score 100 * 0.1
+	// Set ratios for each coin_lv - placed in an array in the order of lv1, lv2, lv3, lv4, and will be used accordingly,
+	// e.g., lv1; score 100 * 0.1
 	private static final double[] COIN_RATIOS = {0.1, 0.13, 0.16, 0.19};
 
 	/**
