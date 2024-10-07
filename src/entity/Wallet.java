@@ -29,6 +29,7 @@ public class Wallet {
         this.shot_lv = 1;
         this.lives_lv = 1;
         this.coin_lv = 1;
+        writeWallet();
     }
 
     public Wallet(int coin, int bullet_lv, int shot_lv, int lives_lv, int coin_lv)
@@ -123,7 +124,7 @@ public class Wallet {
 
     //현재 지갑상태를 파일에 저장. 저장방식: coin, bullet_lv, shot_lv, lives_lv, coin_lv 순으로 한줄씩 저장
     //Save the current wallet state to a file. Save format: coin, bullet_lv, shot_lv, lives_lv, coin_lv, each in one line
-    private boolean writeWallet()
+    private void writeWallet()
     {
         try {
             Core.getFileManager().saveWallet(this);
@@ -131,7 +132,6 @@ public class Wallet {
 //            throw new RuntimeException(e);
             logger.warning("Couldn't load wallet!");
         }
-        return true;
     }
 
     // 파일에 적힌 정보로 지갑 생성. 만약 파일이 손상되어 읽을 수 없다면 초기값(0)으로 생성하기
@@ -153,12 +153,17 @@ public class Wallet {
             //파일에서 각 줄을 읽어와서 값 설정
             //Read each line from the file and set the values
             int coin = Integer.parseInt(bufferedReader.readLine());
-            int bullet_lv = Integer.parseInt(bufferedReader.readLine());
-            int shot_lv = Integer.parseInt(bufferedReader.readLine());
-            int lives_lv = Integer.parseInt(bufferedReader.readLine());
-            int coin_lv = Integer.parseInt(bufferedReader.readLine());
+            int levelSeq [] = new int[4]; //bullet_lv, shot_lv, lives_lv, coin_lv
+            for (int i = 0; i < 4; i++) {
+                int level = Integer.parseInt(bufferedReader.readLine());
+                if(level > 4 || level <= 0){
+                    logger.info("Weird level. Initializing with default values.");
+                    return new Wallet();
+                }
+                levelSeq[i] = level;
+            }
 
-            return new Wallet(coin, bullet_lv, shot_lv, lives_lv, coin_lv);
+            return new Wallet(coin, levelSeq[0], levelSeq[1], levelSeq[2], levelSeq[3]);
 
         } catch (IOException | NumberFormatException e) {
             //파일을 읽지 못하거나 손상된 경우 기본값으로 반환
