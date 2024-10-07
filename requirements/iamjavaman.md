@@ -1,43 +1,53 @@
 # IamJAVAman
 
 ## Team Introduction
-Through this SDP class, we can expect to grow in our development and collaboration skills.
+
+Through this SDP class, we aim to improve our development and collaboration skills.
 
 - Team leader
-    - `Seochan Moon` : Development
-- Team member
-    - `Jongwon Lee` : Development
-    - `Seungmin Kim` : Development
-    - `Jimin Hwang` : Development
-    - `Dohun Lee` : Development
-    - `Sanghoon Eum` : Development
+    - [`Seochan Moon`](https://github.com/dev-moonsc) : Project Manager, GitHub Repository Management, Bomb item implementation
+- Team members
+    - [`Jongwon Lee`](https://github.com/javadocq) : Goast item implementation
+    - [`Seungmin Kim`](https://github.com/smeasylife) : Multi-Shot item implementation
+    - [`Jimin Hwang`](https://github.com/specture258) : Line-Bomb item implementation
+    - [`Dohun Lee`](https://github.com/D0hunLee) : Time-Stop item implementation
+    - [`Sanghoon Eum`](https://github.com/bamcasa) : Barrier item implementation
 
-## Team Requirements
-Perform the following tasks on in-game items:
-- Developement
-- Create
-- Obtain
-- Use
+## Team Objectives
+
+Our goal is to develop and implement the following item features:
+
+- Creation
+- Acquisition
+- Usage
 
 ## Detailed Requirements
-In this game, items are spawned at the location where enemies are killed with a certain probability. If the player hits the item with a bullet, the item can be obtained.
 
-### Item list
-- Bomb
-    - Kill enemies within 3*3 range
-- Line Bomb
-    - Kill enemies at the bottom of the line.
-- Barrier
-    - Barriers are created in front of the player to prevent enemy projectiles.
-- Goast
-    - Player becomes transparent like ghost. And nothing can harm the player. So the bullets just goes through the player.
-- Time stop 
-    - Enemies do not come down for a certain period of time (x seconds)
-- Multi shot
-    - Power-up item that allows the player's spaceship to fire multiple bullets at once. 
-    - When this item is acquired, the player can shoot a several bullets in a straight line at the same time.
-    - Each time the player collects a multi-shot item, the number of bullets increases.
+Items in this game will be implemented as follows:
+
+1. When an enemy is defeated, there is a certain probability that an item will drop.
+2. When a dropped item is hit by a bullet, the item will be both acquired and used immediately.
+
+### Item list (To be implemented)
+
+- **Bomb**
+    - Eliminates enemies within a 3*3 range
+- **Line-Bomb**
+    - Eliminates enemies in the bottom row of enemy formations.
+      - (This may be changed to kill enemies in a single vertical column.)
+- **Barrier**
+    - Creates a shield in front of the player that blocks enemy projectiles.
+    - The barrier is destroyed after blocking one projectile.
+- **Goast**
+    - For a certain period, the player's ship becomes transparent, allowing it to ignore bullets.
+- **Time-stop**
+    - Freezes enemy ships and bullets for a certain duration.
+    - The player can move and attack freely during this time.
+- **Multi-shot**
+    - Increases the number of bullets fired by the player's ship.
+    - The number of bullets increases each time the player acquires a Multi-shot item.
 
 ## Dependency
+
 - Sound effects
-- Visual effects
+    - Sound effects will be played when items are dropped and used.

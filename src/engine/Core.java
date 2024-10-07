@@ -69,7 +69,8 @@ public final class Core {
 	private static Handler fileHandler;
 	/** Logger handler for printing to console. */
 	private static ConsoleHandler consoleHandler;
-
+	/** Initialize singleton instance of SoundManager and return that */
+	private static final SoundManager soundManager = SoundManager.getInstance();
 
 	/**
 	 * Test implementation.
@@ -209,6 +210,8 @@ public final class Core {
 
 		fileHandler.flush();
 		fileHandler.close();
+		soundManager.closeAllSounds();
+
 		System.exit(0);
 	}
 
