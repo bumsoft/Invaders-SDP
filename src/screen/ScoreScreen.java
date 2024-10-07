@@ -66,17 +66,17 @@ public class ScoreScreen extends Screen {
 		this.bulletsShot = gameState.getBulletsShot();
 		this.shipsDestroyed = gameState.getShipsDestroyed();
 
-		// 사용자의 coin_lv 가져오기
+		// Get the user's coin_lv
 		int coin_lv = wallet.getCoin_lv();
 
-		// coin_lv에 따라서 다른 비율 적용
+		// Apply different ratios based on coin_lv
 		double coin_ratio = COIN_RATIOS[coin_lv-1];
 
-		// 게임 단계 업그레이드 단계 별 점수에 따른 코인 획득 비율 조정
-		// - 코인 단위는 정수로 떨어지니까 소수점 이라 반올림 시켜서 int로 변환
+		// Adjust coin earning ratios based on the game level upgrade stage score
+		// Since coins are in integer units, round the decimal points and convert to int
 		this.coinsEarned = (int)Math.round(gameState.getScore() * coin_ratio);
 
-		// wallet에 획득한 코인 저축
+		// deposit the earned coins to wallet
 		wallet.deposit(coinsEarned);
 
 		this.isNewRecord = false;
