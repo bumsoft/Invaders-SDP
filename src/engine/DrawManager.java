@@ -6,11 +6,13 @@ import java.awt.FontFormatException;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 
 import entity.Wallet;
 import screen.Screen;
@@ -54,6 +56,14 @@ public final class DrawManager {
 
 	/** Sprite types mapped to their images. */
 	private static Map<SpriteType, boolean[][]> spriteMap;
+
+	/** For Shopscreen image */
+	private static BufferedImage imgadditionallife = null;
+	private static BufferedImage imgbulletspeed = null;
+	private static BufferedImage imgcoin = null;
+	private static BufferedImage imgcoingain = null;
+	private static BufferedImage imgshotinterval = null;
+
 
 	/** Sprite types. */
 	public static enum SpriteType {
@@ -121,6 +131,18 @@ public final class DrawManager {
 		} catch (FontFormatException e) {
 			logger.warning("Font formating failed.");
 		}
+
+		/** Shop image load*/
+		try{
+			imgadditionallife = ImageIO.read(new File("res/additional life.jpg"));
+			imgbulletspeed = ImageIO.read(new File("res/bullet speed.jpg"));
+			imgcoin = ImageIO.read(new File("res/coin.jpg"));
+			imgcoingain = ImageIO.read(new File("res/coin gain.jpg"));
+			imgshotinterval = ImageIO.read(new File("res/shot interval.jpg"));
+		} catch (IOException e) {
+			logger.info("Shop image loading failed");
+		}
+
 	}
 
 	/**
@@ -732,38 +754,196 @@ public final class DrawManager {
 	public void drawShop(final Screen screen, final int option, final Wallet wallet, final Cooldown money_alertcooldown, final Cooldown max_alertcooldown) {
 
 		String shopString = "Shop";
-		String instructionsString = "COIN: " + wallet.getCoin();
-		String exitinfo = "press esc to exit";
-		String coststring = "cost";
-		String[] costs = new String[] {"0", "2000", "4000", "8000", "MAX LEVEL"};
-
-		backBufferGraphics.setColor(Color.GRAY);
-		drawCenteredRegularString(screen,exitinfo,(screen.getHeight()/20)*5);
-		drawCenteredRegularString(screen, instructionsString,
-				(screen.getHeight() / 20)*6);
-		drawCenteredRegularString(screen,coststring,screen.getHeight() /20 *8 );
-
-		if(option==1)
-		{
-			drawCenteredRegularString(screen,costs[wallet.getBullet_lv()],screen.getHeight() /20 *9 );
-		}
-		else if(option==2)
-		{
-			drawCenteredRegularString(screen,costs[wallet.getShot_lv()],screen.getHeight() /20 *9 );
-		}
-		else if(option==3)
-		{
-			drawCenteredRegularString(screen,costs[wallet.getLives_lv()],screen.getHeight() /20 *9 );
-		}
-		else if(option==4)
-		{
-			drawCenteredRegularString(screen,costs[wallet.getCoin_lv()],screen.getHeight() /20 *9 );
-		}
+		String instructionsString = ":  " + wallet.getCoin();
+		String exitinfo = "PRESS \"ESC\" TO RETURN TO MAIN MENU";
+		String[] costs = new String[] {"2000", "4000", "8000", "MAX LEVEL"};
+		int imgstartx = screen.getWidth()/80*23;
+		int imgstarty = screen.getHeight()/80*27;
+		int imgdis = screen.getHeight()/80*12;
+		int coinstartx = screen.getWidth()/80*55;
+		int coinstarty = screen.getHeight()/160*66;
+		int coindis = screen.getHeight()/80*12;
+		int coinsize = 20;
+		int cointextstartx=screen.getWidth()/80*60;
+		int cointextstarty=screen.getHeight()/160*71;
+		int cointextdis=screen.getHeight()/80*12;
 
 		backBufferGraphics.setColor(Color.GREEN);
 		drawCenteredBigString(screen, shopString, screen.getHeight() / 20*3);
+		backBufferGraphics.drawImage(imgcoin, screen.getWidth()/80*39-(instructionsString.length()-3)*screen.getWidth()/80,screen.getHeight()/80*18,coinsize,coinsize,null);
+		backBufferGraphics.setColor(Color.WHITE);
+		backBufferGraphics.setFont(fontRegular);
+		backBufferGraphics.drawString(instructionsString,screen.getWidth()/80*44-(instructionsString.length()-3)*screen.getWidth()/80,screen.getHeight()/80*20);
+		drawCenteredRegularString(screen,"BULLET SPEED",screen.getHeight()/80*28);
+		for (int i = 0; i < 3; i++) {
+			backBufferGraphics.setColor(Color.WHITE);
+			backBufferGraphics.fillRect(screen.getWidth()/40*(33/2) +i*(screen.getWidth()/10),screen.getHeight()/80*30,20,20);
+		}
+		backBufferGraphics.setColor(Color.GREEN);
+		for (int i = 0; i < wallet.getBullet_lv()-1; i++) {
+			backBufferGraphics.fillRect(screen.getWidth()/40*(33/2) +i*(screen.getWidth()/10),screen.getHeight()/80*30,20,20);
+		}
+		backBufferGraphics.setColor(Color.WHITE);
+		drawCenteredRegularString(screen,"SHOT INTERVAL",screen.getHeight()/80*40);
+		for (int i = 0; i < 3; i++) {
+			backBufferGraphics.setColor(Color.WHITE);
+			backBufferGraphics.fillRect(screen.getWidth()/40*(33/2) +i*(screen.getWidth()/10),screen.getHeight()/80*42,20,20);
+		}
+		backBufferGraphics.setColor(Color.GREEN);
+		for (int i = 0; i < wallet.getShot_lv()-1; i++) {
+			backBufferGraphics.fillRect(screen.getWidth()/40*(33/2) +i*(screen.getWidth()/10),screen.getHeight()/80*42,20,20);
+		}
+		backBufferGraphics.setColor(Color.WHITE);
+		drawCenteredRegularString(screen,"ADDITIONAL LIFE",screen.getHeight()/80*52);
+		for (int i = 0; i < 3; i++) {
+			backBufferGraphics.setColor(Color.WHITE);
+			backBufferGraphics.fillRect(screen.getWidth()/40*(33/2) +i*(screen.getWidth()/10),screen.getHeight()/80*54,20,20);
+		}
+		backBufferGraphics.setColor(Color.GREEN);
+		for (int i = 0; i < wallet.getLives_lv()-1; i++) {
+			backBufferGraphics.fillRect(screen.getWidth()/40*(33/2) +i*(screen.getWidth()/10),screen.getHeight()/80*54,20,20);
+		}
+		backBufferGraphics.setColor(Color.WHITE);
+		drawCenteredRegularString(screen,"COIN GAIN",screen.getHeight()/80*64);
+		for (int i = 0; i < 3; i++) {
+			backBufferGraphics.setColor(Color.WHITE);
+			backBufferGraphics.fillRect(screen.getWidth()/40*(33/2) +i*(screen.getWidth()/10),screen.getHeight()/80*66,20,20);
+		}
+		backBufferGraphics.setColor(Color.GREEN);
+		for (int i = 0; i < wallet.getCoin_lv()-1; i++) {
+			backBufferGraphics.fillRect(screen.getWidth()/40*(33/2) +i*(screen.getWidth()/10),screen.getHeight()/80*66,20,20);
+		}
+
+		switch (option)
+		{
+			case 1:
+			{
+				backBufferGraphics.drawImage(imgbulletspeed,imgstartx,imgstarty,50,40,null);
+				backBufferGraphics.drawImage(imgcoin,coinstartx,coinstarty,coinsize,coinsize,null);
+				backBufferGraphics.setColor(Color.WHITE);
+				switch(wallet.getBullet_lv())
+				{
+					case 1:
+					{
+						backBufferGraphics.drawString("X "+costs[0],cointextstartx,cointextstarty);
+						break;
+					}
+					case 2:
+					{
+						backBufferGraphics.drawString("X "+costs[1],cointextstartx,cointextstarty);
+						break;
+					}
+					case 3:
+					{
+						backBufferGraphics.drawString("X "+costs[2],cointextstartx,cointextstarty);
+						break;
+					}
+					default:
+					{
+						backBufferGraphics.drawString(costs[3],cointextstartx,cointextstarty);
+						break;
+					}
+				}
+				break;
+			}
+			case 2:
+			{
+				backBufferGraphics.drawImage(imgshotinterval,imgstartx,imgstarty+imgdis,50,40,null);
+				backBufferGraphics.drawImage(imgcoin,coinstartx,coinstarty+coindis,coinsize,coinsize,null);
+				backBufferGraphics.setColor(Color.WHITE);
+				switch(wallet.getShot_lv())
+				{
+					case 1:
+					{
+						backBufferGraphics.drawString("X "+costs[0],cointextstartx,cointextstarty+cointextdis);
+						break;
+					}
+					case 2:
+					{
+						backBufferGraphics.drawString("X "+costs[1],cointextstartx,cointextstarty+cointextdis);
+						break;
+					}
+					case 3:
+					{
+						backBufferGraphics.drawString("X "+costs[2],cointextstartx,cointextstarty+cointextdis);
+						break;
+					}
+					default:
+					{
+						backBufferGraphics.drawString(costs[3],cointextstartx,cointextstarty+cointextdis);
+						break;
+					}
+				}
+				break;
+			}
+			case 3:
+			{
+				backBufferGraphics.drawImage(imgadditionallife,imgstartx-imgdis/10*2,imgstarty+2*imgdis/40*39,50*3/2,40*3/2,null);
+				backBufferGraphics.drawImage(imgcoin,coinstartx,coinstarty+2*coindis,coinsize,coinsize,null);
+				backBufferGraphics.setColor(Color.WHITE);
+				switch(wallet.getLives_lv())
+				{
+					case 1:
+					{
+						backBufferGraphics.drawString("X "+costs[0],cointextstartx,cointextstarty+2*cointextdis);
+						break;
+					}
+					case 2:
+					{
+						backBufferGraphics.drawString("X "+costs[1],cointextstartx,cointextstarty+2*cointextdis);
+						break;
+					}
+					case 3:
+					{
+						backBufferGraphics.drawString("X "+costs[2],cointextstartx,cointextstarty+2*cointextdis);
+						break;
+					}
+					default:
+					{
+						backBufferGraphics.drawString(costs[3],cointextstartx,cointextstarty+2*cointextdis);
+						break;
+					}
+				}
+				break;
+			}
+			default:
+			{
+				backBufferGraphics.drawImage(imgcoingain,imgstartx,imgstarty+3*imgdis,40,41,null);
+				backBufferGraphics.drawImage(imgcoin,coinstartx,coinstarty+3*coindis,coinsize,coinsize,null);
+				backBufferGraphics.setColor(Color.WHITE);
+				switch(wallet.getCoin_lv())
+				{
+					case 1:
+					{
+						backBufferGraphics.drawString("X "+costs[0],cointextstartx,cointextstarty+3*cointextdis);
+						break;
+					}
+					case 2:
+					{
+						backBufferGraphics.drawString("X "+costs[1],cointextstartx,cointextstarty+3*cointextdis);
+						break;
+					}
+					case 3:
+					{
+						backBufferGraphics.drawString("X "+costs[2],cointextstartx,cointextstarty+3*cointextdis);
+						break;
+					}
+					default:
+					{
+						backBufferGraphics.drawString(costs[3],cointextstartx,cointextstarty+3*cointextdis);
+						break;
+					}
+				}
+				break;
+			}
+		}
+
+		backBufferGraphics.setColor(Color.WHITE);
+		drawCenteredRegularString(screen,"PRESS \"ESC\" TO RETURN TO MAIN MENU",screen.getHeight()/80*80);
 
 
+
+		/*
 		String item1String = "bullet_speed";
 		String item2String = "shot_interval";
 		String item3String = "additional_life";
@@ -796,7 +976,7 @@ public final class DrawManager {
 			backBufferGraphics.setColor(Color.WHITE);
 		drawCenteredRegularString(screen, item4String+ " LV. "+ wallet.getCoin_lv() , screen.getHeight() / 3
 				* 2 + fontRegularMetrics.getHeight() * 6);
-
+		*/
 		if (!money_alertcooldown.checkFinished())
 		{
 			backBufferGraphics.setColor(Color.red);
