@@ -58,11 +58,11 @@ public final class DrawManager {
 	private static Map<SpriteType, boolean[][]> spriteMap;
 
 	/** For Shopscreen image */
-	private static BufferedImage imgadditionallife = null;
-	private static BufferedImage imgbulletspeed = null;
-	private static BufferedImage imgcoin = null;
-	private static BufferedImage imgcoingain = null;
-	private static BufferedImage imgshotinterval = null;
+	private static BufferedImage img_additionallife;
+	private static BufferedImage img_bulletspeed;
+	private static BufferedImage img_coin;
+	private static BufferedImage img_coingain;
+	private static BufferedImage img_shotinterval;
 
 
 	/** Sprite types. */
@@ -134,11 +134,11 @@ public final class DrawManager {
 
 		/** Shop image load*/
 		try{
-			imgadditionallife = ImageIO.read(new File("res/additional life.jpg"));
-			imgbulletspeed = ImageIO.read(new File("res/bullet speed.jpg"));
-			imgcoin = ImageIO.read(new File("res/coin.jpg"));
-			imgcoingain = ImageIO.read(new File("res/coin gain.jpg"));
-			imgshotinterval = ImageIO.read(new File("res/shot interval.jpg"));
+			img_additionallife = ImageIO.read(new File("res/image/additional life.jpg"));
+			img_bulletspeed = ImageIO.read(new File("res/image/bullet speed.jpg"));
+			img_coin = ImageIO.read(new File("res/image/coin.jpg"));
+			img_coingain = ImageIO.read(new File("res/image/coin gain.jpg"));
+			img_shotinterval = ImageIO.read(new File("res/image/shot interval.jpg"));
 		} catch (IOException e) {
 			logger.info("Shop image loading failed");
 		}
@@ -754,229 +754,62 @@ public final class DrawManager {
 	public void drawShop(final Screen screen, final int option, final Wallet wallet, final Cooldown money_alertcooldown, final Cooldown max_alertcooldown) {
 
 		String shopString = "Shop";
-		String instructionsString = ":  " + wallet.getCoin();
-		String exitinfo = "PRESS \"ESC\" TO RETURN TO MAIN MENU";
+		int shopStringY = Math.round(screen.getHeight() * 0.15f);
+
+
+		String coinString = ":  " + wallet.getCoin();
+		String exitString = "PRESS \"ESC\" TO RETURN TO MAIN MENU";
 		String[] costs = new String[] {"2000", "4000", "8000", "MAX LEVEL"};
+
+		String[] itemString = new String[]{"BULLET SPEED", "SHOT INTERVAL", "ADDITIONAL LIFE","COIN GAIN"};
+		int[] walletLevel = new int[]{wallet.getBullet_lv(), wallet.getShot_lv(), wallet.getLives_lv(), wallet.getCoin_lv()};
+
+		BufferedImage[] itemImages = new BufferedImage[]{img_bulletspeed,img_shotinterval,img_additionallife,img_coingain};
+
 		int imgstartx = screen.getWidth()/80*23;
 		int imgstarty = screen.getHeight()/80*27;
 		int imgdis = screen.getHeight()/80*12;
 		int coinstartx = screen.getWidth()/80*55;
 		int coinstarty = screen.getHeight()/160*66;
 		int coindis = screen.getHeight()/80*12;
-		int coinsize = 20;
-		int cointextstartx=screen.getWidth()/80*60;
-		int cointextstarty=screen.getHeight()/160*71;
-		int cointextdis=screen.getHeight()/80*12;
+		int coinSize = 20;
+		int cointextstartx = screen.getWidth()/80*60;
+		int cointextstarty = screen.getHeight()/160*71;
+		int cointextdis = screen.getHeight()/80*12;
 
 		backBufferGraphics.setColor(Color.GREEN);
-		drawCenteredBigString(screen, shopString, screen.getHeight() / 20*3);
-		backBufferGraphics.drawImage(imgcoin, screen.getWidth()/80*39-(instructionsString.length()-3)*screen.getWidth()/80,screen.getHeight()/80*18,coinsize,coinsize,null);
+		drawCenteredBigString(screen, shopString, shopStringY);
+		backBufferGraphics.drawImage(img_coin, screen.getWidth()/80*39-(coinString.length()-3)*screen.getWidth()/80,screen.getHeight()/80*18,coinSize,coinSize,null);
 		backBufferGraphics.setColor(Color.WHITE);
 		backBufferGraphics.setFont(fontRegular);
-		backBufferGraphics.drawString(instructionsString,screen.getWidth()/80*44-(instructionsString.length()-3)*screen.getWidth()/80,screen.getHeight()/80*20);
-		drawCenteredRegularString(screen,"BULLET SPEED",screen.getHeight()/80*28);
-		for (int i = 0; i < 3; i++) {
-			backBufferGraphics.setColor(Color.WHITE);
-			backBufferGraphics.fillRect(screen.getWidth()/40*(33/2) +i*(screen.getWidth()/10),screen.getHeight()/80*30,20,20);
-		}
-		backBufferGraphics.setColor(Color.GREEN);
-		for (int i = 0; i < wallet.getBullet_lv()-1; i++) {
-			backBufferGraphics.fillRect(screen.getWidth()/40*(33/2) +i*(screen.getWidth()/10),screen.getHeight()/80*30,20,20);
-		}
-		backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen,"SHOT INTERVAL",screen.getHeight()/80*40);
-		for (int i = 0; i < 3; i++) {
-			backBufferGraphics.setColor(Color.WHITE);
-			backBufferGraphics.fillRect(screen.getWidth()/40*(33/2) +i*(screen.getWidth()/10),screen.getHeight()/80*42,20,20);
-		}
-		backBufferGraphics.setColor(Color.GREEN);
-		for (int i = 0; i < wallet.getShot_lv()-1; i++) {
-			backBufferGraphics.fillRect(screen.getWidth()/40*(33/2) +i*(screen.getWidth()/10),screen.getHeight()/80*42,20,20);
-		}
-		backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen,"ADDITIONAL LIFE",screen.getHeight()/80*52);
-		for (int i = 0; i < 3; i++) {
-			backBufferGraphics.setColor(Color.WHITE);
-			backBufferGraphics.fillRect(screen.getWidth()/40*(33/2) +i*(screen.getWidth()/10),screen.getHeight()/80*54,20,20);
-		}
-		backBufferGraphics.setColor(Color.GREEN);
-		for (int i = 0; i < wallet.getLives_lv()-1; i++) {
-			backBufferGraphics.fillRect(screen.getWidth()/40*(33/2) +i*(screen.getWidth()/10),screen.getHeight()/80*54,20,20);
-		}
-		backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen,"COIN GAIN",screen.getHeight()/80*64);
-		for (int i = 0; i < 3; i++) {
-			backBufferGraphics.setColor(Color.WHITE);
-			backBufferGraphics.fillRect(screen.getWidth()/40*(33/2) +i*(screen.getWidth()/10),screen.getHeight()/80*66,20,20);
-		}
-		backBufferGraphics.setColor(Color.GREEN);
-		for (int i = 0; i < wallet.getCoin_lv()-1; i++) {
-			backBufferGraphics.fillRect(screen.getWidth()/40*(33/2) +i*(screen.getWidth()/10),screen.getHeight()/80*66,20,20);
-		}
+		backBufferGraphics.drawString(coinString,screen.getWidth()/80*44-(coinString.length()-3)*screen.getWidth()/80,screen.getHeight()/80*20);
 
-		switch (option)
+		for(int i = 0;i<4;i++)
 		{
-			case 1:
+			backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularString(screen,itemString[i],screen.getHeight()/80*(28 + 12*i));
+			for (int j = 0; j < 3; j++)
 			{
-				backBufferGraphics.drawImage(imgbulletspeed,imgstartx,imgstarty,50,40,null);
-				backBufferGraphics.drawImage(imgcoin,coinstartx,coinstarty,coinsize,coinsize,null);
-				backBufferGraphics.setColor(Color.WHITE);
-				switch(wallet.getBullet_lv())
+				if (j + 2 <= walletLevel[i])
 				{
-					case 1:
-					{
-						backBufferGraphics.drawString("X "+costs[0],cointextstartx,cointextstarty);
-						break;
-					}
-					case 2:
-					{
-						backBufferGraphics.drawString("X "+costs[1],cointextstartx,cointextstarty);
-						break;
-					}
-					case 3:
-					{
-						backBufferGraphics.drawString("X "+costs[2],cointextstartx,cointextstarty);
-						break;
-					}
-					default:
-					{
-						backBufferGraphics.drawString(costs[3],cointextstartx,cointextstarty);
-						break;
-					}
-				}
-				break;
-			}
-			case 2:
-			{
-				backBufferGraphics.drawImage(imgshotinterval,imgstartx,imgstarty+imgdis,50,40,null);
-				backBufferGraphics.drawImage(imgcoin,coinstartx,coinstarty+coindis,coinsize,coinsize,null);
-				backBufferGraphics.setColor(Color.WHITE);
-				switch(wallet.getShot_lv())
+					backBufferGraphics.setColor(Color.GREEN);
+					backBufferGraphics.fillRect(screen.getWidth() / 40 * (33 / 2) + j * (screen.getWidth() / 10), screen.getHeight() / 80 * (30 + 12*i), 20, 20);
+				} else
 				{
-					case 1:
-					{
-						backBufferGraphics.drawString("X "+costs[0],cointextstartx,cointextstarty+cointextdis);
-						break;
-					}
-					case 2:
-					{
-						backBufferGraphics.drawString("X "+costs[1],cointextstartx,cointextstarty+cointextdis);
-						break;
-					}
-					case 3:
-					{
-						backBufferGraphics.drawString("X "+costs[2],cointextstartx,cointextstarty+cointextdis);
-						break;
-					}
-					default:
-					{
-						backBufferGraphics.drawString(costs[3],cointextstartx,cointextstarty+cointextdis);
-						break;
-					}
+					backBufferGraphics.setColor(Color.WHITE);
+					backBufferGraphics.fillRect(screen.getWidth() / 40 * (33 / 2) + j * (screen.getWidth() / 10), screen.getHeight() / 80 * (30 + 12*i), 20, 20);
 				}
-				break;
-			}
-			case 3:
-			{
-				backBufferGraphics.drawImage(imgadditionallife,imgstartx-imgdis/10*2,imgstarty+2*imgdis/40*39,50*3/2,40*3/2,null);
-				backBufferGraphics.drawImage(imgcoin,coinstartx,coinstarty+2*coindis,coinsize,coinsize,null);
-				backBufferGraphics.setColor(Color.WHITE);
-				switch(wallet.getLives_lv())
-				{
-					case 1:
-					{
-						backBufferGraphics.drawString("X "+costs[0],cointextstartx,cointextstarty+2*cointextdis);
-						break;
-					}
-					case 2:
-					{
-						backBufferGraphics.drawString("X "+costs[1],cointextstartx,cointextstarty+2*cointextdis);
-						break;
-					}
-					case 3:
-					{
-						backBufferGraphics.drawString("X "+costs[2],cointextstartx,cointextstarty+2*cointextdis);
-						break;
-					}
-					default:
-					{
-						backBufferGraphics.drawString(costs[3],cointextstartx,cointextstarty+2*cointextdis);
-						break;
-					}
-				}
-				break;
-			}
-			default:
-			{
-				backBufferGraphics.drawImage(imgcoingain,imgstartx,imgstarty+3*imgdis,40,41,null);
-				backBufferGraphics.drawImage(imgcoin,coinstartx,coinstarty+3*coindis,coinsize,coinsize,null);
-				backBufferGraphics.setColor(Color.WHITE);
-				switch(wallet.getCoin_lv())
-				{
-					case 1:
-					{
-						backBufferGraphics.drawString("X "+costs[0],cointextstartx,cointextstarty+3*cointextdis);
-						break;
-					}
-					case 2:
-					{
-						backBufferGraphics.drawString("X "+costs[1],cointextstartx,cointextstarty+3*cointextdis);
-						break;
-					}
-					case 3:
-					{
-						backBufferGraphics.drawString("X "+costs[2],cointextstartx,cointextstarty+3*cointextdis);
-						break;
-					}
-					default:
-					{
-						backBufferGraphics.drawString(costs[3],cointextstartx,cointextstarty+3*cointextdis);
-						break;
-					}
-				}
-				break;
 			}
 		}
 
 		backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen,"PRESS \"ESC\" TO RETURN TO MAIN MENU",screen.getHeight()/80*80);
+				backBufferGraphics.drawImage(itemImages[option-1],imgstartx,imgstarty + (imgdis*(option-1)),50,40,null);
+				backBufferGraphics.drawImage(img_coin,coinstartx,coinstarty + (coindis*(option-1)),coinSize,coinSize,null);
+				backBufferGraphics.drawString("X "+costs[walletLevel[option-1]-1],cointextstartx,cointextstarty + (cointextdis*(option-1)));
+		backBufferGraphics.setColor(Color.WHITE);
 
+		drawCenteredRegularString(screen,exitString,screen.getHeight()/80*80);
 
-
-		/*
-		String item1String = "bullet_speed";
-		String item2String = "shot_interval";
-		String item3String = "additional_life";
-		String item4String = "coin_gain";
-
-		if (option == 1)
-			backBufferGraphics.setColor(Color.GREEN);
-		else
-			backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen, item1String + "  LV. "+ wallet.getBullet_lv(),
-				screen.getHeight() / 3 * 2);
-
-		if (option == 2)
-			backBufferGraphics.setColor(Color.GREEN);
-		else
-			backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen, item2String+ "  LV. "+ wallet.getShot_lv(), screen.getHeight()
-				/ 3 * 2 + fontRegularMetrics.getHeight() * 2);
-
-		if (option == 3)
-			backBufferGraphics.setColor(Color.GREEN);
-		else
-			backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen, item3String+ " LV. "+ wallet.getLives_lv() , screen.getHeight() / 3
-				* 2 + fontRegularMetrics.getHeight() * 4);
-
-		if (option == 4)
-			backBufferGraphics.setColor(Color.GREEN);
-		else
-			backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen, item4String+ " LV. "+ wallet.getCoin_lv() , screen.getHeight() / 3
-				* 2 + fontRegularMetrics.getHeight() * 6);
-		*/
 		if (!money_alertcooldown.checkFinished())
 		{
 			backBufferGraphics.setColor(Color.red);
@@ -990,7 +823,6 @@ public final class DrawManager {
 			backBufferGraphics.fillRect((screen.getWidth()-300)/2, (screen.getHeight()-100)/2, 300, 80);
 			backBufferGraphics.setColor(Color.black);
 			drawCenteredBigString(screen, "Already max level", screen.getHeight()/2);
-
 		}
 	}
 }
