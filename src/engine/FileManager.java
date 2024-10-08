@@ -225,6 +225,35 @@ public final class FileManager {
 		return highScores;
 	}
 
+	public List<String> loadCreditList() throws IOException {  // 사용자의 크레딧 파일을 로드
+
+		List<String> creditname = new ArrayList<String>();
+		InputStream inputStream = null;
+		BufferedReader bufferedReader = null;
+
+		try {
+			inputStream = FileManager.class.getClassLoader()
+					.getResourceAsStream("creditlist");
+			bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+			logger.info("Loading credit list.");
+
+			String name = bufferedReader.readLine();
+
+			while (name != null) {
+				creditname.add(name);
+				name = bufferedReader.readLine();
+			}
+
+		}finally {
+			if (bufferedReader != null)
+				bufferedReader.close();
+		}
+
+		return creditname;
+	}
+
+
 	/**
 	 * Saves user high scores to disk.
 	 * 
