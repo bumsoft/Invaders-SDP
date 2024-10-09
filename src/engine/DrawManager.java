@@ -769,11 +769,11 @@ public final class DrawManager {
 		int imgstartx = screen.getWidth()/80*23;
 		int imgstarty = screen.getHeight()/80*27;
 		int imgdis = screen.getHeight()/80*12;
-		int coinstartx = screen.getWidth()/80*55;
+		int coinstartx = screen.getWidth()/80*57;
 		int coinstarty = screen.getHeight()/160*66;
 		int coindis = screen.getHeight()/80*12;
 		int coinSize = 20;
-		int cointextstartx = screen.getWidth()/80*60;
+		int cointextstartx = screen.getWidth()/80*61;
 		int cointextstarty = screen.getHeight()/160*71;
 		int cointextdis = screen.getHeight()/80*12;
 
