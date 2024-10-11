@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-import engine.Core;
-import engine.GameState;
-import engine.Score;
+import engine.*;
 import entity.Wallet;
 
 /**
@@ -19,7 +17,9 @@ import entity.Wallet;
 public class ScoreScreen extends Screen {
 
 	/** Maximum number of high scores. */
-	private static final int MAX_HIGH_SCORE_NUM = 7;
+	private static final int MAX_HIGH_SCORE_NUM = 3;
+	/** Singleton instance of SoundManager */
+	private final SoundManager soundManager = SoundManager.getInstance();
 
 
 	/** Current score. */
@@ -33,6 +33,7 @@ public class ScoreScreen extends Screen {
 	/** List of past high scores. */
 	private List<Score> highScores;
 	/** Checks if current score is a new high score. */
+	private double accuracy;
 	private boolean isNewRecord;
 	/** Number of coins earned in the game */
 	private int coinsEarned;
@@ -55,8 +56,8 @@ public class ScoreScreen extends Screen {
 	 * @param gameState
 	 *            Current game state.
 	 */
-	public ScoreScreen(final int width, final int height, final int fps,
-			final GameState gameState, final Wallet wallet) {
+	public ScoreScreen(final String name1, final int width, final int height, final int fps,
+			final GameState gameState, final Wallet wallet, final AchievementManager achievementManager) {
 		super(width, height, fps);
 
 		this.name1 = name1;
@@ -76,19 +77,16 @@ public class ScoreScreen extends Screen {
 		// Adjust coin earning ratios based on the game level upgrade stage score
 		// Since coins are in integer units, round the decimal points and convert to int
 		this.coinsEarned = (int)Math.round(gameState.getScore() * coin_ratio);
+		this.coinsEarned += achievementManager.getAchievementReward();
 
 		// deposit the earned coins to wallet
+		this.accuracy = gameState.getAccuracy();
 		wallet.deposit(coinsEarned);
 
-		this.isNewRecord = false;
+		soundManager.loopSound(Sound.BGM_GAMEOVER);
 
 		try {
 			this.highScores = Core.getFileManager().loadHighScores();
-			if (highScores.size() < MAX_HIGH_SCORE_NUM
-					|| highScores.get(highScores.size() - 1).getScore()
-					< this.score)
-				this.isNewRecord = true;
-
 		} catch (IOException e) {
 			logger.warning("Couldn't load high scores!");
 		}
@@ -117,14 +115,16 @@ public class ScoreScreen extends Screen {
 				// Return to main menu.
 				this.returnCode = 1;
 				this.isRunning = false;
-				if (this.isNewRecord)
-					saveScore();
+				soundManager.stopSound(Sound.BGM_GAMEOVER);
+				soundManager.playSound(Sound.MENU_BACK);
+				saveScore();
 			} else if (inputManager.isKeyDown(KeyEvent.VK_SPACE)) {
 				// Play again.
 				this.returnCode = 2;
 				this.isRunning = false;
-				if (this.isNewRecord)
-					saveScore();
+				soundManager.stopSound(Sound.BGM_GAMEOVER);
+				soundManager.playSound(Sound.MENU_CLICK);
+				saveScore();
 			}
 
 		}
@@ -133,13 +133,40 @@ public class ScoreScreen extends Screen {
 
 	/**
 	 * Saves the score as a high score.
+	 * 중복 방지를 위한 로직 추가.
 	 */
 	private void saveScore() {
-		//highScores.add(new Score(new String(this.name1), score));
+		if (highScores.size() > MAX_HIGH_SCORE_NUM) {
+			int index = 0;
+			for (Score loadScore : highScores) {
+				if (name1.equals(loadScore.getName())) {
+					if (score > loadScore.getScore()) {
+						highScores.remove(index);
+						highScores.add(new Score(name1, score));
+						break;
+					}
+				}
+				index += 1;
+			}
+		} else {
+			boolean checkDuplicate = false;
+			int index = 0;
+			for (Score loadScore : highScores) {
+				if (name1.equals(loadScore.getName())) {
+					checkDuplicate = true;
+					if (score > loadScore.getScore()) {
+						highScores.remove(index);
+						highScores.add(new Score(name1, score));
+						break;
+					}
+				}
+				index += 1;
+			}
+			if (!checkDuplicate) {
+				highScores.add(new Score(name1, score));
+			}
+		}
 		Collections.sort(highScores);
-		if (highScores.size() > MAX_HIGH_SCORE_NUM)
-			highScores.remove(highScores.size() - 1);
-
 		try {
 			Core.getFileManager().saveHighScores(highScores);
 		} catch (IOException e) {
@@ -156,8 +183,7 @@ public class ScoreScreen extends Screen {
 		drawManager.drawGameOver(this, this.inputDelay.checkFinished(),
 				this.isNewRecord);
 		drawManager.drawResults(this, this.score, this.livesRemaining,
-				this.shipsDestroyed, (float) this.shipsDestroyed
-						/ this.bulletsShot, this.isNewRecord, this.coinsEarned);
+				this.shipsDestroyed, this.accuracy, this.isNewRecord, this.coinsEarned);
 
 		drawManager.completeDrawing(this);
 	}

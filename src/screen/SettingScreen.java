@@ -3,6 +3,8 @@ package screen;
 import java.awt.event.KeyEvent;
 import engine.Cooldown;
 import engine.Core;
+import engine.Sound;
+import engine.SoundManager;
 
 public class SettingScreen extends Screen {
 
@@ -16,8 +18,6 @@ public class SettingScreen extends Screen {
     private static final int VOLUME_BAR_GAP = 20;
     /** Spacing between soundbar and volume numbers */
     private static final int VOLUME_PERCENTAGE_GAP = 40;
-    /** Initial volume value */
-    private static final int INITIAL_VOLUME = 50;
     /** Milliseconds between changes in user selection. */
     private static final int COOLDOWN_TIME = 200;
 
@@ -26,9 +26,11 @@ public class SettingScreen extends Screen {
     /** Default selected menu item */
     private int selectedItem = 0;
     /** Default volume value */
-    private int volumeLevel = INITIAL_VOLUME;
+    private int volumeLevel;
     /** Time between changes in user selection. */
     private Cooldown selectionCooldown;
+    /** Singleton instance of SoundManager */
+    private final SoundManager soundManager = SoundManager.getInstance();
 
     /**
      * Constructor, establishes the properties of the screen.
@@ -43,6 +45,7 @@ public class SettingScreen extends Screen {
     public SettingScreen(int width, int height, int fps) {
         super(width, height, fps);
         this.returnCode = 1;
+        this.volumeLevel = soundManager.getVolume()*10;
         this.selectionCooldown = Core.getCooldown(COOLDOWN_TIME);
     }
 
@@ -55,6 +58,7 @@ public class SettingScreen extends Screen {
         if (inputManager.isKeyDown(KeyEvent.VK_ESCAPE)) {
             this.isRunning = false;
             this.returnCode = 1;
+            soundManager.playSound(Sound.MENU_BACK);
             return;
         }
 
@@ -64,23 +68,30 @@ public class SettingScreen extends Screen {
                 if (inputManager.isKeyDown(KeyEvent.VK_LEFT)) {
                     volumeLevel = Math.max(0, volumeLevel - VOLUME_ADJUST_STEP);
                     this.selectionCooldown.reset();
+                    soundManager.volumeDown();
+                    soundManager.playSound(Sound.MENU_MOVE);
                 } else if (inputManager.isKeyDown(KeyEvent.VK_RIGHT)) {
                     volumeLevel = Math.min(100, volumeLevel + VOLUME_ADJUST_STEP);
                     this.selectionCooldown.reset();
+                    soundManager.volumeUp();
+                    soundManager.playSound(Sound.MENU_MOVE);
                 }
             }
 
             if (inputManager.isKeyDown(KeyEvent.VK_UP)) {
                 selectedItem = (selectedItem - 1 + menuItems.length) % menuItems.length;
                 this.selectionCooldown.reset();
+                soundManager.playSound(Sound.MENU_MOVE);
             } else if (inputManager.isKeyDown(KeyEvent.VK_DOWN)) {
                 selectedItem = (selectedItem + 1) % menuItems.length;
                 this.selectionCooldown.reset();
+                soundManager.playSound(Sound.MENU_MOVE);
             }
 
             if (inputManager.isKeyDown(KeyEvent.VK_SPACE) && selectedItem == 1) {
                 this.returnCode = 7;
                 this.isRunning = false;
+                soundManager.playSound(Sound.MENU_CLICK);
             }
         }
 

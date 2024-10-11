@@ -50,7 +50,7 @@ public class Score implements Comparable<Score> {
 	 * @param score
 	 *            Score to compare the current one with.
 	 * @return Comparison between the two scores. Positive if the current one is
-	 *         smaller, positive if its bigger, zero if its the same.
+	 *         smaller, positive if its bigger, zero if it is the same.
 	 */
 	@Override
 	public final int compareTo(final Score score) {

@@ -5,11 +5,15 @@ import java.io.IOException;
 import java.util.List;
 
 import engine.Core;
+import engine.Sound;
+import engine.SoundManager;
 
 public class CreditScreen extends Screen{
 
     private int currentFrame;
     private List<String> creditlist;
+    /** Singleton instance of SoundManager */
+    private final SoundManager soundManager = SoundManager.getInstance();
 
     public CreditScreen(final int width, final int height, final int fps){
         super(width, height, fps);
@@ -50,8 +54,10 @@ public class CreditScreen extends Screen{
 
         draw();
         if (inputManager.isKeyDown(KeyEvent.VK_ESCAPE)
-                && this.inputDelay.checkFinished())
+                && this.inputDelay.checkFinished()) {
             this.isRunning = false;
+            soundManager.playSound(Sound.MENU_BACK);
+        }
     }
 
     private void draw(){

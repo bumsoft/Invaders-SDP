@@ -5,6 +5,10 @@ import java.awt.Color;
 import engine.Cooldown;
 import engine.Core;
 import engine.DrawManager.SpriteType;
+import engine.GameSettings;
+import engine.GameState;
+import engine.Sound;
+import engine.SoundManager;
 
 /**
  * Implements a enemy ship, to be destroyed by the player.
@@ -13,7 +17,6 @@ import engine.DrawManager.SpriteType;
  * 
  */
 public class EnemyShip extends Entity {
-	
 	/** Point value of a type A enemy. */
 	private static final int A_TYPE_POINTS = 10;
 	/** Point value of a type B enemy. */
@@ -30,6 +33,10 @@ public class EnemyShip extends Entity {
 	/** Values of the ship, in points, when destroyed. */
 	private int pointValue;
 
+	/** Singleton instance of SoundManager */
+	private final SoundManager soundManager = SoundManager.getInstance();
+
+    private int health;
 	/**
 	 * Constructor, establishes the ship's properties.
 	 * 
@@ -41,25 +48,30 @@ public class EnemyShip extends Entity {
 	 *            Sprite type, image corresponding to the ship.
 	 */
 	public EnemyShip(final int positionX, final int positionY,
-			final SpriteType spriteType) {
+			final SpriteType spriteType, final GameState gameState) {
 		super(positionX, positionY, 12 * 2, 8 * 2, Color.WHITE);
 
 		this.spriteType = spriteType;
 		this.animationCooldown = Core.getCooldown(500);
 		this.isDestroyed = false;
+        //Determine enemy health based on game level
+		this.health = 0;
+		for(int i =1; i<=gameState.getLevel()/3;i++){
+			this.health++;
+		}
 
 		switch (this.spriteType) {
 		case EnemyShipA1:
 		case EnemyShipA2:
-			this.pointValue = A_TYPE_POINTS;
+			this.pointValue = (int) (A_TYPE_POINTS+(gameState.getLevel()*0.1)+Core.getLevelSetting());
 			break;
 		case EnemyShipB1:
 		case EnemyShipB2:
-			this.pointValue = B_TYPE_POINTS;
+			this.pointValue = (int) (B_TYPE_POINTS+(gameState.getLevel()*0.1)+Core.getLevelSetting());
 			break;
 		case EnemyShipC1:
 		case EnemyShipC2:
-			this.pointValue = C_TYPE_POINTS;
+			this.pointValue = (int) (C_TYPE_POINTS+(gameState.getLevel()*0.1)+Core.getLevelSetting());
 			break;
 		default:
 			this.pointValue = 0;
@@ -139,7 +151,21 @@ public class EnemyShip extends Entity {
 	public final void destroy() {
 		this.isDestroyed = true;
 		this.spriteType = SpriteType.Explosion;
+        soundManager.playSound(Sound.ALIEN_HIT);
 	}
+
+    public final void HealthManageDestroy() { //Determine whether to destroy the enemy ship based on its health
+        if(this.health <= 0){
+            this.isDestroyed = true;
+            this.spriteType = SpriteType.Explosion;
+        }else{
+            this.health--;
+        }
+        soundManager.playSound(Sound.ALIEN_HIT);
+    }
+
+	public int getHealth(){return this.health; }  //Receive enemy ship health
+
 
 	/**
 	 * Checks if the ship has been destroyed.

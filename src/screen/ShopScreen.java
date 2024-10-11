@@ -4,6 +4,8 @@ import java.awt.event.KeyEvent;
 
 import engine.Cooldown;
 import engine.Core;
+import engine.Sound;
+import engine.SoundManager;
 import entity.Wallet;
 
 public class ShopScreen extends Screen {
@@ -11,6 +13,9 @@ public class ShopScreen extends Screen {
     /** Milliseconds between changes in user selection. */
     private static final int SELECTION_TIME = 200;
     private static final int ALERT_TIME = 1500;
+
+    /** Singleton instance of SoundManager */
+    private final SoundManager soundManager = SoundManager.getInstance();
 
     /** Time between changes in user selection. */
     private Cooldown selectionCooldown;
@@ -54,6 +59,9 @@ public class ShopScreen extends Screen {
         this.max_alertCooldown = Core.getCooldown(ALERT_TIME);
         this.wallet = wallet;
         selected_item = 1;
+
+        soundManager.stopSound(Sound.BGM_MAIN);
+        soundManager.loopSound(Sound.BGM_SHOP);
     }
 
     /**
@@ -83,11 +91,13 @@ public class ShopScreen extends Screen {
                     || inputManager.isKeyDown(KeyEvent.VK_W)) {
                 previousMenuItem();
                 this.selectionCooldown.reset();
+                soundManager.playSound(Sound.MENU_MOVE);
             }
             if (inputManager.isKeyDown(KeyEvent.VK_DOWN)
                     || inputManager.isKeyDown(KeyEvent.VK_S)) {
                 nextMenuItem();
                 this.selectionCooldown.reset();
+                soundManager.playSound(Sound.MENU_MOVE);
             }
             if (inputManager.isKeyDown(KeyEvent.VK_SPACE))
             {
@@ -121,8 +131,11 @@ public class ShopScreen extends Screen {
                 }
             }
 
-            if (inputManager.isKeyDown(KeyEvent.VK_ESCAPE))
+            if (inputManager.isKeyDown(KeyEvent.VK_ESCAPE)) {
                 this.isRunning = false;
+                soundManager.playSound(Sound.MENU_BACK);
+                soundManager.stopSound(Sound.BGM_SHOP);
+            }
         }
     }
 
@@ -161,10 +174,12 @@ public class ShopScreen extends Screen {
         {
             if(wallet.withdraw(lv1cost))
             {
+                soundManager.playSound(Sound.COIN_USE);
                 return true;
             }
             else
             {
+                soundManager.playSound(Sound.COIN_INSUFFICIENT);
                 money_alertCooldown.reset();
                 return false;
             }
@@ -173,10 +188,12 @@ public class ShopScreen extends Screen {
         {
             if(wallet.withdraw(lv2cost))
             {
+                soundManager.playSound(Sound.COIN_USE);
                 return true;
             }
             else
             {
+                soundManager.playSound(Sound.COIN_INSUFFICIENT);
                 money_alertCooldown.reset();
                 return false;
             }
@@ -185,16 +202,19 @@ public class ShopScreen extends Screen {
         {
             if(wallet.withdraw(lv3cost))
             {
+                soundManager.playSound(Sound.COIN_USE);
                 return true;
             }
             else
             {
+                soundManager.playSound(Sound.COIN_INSUFFICIENT);
                 money_alertCooldown.reset();
                 return false;
             }
         }
         else if(level==4)
         {
+            soundManager.playSound(Sound.COIN_INSUFFICIENT);
             max_alertCooldown.reset();
             return false;
         }
