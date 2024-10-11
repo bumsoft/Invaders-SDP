@@ -550,7 +550,7 @@ public class GameScreen extends Screen {
 						}
 					}
 
-				}
+
 			} else {
 				for (EnemyShip enemyShip : this.enemyShipFormation)
 					if (!enemyShip.isDestroyed()
@@ -583,39 +583,7 @@ public class GameScreen extends Screen {
 
 					recyclable.add(bullet);
 
-				} else {
-					for (EnemyShip enemyShip : this.enemyShipFormation)
-						if (!enemyShip.isDestroyed()
-								&& checkCollision(bullet, enemyShip)) {
-							//Determination of destruction based on physical strength
-							this.enemyShipFormation.HealthManageDestroy(enemyShip);
-							//Set enemyShipFormation to receive enemy ship score and destroyed ship++
-						  if (combo >= 5)
-                this.score += this.enemyShipFormation.getPoint() * (combo / 5 + 1);
-              else
-                this.score += this.enemyShipFormation.getPoint()
-              this.combo++;
-              this.shipsDestroyed += this.enemyShipFormation.getDistroyedship();
-              timer.cancel();
-						  isExecuted = false;
-              recyclable.add(bullet);
-						}
-          
-					if (this.enemyShipSpecial != null
-							&& !this.enemyShipSpecial.isDestroyed()
-							&& checkCollision(bullet, this.enemyShipSpecial)) {
-						if (combo >= 5)
-						  this.score += enemyShipSpecial.getPointValue() * (combo / 5 + 1);
-					  else
-						  this.score += enemyShipSpecial.getPointValue();
-						this.shipsDestroyed++;
-            this.combo++;
-						this.enemyShipSpecial.destroy();
-						this.enemyShipSpecialExplosionCooldown.reset();
-            timer.cancel();
-					  isExecuted = false;
-						recyclable.add(bullet);
-					}
+				}
 					//check the collision between the obstacle and the bullet
 					for (Block block : this.block) {
 						if (checkCollision(bullet, block)) {
