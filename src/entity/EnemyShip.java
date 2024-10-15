@@ -5,7 +5,6 @@ import java.awt.Color;
 import engine.Cooldown;
 import engine.Core;
 import engine.DrawManager.SpriteType;
-import engine.GameSettings;
 import engine.GameState;
 import engine.Sound;
 import engine.SoundManager;
@@ -23,6 +22,12 @@ public class EnemyShip extends Entity {
 	private static final int B_TYPE_POINTS = 20;
 	/** Point value of a type C enemy. */
 	private static final int C_TYPE_POINTS = 30;
+	/** Point value of a type D enemy. */
+	private static final int D_TYPE_POINTS = 40;
+	/** Point value of a type E enemy. */
+	private static final int E_TYPE_POINTS = 50;
+	/** Point value of a type F enemy*/
+	private static final int F_TYPE_POINTS = 60;
 	/** Point value of a bonus enemy. */
 	private static final int BONUS_TYPE_POINTS = 100;
 
@@ -49,7 +54,7 @@ public class EnemyShip extends Entity {
 	 */
 	public EnemyShip(final int positionX, final int positionY,
 			final SpriteType spriteType, final GameState gameState) {
-		super(positionX, positionY, 12 * 2, 8 * 2, Color.WHITE);
+		super(positionX, positionY, 12 * 2, 8 * 2, getDefaultColor(spriteType));
 
 		this.spriteType = spriteType;
 		this.animationCooldown = Core.getCooldown(500);
@@ -73,11 +78,47 @@ public class EnemyShip extends Entity {
 		case EnemyShipC2:
 			this.pointValue = (int) (C_TYPE_POINTS+(gameState.getLevel()*0.1)+Core.getLevelSetting());
 			break;
+		case EnemyShipD1:
+		case EnemyShipD2:
+			this.pointValue = D_TYPE_POINTS;
+			break;
+		case EnemyShipE1:
+		case EnemyShipE2:
+			this.pointValue = E_TYPE_POINTS;
+			break;
+		case EnemyShipF1:
+			this.pointValue = F_TYPE_POINTS;
+			break;
 		default:
 			this.pointValue = 0;
 			break;
 		}
 	}
+
+	/**
+	 * Giving color for each enemy ship
+	 */
+		public static Color getDefaultColor(SpriteType spriteType) {
+			switch (spriteType) {
+				case EnemyShipA1:
+				case EnemyShipA2:
+					return Color.RED; // Цвет для типа A
+				case EnemyShipB1:
+				case EnemyShipB2:
+					return Color.GREEN; // Цвет для типа B
+				case EnemyShipC1:
+				case EnemyShipC2:
+					return Color.BLUE; // Цвет для типа C
+				case EnemyShipD1:
+				case EnemyShipD2:
+					return Color.YELLOW; // Цвет для типа D
+				case EnemyShipE1:
+				case EnemyShipE2:
+					return Color.ORANGE; // Цвет для типа E
+				default:
+					return Color.WHITE; // Цвет по умолчанию
+			}
+		}
 
 	/**
 	 * Constructor, establishes the ship's properties for a special ship, with
@@ -138,6 +179,18 @@ public class EnemyShip extends Entity {
 				break;
 			case EnemyShipC2:
 				this.spriteType = SpriteType.EnemyShipC1;
+				break;
+			case EnemyShipD1:
+				this.spriteType = SpriteType.EnemyShipD2;
+				break;
+			case EnemyShipD2:
+				this.spriteType = SpriteType.EnemyShipD1;
+				break;
+			case EnemyShipE1:
+				this.spriteType = SpriteType.EnemyShipE2;
+				break;
+			case EnemyShipE2:
+				this.spriteType = SpriteType.EnemyShipE1;
 				break;
 			default:
 				break;

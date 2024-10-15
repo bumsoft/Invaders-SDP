@@ -96,6 +96,10 @@ public final class DrawManager {
 		EnemyShipSpecial,
 		/** Destroyed enemy ship. */
 		Explosion,
+		/** Barrier. */
+		Barrier,
+        /** Item Box. */
+        ItemBox,
 		/** Spider webs restricting player movement */
 		Web,
 		/** Obstacles preventing a player's bullet */
@@ -104,12 +108,22 @@ public final class DrawManager {
 		Blocker1,
 		/** Obstruction 2 (Astronaut) */
 		Blocker2,
-		/** 2nd player ship. */
-		Ship2,
-		/** 3rd player ship. */
-		Ship3,
-		/** 4th player ship. */
-		Ship4,
+        /** 2nd player ship. */
+        Ship2,
+        /** 3rd player ship. */
+        Ship3,
+        /** 4th player ship. */
+        Ship4,
+		/** Fourth enemy ship - first form. */
+		EnemyShipD1,
+		/** Fourth enemy ship - second form. */
+		EnemyShipD2,
+		/** Fifth enemy ship - first form. */
+		EnemyShipE1,
+		/** Fifth enemy ship - second form. */
+		EnemyShipE2,
+		/** Elite enemy ship - first form. */
+		EnemyShipF1
 	};
 
 	/**
@@ -135,6 +149,8 @@ public final class DrawManager {
 			spriteMap.put(SpriteType.EnemyShipC2, new boolean[12][8]);
 			spriteMap.put(SpriteType.EnemyShipSpecial, new boolean[16][7]);
 			spriteMap.put(SpriteType.Explosion, new boolean[13][7]);
+			spriteMap.put(SpriteType.Barrier, new boolean[39][11]);
+			spriteMap.put(SpriteType.ItemBox, new boolean[7][7]);
 			spriteMap.put(SpriteType.Web, new boolean[12][8]);
 			spriteMap.put(SpriteType.Block, new boolean[20][7]);
 			spriteMap.put(SpriteType.Blocker1, new boolean[182][93]); // artificial satellite
@@ -142,6 +158,11 @@ public final class DrawManager {
 			spriteMap.put(SpriteType.Ship2, new boolean[13][8]);
 			spriteMap.put(SpriteType.Ship3, new boolean[13][8]);
 			spriteMap.put(SpriteType.Ship4, new boolean[13][8]);
+			spriteMap.put(SpriteType.EnemyShipD1, new boolean[12][8]);
+			spriteMap.put(SpriteType.EnemyShipD2, new boolean[12][8]);
+			spriteMap.put(SpriteType.EnemyShipE1, new boolean[12][8]);
+			spriteMap.put(SpriteType.EnemyShipE2, new boolean[12][8]);
+			spriteMap.put(SpriteType.EnemyShipF1, new boolean[16][7]);
 
 			fileManager.loadSprite(spriteMap);
 			logger.info("Finished loading the sprites.");
@@ -342,9 +363,8 @@ public final class DrawManager {
 		backBufferGraphics.setFont(fontRegular);
 		backBufferGraphics.setColor(Color.LIGHT_GRAY);
 
-		int fps = 1000;
-		int cent = (elapsedTime % fps)/10;
-		int seconds = elapsedTime / fps;
+		int cent = (elapsedTime % 1000)/10;
+		int seconds = elapsedTime / 1000;
 		int sec = seconds % 60;
 		int min = seconds / 60;
 
@@ -402,8 +422,8 @@ public final class DrawManager {
 
 	public void drawLaunchTrajectory(final Screen screen, final int positionX) {
 		backBufferGraphics.setColor(Color.DARK_GRAY);
-		for (int i = 0; i < screen.getHeight() - 60; i += 20){
-			backBufferGraphics.drawRect(positionX + 13, screen.getHeight() - 30 - i,1,10);
+		for (int i = 0; i < screen.getHeight() - 140; i += 20){
+			backBufferGraphics.drawRect(positionX + 13, screen.getHeight() - 100 - i,1,10);
 
 		}
 
@@ -1066,7 +1086,7 @@ public final class DrawManager {
 	 * @param highScores
 	 *            Recorded highscores.
    */
-  
+
 	public void drawRecord(List<Score> highScores, final Screen screen) {
 
 		//add variable for highest score
@@ -1104,19 +1124,35 @@ public final class DrawManager {
 		backBufferGraphics.setFont(fontRegular);
 		backBufferGraphics.setColor(Color.WHITE);
 		if(remainingTime > 0){
-			String timerText = String.format("%d",remainingTime/200);
 
 			int shipX = ship.getPositionX();
 			int shipY = ship.getPositionY();
 			int shipWidth = ship.getWidth();
 			int circleSize = 16;
-			int startAngle = 0;
-			int endAngle = startAngle - (360 * (int)remainingTime / 600);
+			int startAngle = 90;
+			int endAngle = 0;
+			switch(Core.BASE_SHIP){
+				case Ship.ShipType.VoidReaper:
+					endAngle = 360 * (int)remainingTime / (int)(750 * 0.4);
+				    break;
+				case Ship.ShipType.CosmicCruiser:
+					endAngle = 360 * (int)remainingTime / (int)(750 * 1.6);
+				    break;
+				case Ship.ShipType.StarDefender:
+					endAngle = 360 * (int)remainingTime / (int)(750 * 1.0);
+					break;
+				case Ship.ShipType.GalacticGuardian:
+					endAngle = 360 * (int)remainingTime / (int)(750 * 1.2);
+					break;
+
+
+			}
+
 			backBufferGraphics.fillArc(shipX + shipWidth/2 - circleSize/2, shipY - 3*circleSize/2,
 					circleSize, circleSize, startAngle, endAngle);
 		}
 	}
-  
+
   /**
 	 * Draws Combo on screen.
 	 *
@@ -1133,6 +1169,62 @@ public final class DrawManager {
 			backBufferGraphics.drawString(comboString, screen.getWidth() - 100, 85);
 		}
 	}
+
+	/**
+	 * Draws intermediate aggregation on screen.
+	 *
+	 * @param screen
+	 *            Screen to draw on.
+	 * @param maxCombo
+	 *            Value of maxCombo.
+	 * @param elapsedTime
+	 *            Value of elapsedTime.
+	 * @param lapTime
+	 *            Value of lapTime/prevTime.
+	 * @param score
+	 *            Value of score/prevScore.
+	 * @param tempScore
+	 *            Value of tempScore.
+	 */
+	public void interAggre(final Screen screen, final int level, final int maxCombo,
+						   final int elapsedTime, final int lapTime,
+						   final int score, final int tempScore) {
+
+		int prevTime = elapsedTime - lapTime;
+		int prevScore = score - tempScore;
+
+		int pcent = (prevTime % 1000)/10;
+		int pseconds = prevTime / 1000;
+		int psec = pseconds % 60;
+		int pmin = pseconds / 60;
+
+		String timeString;
+		if (pmin < 1){
+			timeString = String.format("Elapsed Time: %d.%02d", psec, pcent);
+		} else {
+			timeString = String.format("Elapsed Time: %d:%02d.%02d", pmin, psec, pcent);
+		}
+
+		String levelString = String.format("Statistics at Level %d", level);
+		String comboString = String.format("MAX COMBO: %03d", maxCombo);
+		String scoreString = String.format("Scores earned: %04d", prevScore);
+
+		backBufferGraphics.setFont(fontRegular);
+		backBufferGraphics.setColor(Color.GREEN);
+		backBufferGraphics.drawString(levelString,
+				(screen.getWidth() - fontRegularMetrics.stringWidth(levelString))/2,
+				5*screen.getHeight()/7);
+		backBufferGraphics.setColor(Color.WHITE);
+		backBufferGraphics.drawString(comboString,
+			(screen.getWidth() - fontRegularMetrics.stringWidth(comboString))/2,
+				5*screen.getHeight()/7 + 21);
+		backBufferGraphics.drawString(timeString,
+						(screen.getWidth() - fontRegularMetrics.stringWidth(timeString))/2,
+				5*screen.getHeight()/7 + 42);
+		backBufferGraphics.drawString(scoreString,
+				(screen.getWidth() - fontRegularMetrics.stringWidth(scoreString))/2,
+				5*screen.getHeight()/7 + 63);
+		}
 
 	/**
 	 * Draws the game setting screen.
@@ -1172,6 +1264,30 @@ public final class DrawManager {
 		// 선택된 경우 초록색, 그렇지 않으면 흰색으로 표시
 		backBufferGraphics.setColor(isSelected ? Color.GREEN : Color.WHITE);
 		drawCenteredRegularString(screen, volumeText, y); // 퍼센트 값을 중앙에 표시
+	}
+
+	/** Almost same function as drawVolumeBar to draw a bar to select the ship*/
+	public void drawShipBoxes(Screen screen, int x, int y, boolean isSelected, int index, boolean current) {
+		if(current){
+			// Ship box
+			backBufferGraphics.setColor(isSelected ? Color.GREEN : Color.WHITE);
+			backBufferGraphics.fillRect(x + index*60, y+index*20, isSelected ? 0 : 10, 10);
+			backBufferGraphics.setColor(Color.GREEN);
+			backBufferGraphics.fillRect(x + index*60, y+index*20, (isSelected ? 10 : 0), 10);
+			// Ship name
+			backBufferGraphics.setFont(fontRegular);
+			backBufferGraphics.drawString(Ship.ShipType.values()[index].name(), x + index*60 + 15, y+index*20);
+		} else {
+			// Ship box
+			backBufferGraphics.setColor(isSelected ? Color.GREEN : Color.WHITE);
+			backBufferGraphics.fillRect(x + index*60, y+index*20, isSelected ? 0 : 10, 10);
+			backBufferGraphics.setColor(Color.GRAY);
+			backBufferGraphics.fillRect(x + index*60, y+index*20, (isSelected ? 10 : 0), 10);
+			// Ship name
+			backBufferGraphics.setFont(fontRegular);
+			backBufferGraphics.drawString(Ship.ShipType.values()[index].name(), x + index*60 + 15, y + index*20);
+		}
+
 	}
 
 	public void drawCenteredRegularString(final Screen screen,

@@ -7,7 +7,7 @@ Through this SDP class, we aim to improve our development and collaboration skil
 - Team leader
     - [`Seochan Moon`](https://github.com/dev-moonsc) : Project Manager, GitHub Repository Management, Bomb item implementation
 - Team members
-    - [`Jongwon Lee`](https://github.com/javadocq) : Goast item implementation
+    - [`Jongwon Lee`](https://github.com/javadocq) : Ghost item implementation
     - [`Seungmin Kim`](https://github.com/smeasylife) : Multi-Shot item implementation
     - [`Jimin Hwang`](https://github.com/specture258) : Line-Bomb item implementation
     - [`Dohun Lee`](https://github.com/D0hunLee) : Time-Stop item implementation
@@ -38,7 +38,7 @@ Items in this game will be implemented as follows:
 - **Barrier**
     - Creates a shield in front of the player that blocks enemy projectiles.
     - The barrier is destroyed after blocking one projectile.
-- **Goast**
+- **Ghost**
     - For a certain period, the player's ship becomes transparent, allowing it to ignore bullets.
 - **Time-stop**
     - Freezes enemy ships and bullets for a certain duration.

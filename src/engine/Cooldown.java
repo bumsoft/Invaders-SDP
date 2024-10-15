@@ -73,8 +73,12 @@ public class Cooldown {
 			return true;
 		return false;
 	}
- 
-  // 경고등 애니메이션 //
+
+	/**
+	 * Controls the countdown animation when displaying 'alert'.
+	 *
+	 * @return Alert animation frame number.
+	 */
 	public final int checkAlertAnimation() {
 		if ((this.time > 0)
 				&& this.time + this.duration - (this.alert / 3) <= System.currentTimeMillis())

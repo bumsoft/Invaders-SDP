@@ -59,4 +59,11 @@ public class Score implements Comparable<Score> {
 		return comparison;
 	}
 
+	public static final int comboScore(int baseScore, int combo) {
+		if (combo >= 5)
+			return baseScore * (combo / 5 + 1);
+		else
+			return baseScore;
+	}
+
 }

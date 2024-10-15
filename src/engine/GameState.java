@@ -9,7 +9,6 @@ import entity.Ship;
  * 
  */
 public class GameState {
-
 	/** Current game level. */
 	private int level;
 	/** Current score. */
@@ -26,8 +25,15 @@ public class GameState {
 	private int elapsedTime;
 	/** Special enemy appearances alert message */
 	private String alertMessage;
-    /** Ships destroyed consecutive. */
+    /** Number of consecutive hits */
 	private int combo;
+	/** Intermediate aggregation variables
+	 * max combo, elapsed time and total score
+	 * you get from previous level */
+	private int maxCombo;
+	private int prevTime;
+	private int prevScore;
+
 
 	/**
 	 * Constructor.
@@ -54,7 +60,8 @@ public class GameState {
 	public GameState(final int level, final int score,
 			final Ship.ShipType shipType,
 			final int livesRemaining, final int bulletsShot,
-			final int shipsDestroyed, final int elapsedTime, final String alertMessage, final int combo) {
+			final int shipsDestroyed, final int elapsedTime, final String alertMessage, final int combo,
+					 final int maxCombo, final int prevTime, final int prevScore) {
 				
 		this.level = level;
 		this.score = score;
@@ -65,6 +72,9 @@ public class GameState {
 		this.elapsedTime = elapsedTime;
 		this.alertMessage = alertMessage;
 		this.combo = combo;
+		this.maxCombo = maxCombo;
+		this.prevTime = prevTime;
+		this.prevScore = prevScore;
 	}
 
 	/**
@@ -126,6 +136,21 @@ public class GameState {
 		}
 		return ((double) shipsDestroyed / bulletsShot) *100;
 	}
+
+	/**
+	 * @return the maxCombo
+	 */
+	public final int getMaxCombo() { return maxCombo;}
+
+	/**
+	 * @return the prevTime/lapTime
+	 */
+	public final int getPrevTime() { return prevTime;}
+
+	/**
+	 * @return the prevScore/tempScore
+	 */
+	public final int getPrevScore() { return prevScore;}
 
 }
 

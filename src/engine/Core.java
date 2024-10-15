@@ -30,7 +30,7 @@ public final class Core {
 	private static final int FPS = 60;
 
 	/** Base ship type. */
-	private static final Ship.ShipType BASE_SHIP = Ship.ShipType.StarDefender;
+	public static Ship.ShipType BASE_SHIP = Ship.ShipType.StarDefender;
 	/** Max lives. */
 	private static int MAX_LIVES;
 	/** Levels between extra life. */
@@ -96,7 +96,7 @@ public final class Core {
 		int returnCode = 1;
 		do {
 			MAX_LIVES = wallet.getLives_lv()+2;
-			gameState = new GameState(1, 0, BASE_SHIP, MAX_LIVES, 0, 0, 0, "", 0);
+			gameState = new GameState(1, 0, BASE_SHIP, MAX_LIVES, 0, 0, 0, "", 0, 0, 0 ,0);
 			achievementManager = new AchievementManager();
 
 			GameSettings gameSetting = new GameSettings(4, 4, 60, 2500);
@@ -146,7 +146,10 @@ public final class Core {
 							gameState.getShipsDestroyed(),
 							gameState.getElapsedTime(),
 							gameState.getAlertMessage(),
-							0);
+							0,
+							gameState.getMaxCombo(),
+							gameState.getPrevTime(),
+							gameState.getPrevScore());
           
 					endTime = System.currentTimeMillis();
 					achievementManager.updatePlaying((int) (endTime - startTime) / 1000, MAX_LIVES, gameState.getLivesRemaining(), gameState.getLevel()-1);

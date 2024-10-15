@@ -133,15 +133,33 @@ public abstract class Ship extends Entity {
 	 *            List of bullets on screen, to add the new bullet.
 	 * @return Checks if the bullet was shot correctly.
 	 */
-	public final boolean shoot(final Set<Bullet> bullets) {
+	public final boolean shoot(final Set<Bullet> bullets, int shotNum) {
 		if (this.shootingCooldown.checkFinished()) {
+
 			this.shootingCooldown.reset();
-			bullets.add(BulletPool.getBullet(positionX + this.width / 2,
-					positionY,  this.getBulletSpeed()));
-			soundManager.playSound(Sound.PLAYER_LASER);
-      this.lastShootTime = System.currentTimeMillis();
+			this.lastShootTime = System.currentTimeMillis();
+
+			switch (shotNum) {
+				case 1:
+					bullets.add(BulletPool.getBullet(positionX + this.width / 2, positionY, this.getBulletSpeed()));
+					soundManager.playSound(Sound.PLAYER_LASER);
+					break;
+				case 2:
+					bullets.add(BulletPool.getBullet(positionX + this.width, positionY, this.getBulletSpeed()));
+					bullets.add(BulletPool.getBullet(positionX, positionY, this.getBulletSpeed()));
+					soundManager.playSound(Sound.ITEM_2SHOT);
+					break;
+				case 3:
+					bullets.add(BulletPool.getBullet(positionX + this.width, positionY, this.getBulletSpeed()));
+					bullets.add(BulletPool.getBullet(positionX, positionY, this.getBulletSpeed()));
+					bullets.add(BulletPool.getBullet(positionX + this.width / 2, positionY, this.getBulletSpeed()));
+					soundManager.playSound(Sound.ITEM_3SHOT);
+					break;
+			}
+
 			return true;
 		}
+
 		return false;
 	}
 
@@ -200,7 +218,7 @@ public abstract class Ship extends Entity {
 	public long getRemainingReloadTime(){
 		long currentTime = System.currentTimeMillis();
 		long elapsedTime = currentTime - this.lastShootTime;
-		long remainingTime = SHOOTING_INTERVAL - elapsedTime;
+		long remainingTime = this.getShootingInterval() - elapsedTime;
 		return remainingTime > 0 ? remainingTime : 0;
 	}
 
