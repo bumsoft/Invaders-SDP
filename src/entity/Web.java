@@ -4,7 +4,7 @@ import engine.DrawManager.SpriteType;
 
 import java.awt.*;
 
-public class Web extends Entity{
+public class  Web extends Entity{
     /**
      * Constructor, establishes the entity's generic properties.
      *

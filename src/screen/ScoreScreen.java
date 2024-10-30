@@ -39,6 +39,8 @@ public class ScoreScreen extends Screen {
 	private int coinsEarned;
 	/** Player's name */
 	private String name1, name2;
+	/** Two player mode flags*/
+	private boolean isMultiplay;
 
 	// Set ratios for each coin_lv - placed in an array in the order of lv1, lv2, lv3, lv4, and will be used accordingly,
 	// e.g., lv1; score 100 * 0.1
@@ -57,7 +59,8 @@ public class ScoreScreen extends Screen {
 	 *            Current game state.
 	 */
 	public ScoreScreen(final String name1, final int width, final int height, final int fps,
-			final GameState gameState, final Wallet wallet, final AchievementManager achievementManager) {
+			final GameState gameState, final Wallet wallet, final AchievementManager achievementManager,
+		    final boolean isMultiplay) {
 		super(width, height, fps);
 
 		this.name1 = name1;
@@ -67,6 +70,7 @@ public class ScoreScreen extends Screen {
 		this.livesRemaining = gameState.getLivesRemaining();
 		this.bulletsShot = gameState.getBulletsShot();
 		this.shipsDestroyed = gameState.getShipsDestroyed();
+		this.isMultiplay = isMultiplay;
 
 		// Get the user's coin_lv
 		int coin_lv = wallet.getCoin_lv();
@@ -120,7 +124,7 @@ public class ScoreScreen extends Screen {
 				saveScore();
 			} else if (inputManager.isKeyDown(KeyEvent.VK_SPACE)) {
 				// Play again.
-				this.returnCode = 2;
+				this.returnCode = isMultiplay ? 8 : 2;
 				this.isRunning = false;
 				soundManager.stopSound(Sound.BGM_GAMEOVER);
 				soundManager.playSound(Sound.MENU_CLICK);

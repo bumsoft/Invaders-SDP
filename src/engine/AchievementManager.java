@@ -1,7 +1,6 @@
 package engine;
 
 import entity.Achievement;
-import entity.Wallet;
 
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -20,29 +19,28 @@ public class AchievementManager {
     private final int MAX_PERFECT_STAGE = 7;
 
     // Variables related to Accuracy Achievement
-    private double highAccuracy; // List of accuracy achievements
+    private int highMaxCombo; // List of accuracy achievements
 
     // Variables related to Flawless Failure Achievement
     private boolean checkFlawlessFailure;
 
-    // Variables related to Best Friends Achievement
-    private boolean checkBestFriends;
-
     // Coin rewards update
     private int coinReward = 0;
 
-    private final int[] ACCURACY_COIN_REWARD = {500, 1500, 2000, 2500};
+    private final int[] COMBO_COIN_REWARD = {500, 1500, 2000, 2500};
     private final int[] PERFECT_COIN_REWARD = {200, 400, 800, 2000, 3000, 4000, 5000};
     private final int FLAWLESS_FAILURE_COIN = 1000;
-    private final int BEST_FRIENDS_COIN = 1000;
+    private final int PLAY_TIME_COIN = 1000;
+
+    private boolean checkPlayTimeAch;
+
 
     // Variables needed for each achievement are loaded through a file.
     public AchievementManager() throws IOException {
         achievement = FileManager.getInstance().loadAchievement();
         this.currentPerfectLevel = achievement.getPerfectStage();
-        this.highAccuracy = achievement.getHighAccuracy();
+        this.highMaxCombo = achievement.getHighmaxCombo();
         this.checkFlawlessFailure = achievement.getFlawlessFailure();
-        this.checkBestFriends = achievement.getBestFriends();
     }
 
     public int getAchievementReward() {
@@ -50,6 +48,9 @@ public class AchievementManager {
     }
 
     public void updateTotalPlayTime(int playTime) {
+        if (achievement.getTotalPlayTime() < 600 && achievement.getTotalPlayTime() + playTime >= 600) {
+            coinReward += PLAY_TIME_COIN;
+        }
         achievement.setTotalPlayTime(playTime);
     }
 
@@ -60,38 +61,44 @@ public class AchievementManager {
     /**
      * Function to update the accuracy achievement.
      */
-    public void updateAccuracy(double accuracy) {
-        if (highAccuracy >= accuracy) {
+    public void updateMaxCombo(int maxCombo) {
+        if (highMaxCombo >= maxCombo) {
             return;
         }
-        int accuracyGoal = (int)(highAccuracy/10)*10+10;
-        highAccuracy = accuracy;
-        if (accuracyGoal < 70) {
-            accuracyGoal = 70;
+        int maxComboGoal = 10;
+        if (highMaxCombo < 10) {
+            maxComboGoal = 10;
+        } else if (highMaxCombo < 15) {
+            maxComboGoal = 15;
+        } else if (highMaxCombo < 20) {
+            maxComboGoal = 20;
+        } else if (highMaxCombo < 25) {
+            maxComboGoal = 25;
         }
-        if (highAccuracy < accuracyGoal) {
-            achievement.setHighAccuracy(highAccuracy);
+        int rewardIndex = highMaxCombo / 5 - 1 <= 9 ? 0 : highMaxCombo / 5 - 1;
+        highMaxCombo = maxCombo;
+        if (highMaxCombo < maxComboGoal) {
+            achievement.setHighMaxcombo(highMaxCombo);
             return;
         }
-        int rewardIndex = accuracyGoal/10-7;
         // When an accuracy achievement is reached, all lower achievements are achieved together.
-        if (highAccuracy >= 100) {
+        if (highMaxCombo >= 25) {
             for (int i = rewardIndex; i < 4; i++) {
-                coinReward += ACCURACY_COIN_REWARD[i];
+                coinReward += COMBO_COIN_REWARD[i];
             }
-        } else if (highAccuracy >= 90) {
+        } else if (highMaxCombo >= 20) {
             for (int i = rewardIndex; i < 3; i++) {
-                coinReward += ACCURACY_COIN_REWARD[i];
+                coinReward += COMBO_COIN_REWARD[i];
             }
-        } else if (highAccuracy >= 80) {
+        } else if (highMaxCombo >= 15) {
             for (int i = rewardIndex; i < 2; i++) {
-                coinReward += ACCURACY_COIN_REWARD[i];
+                coinReward += COMBO_COIN_REWARD[i];
             }
-        } else if (highAccuracy >= 70) {
-            coinReward += ACCURACY_COIN_REWARD[0];
+        } else if (highMaxCombo >= 10) {
+            coinReward += COMBO_COIN_REWARD[0];
         }
         // Save the updated achievement.
-        achievement.setHighAccuracy(highAccuracy);
+        achievement.setHighMaxcombo(highMaxCombo);
     }
     /**
      * Check if the perfect achievement has been reached.
@@ -113,27 +120,18 @@ public class AchievementManager {
         }
     }
 
-    public void updateBestFriends(boolean checkTwoPlayMode) {
-        if (!checkBestFriends && checkTwoPlayMode) {
-            checkBestFriends = true;
-            coinReward += BEST_FRIENDS_COIN;
-            achievement.setBestFriends(true);
-        }
-    }
-
     public void updateAllAchievements() throws IOException {
         FileManager.getInstance().saveAchievement(achievement);
     }
 
-    public void updatePlaying(int playtime, int max_lives, int LivesRemaining, int level ) throws IOException{
+    public void updatePlaying(int maxCombo ,int playtime, int max_lives, int LivesRemaining, int level ) throws IOException{
         updateTotalPlayTime(playtime);
         updatePerfect(max_lives,LivesRemaining,level);
+        updateMaxCombo(maxCombo);
     }
 
-    public void updatePlayed(double accuracy, int score, boolean multiPlay) throws IOException{
-        updateAccuracy(accuracy);
+    public void updatePlayed(double accuracy, int score) throws IOException{
         updateTotalScore(score);
         updateFlawlessFailure(accuracy);
-        updateBestFriends(multiPlay);
     }
 }

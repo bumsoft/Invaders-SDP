@@ -20,24 +20,37 @@ The main purpose of our group is to develop “records and achievements”.
 - Changes
   - Rename the High Score menu to Achievement.
 
-- Achievement Additions
-  - Add cumulative score, cumulative playtime, cumulative number of games, highest score, and hit rate achievements.
-  - Create tiered achievements for each category, ranging from the initial achievement to the final achievement.
-  - Requirement: Create a file to store records for each category.
+
+- ACHIEVEMENTS Additions
+  - TOTAL SCORE, TOTAL PLAYTIME, ACHIEVEMENTS STATUS
+
+  
+- ACHIEVEMENTS STATUS Additions
+  - MAX COMBO
+  - PERFECT CLEAR 
+  - FLAWLESS FAILURE 
+  - A TIME OF ETERNITY 
+  
 
 - Achievement Rewards
   - Provide tiered currency benefits for each category, from the initial achievement to the final achievement.
 
 
 
+
 - 변경사항
-  - High Score메뉴를 Achievement로 변경.
+  - 기존 High Score메뉴를 Achievement로 변경.
+  
+
+- "ACHIEVEMENT" 창에 추가할 항목
+  - TOTAL SCORE, TOTAL PLAYTIME, ACHIEVEMENTS STATUS
 
 
-- Achievement에 추가할 항목
-  - 누적점수, 누적 플레이 시간, 누적 판수, 최고 점수, 명중률 달성
-  - 각 항목 별 최초 업적부터 최종 업적까지 단계별 업적 생성
-  - 필요 사항 : 각 항목 별 기록을 담을 파일 생성
+- "ACHIEVEMENTS STATUS"에 추가할 항목
+  - MAX COMBO (최고 콤보)
+  - PERFECT CLEAR (게임 클리어)
+  - FLAWLESS FAILURE (명중률 0으로 게임 오버)
+  - A TIME OF ETERNITY (누적 플레이 시간 10분 이상 달성)
 
 
 - 업적 달성 시 보상

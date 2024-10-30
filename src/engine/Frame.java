@@ -40,7 +40,7 @@ public class Frame extends JFrame {
 
 		Insets insets = getInsets();
 		this.width = width - insets.left - insets.right;
-		this.height = height - insets.top + insets.bottom;
+		this.height = height - insets.top - insets.bottom;
 		setTitle("Invaders");
 
 		addKeyListener(Core.getInputManager());
@@ -77,4 +77,6 @@ public class Frame extends JFrame {
 	public final int getHeight() {
 		return this.height;
 	}
+
+	public void moveToMiddle() {setLocationRelativeTo(null);}
 }

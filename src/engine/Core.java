@@ -1,8 +1,6 @@
 package engine;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
@@ -12,7 +10,6 @@ import java.util.logging.Logger;
 import entity.Ship;
 import entity.Wallet;
 import screen.*;
-import engine.Score;
 
 /**
  * Implements core game logic.
@@ -32,17 +29,13 @@ public final class Core {
 	/** Base ship type. */
 	public static Ship.ShipType BASE_SHIP = Ship.ShipType.StarDefender;
 	/** Max lives. */
-	private static int MAX_LIVES;
+	public static int MAX_LIVES;
 	/** Levels between extra life. */
-	private static final int EXTRA_LIFE_FRECUENCY = 3;
-	/** Total number of levels. */
-	private static final int NUM_LEVELS = 7;
+	public static final int EXTRA_LIFE_FRECUENCY = 3;
 	/** Frame to draw the screen on. */
 	private static Frame frame;
 	/** Screen currently shown. */
 	private static Screen currentScreen;
-	/** Difficulty settings list. */
-	private static List<GameSettings> gameSettings;
 	/** Application logger. */
 	private static final Logger LOGGER = Logger.getLogger(Core.class
 			.getSimpleName());
@@ -96,7 +89,7 @@ public final class Core {
 		int returnCode = 1;
 		do {
 			MAX_LIVES = wallet.getLives_lv()+2;
-			gameState = new GameState(1, 0, BASE_SHIP, MAX_LIVES, 0, 0, 0, "", 0, 0, 0 ,0);
+			gameState = new GameState(1, 0, BASE_SHIP, MAX_LIVES, 0, 0, 0, "", 0, 0, 0 ,0, 0);
 			achievementManager = new AchievementManager();
 
 			GameSettings gameSetting = new GameSettings(4, 4, 60, 2500);
@@ -137,24 +130,11 @@ public final class Core {
 
 					gameState = ((GameScreen) currentScreen).getGameState();
 
-					gameState = new GameState(
-							gameState.getLevel() + 1,
-							gameState.getScore(),
-							gameState.getShipType(),
-							gameState.getLivesRemaining(),
-							gameState.getBulletsShot(),
-							gameState.getShipsDestroyed(),
-							gameState.getElapsedTime(),
-							gameState.getAlertMessage(),
-							0,
-							gameState.getMaxCombo(),
-							gameState.getPrevTime(),
-							gameState.getPrevScore());
-          
+					gameState = new GameState(gameState, gameState.getLevel() + 1);
 					endTime = System.currentTimeMillis();
-					achievementManager.updatePlaying((int) (endTime - startTime) / 1000, MAX_LIVES, gameState.getLivesRemaining(), gameState.getLevel()-1);
+					achievementManager.updatePlaying(gameState.getMaxCombo(),(int) (endTime - startTime) / 1000, MAX_LIVES, gameState.getLivesRemaining(), gameState.getLevel()-1);
 				} while (gameState.getLivesRemaining() > 0);
-				achievementManager.updatePlayed(gameState.getAccuracy(), gameState.getScore(), GameSettingScreen.getMultiPlay());
+				achievementManager.updatePlayed(gameState.getAccuracy(), gameState.getScore());
                 achievementManager.updateAllAchievements();
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 						+ " score screen at " + FPS + " fps, with a score of "
@@ -163,7 +143,7 @@ public final class Core {
 						+ gameState.getLivesRemaining() + " lives remaining, "
 						+ gameState.getBulletsShot() + " bullets shot and "
 						+ gameState.getShipsDestroyed() + " ships destroyed.");
-				currentScreen = new ScoreScreen(GameSettingScreen.getName1(), width, height, FPS, gameState, wallet, achievementManager);
+				currentScreen = new ScoreScreen(GameSettingScreen.getName(0), width, height, FPS, gameState, wallet, achievementManager, false);
 
 				returnCode = frame.setScreen(currentScreen);
 				LOGGER.info("Closing score screen.");
@@ -203,7 +183,7 @@ public final class Core {
 						+ " game setting screen at " + FPS + " fps.");
 				returnCode = frame.setScreen(currentScreen);
 				LOGGER.info("Closing game setting screen.");
-        break;
+        		break;
 
 			case 7:
 				//Credit Screen
@@ -213,7 +193,34 @@ public final class Core {
 				returnCode = frame.setScreen(currentScreen);
 				LOGGER.info("Closing credit screen.");
 				break;
+			case 8:
+				// TwoPlayerScreen
+				frame.setSize(WIDTH*2, HEIGHT);
+				frame.moveToMiddle();
 
+				currentScreen = new TwoPlayerScreen(gameState, gameSetting, width, height, FPS, wallet);
+				LOGGER.info("Two player starting " + WIDTH + "x" + HEIGHT
+						+ " game screen at " + FPS + " fps.");
+				frame.setScreen(currentScreen);
+				LOGGER.info("Closing game screen.");
+
+				frame.setSize(WIDTH, HEIGHT);
+				frame.moveToMiddle();
+
+				gameState = ((TwoPlayerScreen) currentScreen).getWinnerGameState();
+				int winnerNumber = ((TwoPlayerScreen) currentScreen).getWinnerNumber();
+
+				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
+						+ " score screen at " + FPS + " fps, with a score of "
+						+ gameState.getScore() + ", "
+						+ gameState.getLivesRemaining() + " lives remaining, "
+						+ gameState.getBulletsShot() + " bullets shot and "
+						+ gameState.getShipsDestroyed() + " ships destroyed.");
+				DrawManager.getInstance().setFrame(frame);
+				currentScreen = new ScoreScreen(GameSettingScreen.getName(winnerNumber), width, height, FPS, gameState, wallet, achievementManager, true);
+				returnCode = frame.setScreen(currentScreen);
+				LOGGER.info("Closing score screen.");
+				break;
 			default:
 				break;
 			}

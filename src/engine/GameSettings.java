@@ -7,8 +7,6 @@ package engine;
  * 
  */
 public class GameSettings {
-	private GameState gameState;
-
 	private int difficulty;
 	/** Width of the level's enemy formation. */
 	private int formationWidth;
@@ -38,6 +36,13 @@ public class GameSettings {
 		this.formationHeight = formationHeight;
 		this.baseSpeed = baseSpeed;
 		this.shootingFrecuency = shootingFrequency;
+	}
+
+	public GameSettings(GameSettings gameSettings) { // fix typo
+		this.formationWidth = gameSettings.formationWidth;
+		this.formationHeight = gameSettings.formationHeight;
+		this.baseSpeed = gameSettings.baseSpeed;
+		this.shootingFrecuency = gameSettings.shootingFrecuency;
 	}
 
 	/**

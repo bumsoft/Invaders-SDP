@@ -29,12 +29,13 @@ public class ItemBox extends Entity {
      *
      * @param positionX Initial position of the entity in the X axis.
      * @param positionY Initial position of the entity in the Y axis.
+     * @param balance 1p -1.0, 2p 1.0, both 0.0
      */
-    public ItemBox(int positionX, int positionY) {
+    public ItemBox(int positionX, int positionY, final float balance) {
         super(positionX, positionY, 7 * 2, 7 * 2, Color.YELLOW);
         this.spriteType = SpriteType.ItemBox;
         this.droppedRightNow = true;
-        soundManager.playSound(Sound.ITEM_SPAWN);
+        soundManager.playSound(Sound.ITEM_SPAWN, balance);
 
         // Prevents being hit by bullets immediately after being created.
         new Thread(() -> {
