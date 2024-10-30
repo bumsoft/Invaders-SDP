@@ -344,19 +344,19 @@ public class GameScreen extends Screen implements Callable<GameState> {
 				switch (playerNumber) {
 					case 1:
 						if (player2Attacking) {
-							if (this.ship.shoot(this.bullets, this.itemManager.getShotNum(), 1.0f)) // Player 1 attack
+							if (this.ship.shoot(this.bullets, this.itemManager.getShotNum(), balance)) // Player 1 attack
 								this.bulletsShot += this.itemManager.getShotNum();
 						}
 						break;
 					case 0:
 						if (player1Attacking) {
-							if (this.ship.shoot(this.bullets, this.itemManager.getShotNum(), -1.0f)) // Player 1 attack
+							if (this.ship.shoot(this.bullets, this.itemManager.getShotNum(), balance)) // Player 1 attack
 								this.bulletsShot += this.itemManager.getShotNum();
 						}
 						break;
 					default: //playerNumber = -1
 						if (player1Attacking) {
-							if (this.ship.shoot(this.bullets, this.itemManager.getShotNum(), 0.0f)) // Player 1 attack
+							if (this.ship.shoot(this.bullets, this.itemManager.getShotNum(), balance)) // Player 1 attack
 								this.bulletsShot += this.itemManager.getShotNum();
 						}
 						break;
