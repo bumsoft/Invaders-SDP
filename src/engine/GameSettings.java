@@ -94,21 +94,26 @@ public class GameSettings {
                     } else {
 						if(formationHeight < 10) formationHeight += 1;
                     }
-                    if(baseSpeed-10 > -150)baseSpeed -= 10;
-					else baseSpeed = -150;
-                    if(shootingFrecuency-100 > 100) shootingFrecuency -= 100;
-					else shootingFrecuency = 100;
-                }else if(level % 2 == 0 && level >= 5){
+                }else if(level % 2 == 0 && level < 10){
 					if(formationWidth == formationHeight){
 						if(formationWidth < 14) formationWidth += 1;
 					} else {
 						if(formationHeight < 10) formationHeight += 1;
 					}
-					if(baseSpeed-10 > -150)baseSpeed -= 10;
-					else baseSpeed = -150;
-					if(shootingFrecuency-100 > 100) shootingFrecuency -= 100;
-					else shootingFrecuency = 100;
+					if(baseSpeed-10 > 0)baseSpeed -= 10;
+					else baseSpeed = 0;
 				}
+				else if(level>=10){
+					if(formationWidth == formationHeight){
+						if(formationWidth < 14) formationWidth += 1;
+					} else {
+						if(formationHeight < 10) formationHeight += 1;
+					}
+					if(baseSpeed-10 > 0)baseSpeed -= 10;
+					else baseSpeed = 0;
+				}
+				if(shootingFrecuency-100 > 100) shootingFrecuency -= 100;
+				else shootingFrecuency = 100;
                 yield new GameSettings(formationWidth, formationHeight, baseSpeed, shootingFrecuency);
 			}
 			case 1 -> {
