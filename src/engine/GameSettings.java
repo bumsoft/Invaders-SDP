@@ -121,6 +121,8 @@ public class GameSettings {
 			}
 			case 1 -> {
 				if(level < 5){
+					if (shootingFrecuency - 100 > 100) shootingFrecuency -= 100;
+					else shootingFrecuency = 100;
 					if(level%2 == 0) {
 						if (formationWidth == formationHeight) {
 							if (formationWidth < 14) formationWidth += 1;
@@ -129,10 +131,10 @@ public class GameSettings {
 						}
 						if (baseSpeed - 10 > 0) baseSpeed -= 10;
 						else baseSpeed = 0;
-						if (shootingFrecuency - 100 > 100) shootingFrecuency -= 100;
-						else shootingFrecuency = 100;
 					}
 				}else if(level < 10){
+					if (shootingFrecuency - 200 > 100) shootingFrecuency -= 200; //Adjust firing interval
+					else shootingFrecuency = 100;
 					if(level % 2 == 0) {
 						if (formationWidth == formationHeight) {
 							if (formationWidth < 14) formationWidth += 1;
@@ -141,8 +143,6 @@ public class GameSettings {
 						}
 						if (baseSpeed - 10 > 0) baseSpeed -= 10; //speed control
 						else baseSpeed = 0;
-						if (shootingFrecuency - 200 > 100) shootingFrecuency -= 200; //Adjust firing interval
-						else shootingFrecuency = 100;
 					}
 				}else{
 					if(formationWidth == formationHeight){
@@ -158,17 +158,19 @@ public class GameSettings {
                 yield new GameSettings(formationWidth, formationHeight, baseSpeed, shootingFrecuency);
 			}
 			case 2 -> {
-				if(level%2 == 0 && level < 5){
-					if(formationWidth == formationHeight){
-						if(formationWidth < 14) formationWidth += 1;
-					} else {
-						if(formationHeight < 10) formationHeight += 1;
-					}
-					if(baseSpeed-20 > 0)baseSpeed -= 20;
-					else baseSpeed = 0;
-					if(shootingFrecuency-200 > 100) shootingFrecuency -= 300;
+				if(level < 5){
+					if(shootingFrecuency-200 > 100) shootingFrecuency -= 200;
 					else shootingFrecuency = 100;
-				}else if(level >= 5){
+					if(level%2 == 0) {
+						if (formationWidth == formationHeight) {
+							if (formationWidth < 14) formationWidth += 1;
+						} else {
+							if (formationHeight < 10) formationHeight += 1;
+						}
+						if (baseSpeed - 20 > 0) baseSpeed -= 20;
+						else baseSpeed = 0;
+					}
+				}else{
 					if(formationWidth == formationHeight){
 						if(formationWidth < 14) formationWidth += 2;
 					} else {
