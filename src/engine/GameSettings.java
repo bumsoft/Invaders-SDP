@@ -163,9 +163,9 @@ public class GameSettings {
 					else shootingFrecuency = 100;
 					if(level%2 == 0) {
 						if (formationWidth == formationHeight) {
-							if (formationWidth < 14) formationWidth += 1;
+							if (formationWidth < 14) formationWidth += 2;
 						} else {
-							if (formationHeight < 10) formationHeight += 1;
+							if (formationHeight < 10) formationHeight += 2;
 						}
 						if (baseSpeed - 20 > 0) baseSpeed -= 20;
 						else baseSpeed = 0;
