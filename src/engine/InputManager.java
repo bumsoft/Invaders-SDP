@@ -66,6 +66,21 @@ public final class InputManager implements KeyListener {
 	}
 
 	/**
+	 * Returns true if the provided key is pressed and hasn't been processed yet.
+	 * Resets the processed state for that key.
+	 *
+	 * @param keyCode Key number to check.
+	 * @return True if the key is pressed and not yet processed.
+	 */
+	public boolean isKeyPressed(final int keyCode) {
+		if (keys[keyCode] && !processedKeys[keyCode]) {
+			processedKeys[keyCode] = true; // Mark as processed
+			return true;
+		}
+		return false;
+	}
+
+	/**
 	 * Changes the state of the key to not pressed.
 	 * 
 	 * @param key
