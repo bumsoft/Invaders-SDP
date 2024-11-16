@@ -1948,4 +1948,22 @@ public final class DrawManager {
 
 		}
 	}
+
+	/**
+	 * Draws a centered text string on the screen.
+	 *
+	 * @param screen Screen to draw on.
+	 * @param text   Text to draw.
+	 * @param y      Y coordinate to draw the text at.
+	 */
+	public void drawCenteredText(final Screen screen, final String text, final int y) {
+		backBufferGraphics.setFont(fontRegular);
+		backBufferGraphics.setColor(Color.WHITE);
+		int x = (screen.getWidth() - fontRegularMetrics.stringWidth(text)) / 2;
+		backBufferGraphics.drawString(text, x, y);
+	}
+
+
+
+
 }
