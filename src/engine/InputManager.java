@@ -88,4 +88,15 @@ public final class InputManager implements KeyListener {
 	public void keyTyped(final KeyEvent key) {
 		lastTypedKey = key.getKeyChar(); // 마지막 입력된 문자 저장
 	}
+
+	/**
+	 * Returns the last typed character.
+	 *
+	 * @return Last typed character, or '\0' if no character was typed.
+	 */
+	public char getTypedKey() {
+		char key = lastTypedKey;
+		lastTypedKey = '\0'; // Reset after returning
+		return key;
+	}
 }
