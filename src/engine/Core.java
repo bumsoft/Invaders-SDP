@@ -98,6 +98,14 @@ public final class Core {
 
 			switch (returnCode) {
 				case 1 -> {
+					// loginScreen
+					currentScreen = new LoginScreen(width, height, FPS);
+					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
+							+ " login screen at " + FPS + " fps.");
+					returnCode = frame.setScreen(currentScreen);
+					LOGGER.info("Closing login screen.");
+				}
+				case 2 -> {
 					// Main menu.
 					currentScreen = new TitleScreen(width, height, FPS, wallet);
 					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
@@ -106,7 +114,7 @@ public final class Core {
 					LOGGER.info("Closing title screen.");
 				}
 
-				case 2 -> {
+				case 3 -> {
 					// Game & score.
 					do {
 						// One extra live every few levels.
@@ -152,7 +160,7 @@ public final class Core {
 					LOGGER.info("Closing score screen.");
 				}
 
-				case 3 -> {
+				case 4 -> {
 					//Shop
 					currentScreen = new ShopScreen(width, height, FPS, wallet);
 					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
@@ -161,7 +169,7 @@ public final class Core {
 					LOGGER.info("Closing Shop screen.");
 				}
 
-				case 4 -> {
+				case 5 -> {
 					// Achievement
 					currentScreen = new AchievementScreen(width, height, FPS, achievementManager);
 					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
@@ -170,7 +178,7 @@ public final class Core {
 					LOGGER.info("Closing Achievement screen.");
 				}
 
-				case 5 -> {
+				case 6 -> {
 					//Setting
 					currentScreen = new SettingScreen(width, height, FPS);
 					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
@@ -179,7 +187,7 @@ public final class Core {
 					LOGGER.info("Closing Setting screen.");
 				}
 
-				case 6 -> {
+				case 7 -> {
 					//Game Setting
 					currentScreen = new GameSettingScreen(width, height, FPS);
 					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
@@ -188,7 +196,7 @@ public final class Core {
 					LOGGER.info("Closing game setting screen.");
 				}
 
-				case 7 -> {
+				case 8 -> {
 					//Credit Screen
 					currentScreen = new CreditScreen(width, height, FPS);
 					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
@@ -197,7 +205,7 @@ public final class Core {
 					LOGGER.info("Closing credit screen.");
 				}
 
-				case 8 -> {
+				case 9 -> {
 					// TwoPlayerScreen
 					frame.setSize(WIDTH * 2, HEIGHT);
 					frame.moveToMiddle();
