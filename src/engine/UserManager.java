@@ -1,7 +1,11 @@
 package engine;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.logging.Logger;
@@ -106,7 +110,7 @@ public class UserManager {
                     }
                 } else { //401
                     //로그인 실패에 대한 처리
-                    logger.info("Login failed.");
+                    logger.info("Login failed. Cannot find user info");
                 }
             } catch (Exception e) {
                 logger.info("Wrong login url OR Server is not running.");
@@ -118,6 +122,40 @@ public class UserManager {
             connection.disconnect();
         }
         return false;
+    }
+
+    public String getUsername()
+    {
+        String username;
+        URL url;
+        try
+        {
+            url = new URL(Core.getServerUrl()+"username");
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Cookie", sessionCookie);
+
+            if(connection.getResponseCode() == HttpURLConnection.HTTP_OK)
+            {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                username = reader.readLine();
+                reader.close();
+                return username;
+            }
+            else //서버에서 문제가 생긴경우(로그인 정보가 없는 등)
+            {
+                logger.info("ResponseCode:"+connection.getResponseCode());
+                logger.info("Cannot get the username from server.");
+                //로그인 화면으로 다시 보내는게 베스트긴함
+            }
+        } catch (Exception e)
+        {
+            logger.info("Server error");
+        }finally
+        {
+            connection.disconnect();
+        }
+        return "default_username";
     }
 
     private class RegisterDto {

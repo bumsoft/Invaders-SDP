@@ -2,10 +2,7 @@ package screen;
 
 import java.awt.event.KeyEvent;
 
-import engine.Cooldown;
-import engine.Core;
-import engine.Sound;
-import engine.SoundManager;
+import engine.*;
 import entity.Wallet;
 
 
@@ -26,22 +23,21 @@ public class TitleScreen extends Screen {
 	/** Singleton instance of SoundManager */
 	private final SoundManager soundManager = SoundManager.getInstance();
 
-	private Wallet wallet;
+	private final Wallet wallet;
 
+	private final String username;
 	/**
-	 * Constructor, establishes the properties of the screen.
-	 *
-	 * @param width
-	 *            Screen width.
-	 * @param height
-	 *            Screen height.
-	 * @param fps
-	 *            Frames per second, frame rate at which the game is run.
-	 * @param wallet
-	 * 			  Player's wallet
-	 */
-	public TitleScreen(final int width, final int height, final int fps, final Wallet wallet) {
+     * Constructor, establishes the properties of the screen.
+     *
+     * @param width       Screen width.
+     * @param height      Screen height.
+     * @param fps         Frames per second, frame rate at which the game is run.
+     * @param wallet      Player's wallet
+     * @param userManager
+     */
+	public TitleScreen(final int width, final int height, final int fps, final Wallet wallet, UserManager userManager) {
 		super(width, height, fps);
+		this.username = userManager.getUsername();
 
 		// Defaults to play.
 		if (!soundManager.isSoundPlaying(Sound.BGM_MAIN))
@@ -134,7 +130,7 @@ public class TitleScreen extends Screen {
 
 		drawManager.drawTitle(this);
 		drawManager.drawMenu(this, this.returnCode, wallet.getCoin());
-
+		drawManager.drawCenteredText(this, "Welcome, "+ username, 150);
 		drawManager.completeDrawing(this);
 	}
 }

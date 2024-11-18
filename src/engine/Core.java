@@ -89,14 +89,21 @@ public final class Core {
 		Wallet wallet = Wallet.getWallet();
 		userManager = new UserManager();
 
+		//registerScreen
+		currentScreen = new RegisterScreen(width, height, FPS, userManager);
+		LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
+				+ " register screen at " + FPS + " fps.");
+
+		frame.setScreen(currentScreen);
+		LOGGER.info("Closing register screen.");
 		// loginScreen
 		currentScreen = new LoginScreen(width, height, FPS, userManager);
 		LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 				+ " login screen at " + FPS + " fps.");
 
-
 		int returnCode = frame.setScreen(currentScreen);
 		LOGGER.info("Closing login screen.");
+		userManager.getUsername();
 		do {
 			MAX_LIVES = wallet.getLives_lv()+2;
 			gameState = new GameState(1, 0, BASE_SHIP, MAX_LIVES, 0, 0, 0, "", 0, 0, 0 ,0, 0);
@@ -107,7 +114,7 @@ public final class Core {
 			switch (returnCode) {
 				case 1 -> {
 					// Main menu.
-					currentScreen = new TitleScreen(width, height, FPS, wallet);
+					currentScreen = new TitleScreen(width, height, FPS, wallet, userManager);
 					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 							+ " title screen at " + FPS + " fps.");
 					returnCode = frame.setScreen(currentScreen);

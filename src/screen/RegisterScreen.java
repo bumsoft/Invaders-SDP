@@ -54,7 +54,7 @@ public class RegisterScreen extends Screen {
             char typedChar = inputManager.getTypedKey();
             if (typedChar >='a' && typedChar <= 'z'
                 || typedChar >='A' && typedChar <= 'Z'
-                || typedChar >='0' && typedChar <=9) {
+                || typedChar >='0' && typedChar <='9') {
                 if (isUsernameFocused) {
                     username += typedChar;
                 } else {
