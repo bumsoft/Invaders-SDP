@@ -24,10 +24,13 @@ public class LoginScreen extends Screen {
     protected void update() {
         // Check for input
         if (inputManager.isKeyPressed(KeyEvent.VK_ENTER)) {
-            // Submit login data
-            System.out.println("Username: " + username);
-            System.out.println("Password: " + password);
-            this.isRunning = false; // Exit screen
+            if(isUsernameFocused)
+            {
+                isUsernameFocused = false;
+                logger.info("Username: " + username);
+            }
+            // Submit registration data
+            else this.isRunning = false; // Exit screen
         } else if (inputManager.isKeyPressed(KeyEvent.VK_TAB)) {
             isUsernameFocused = !isUsernameFocused; // Toggle focus
         } else if (inputManager.isKeyPressed(KeyEvent.VK_BACK_SPACE)) {
@@ -38,7 +41,9 @@ public class LoginScreen extends Screen {
             }
         } else {
             char typedChar = inputManager.getTypedKey();
-            if (typedChar != '\0') {
+            if (typedChar >='a' && typedChar <= 'z'
+                    || typedChar >='A' && typedChar <= 'Z'
+                    || typedChar >='0' && typedChar <=9) {
                 if (isUsernameFocused) {
                     username += typedChar;
                 } else {
