@@ -19,6 +19,8 @@ import screen.*;
  */
 public final class Core {
 
+	private static final String serverUrl = "http://localhost:8080/";
+
 	/** Width of current screen. */
 	private static final int WIDTH = 600;
 	/** Height of current screen. */
@@ -310,5 +312,10 @@ public final class Core {
 
 	public static int getLevelSetting(){
 		return DifficultySetting;
+	}
+
+	public static String getServerUrl()
+	{
+		return serverUrl;
 	}
 }
