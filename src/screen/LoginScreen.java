@@ -35,28 +35,23 @@ public class LoginScreen extends Screen {
 
     @Override
     protected void update() {
-        // Check for input
         if (inputManager.isKeyPressed(KeyEvent.VK_ENTER)) {
-            if(isUsernameFocused)
-            {
-                isUsernameFocused = false;
-                logger.info("Username: " + username);
-            }
-            // Submit registration data
-            else
-            {
-                if(userManager.login(username, password))
-                {
+            if (isUsernameFocused) {
+                isUsernameFocused = false; // Move focus to password
+            } else {
+                if (userManager.login(username, password)) {
+                    this.returnCode = 1; // 로그인 성공 -> 메인 메뉴
                     this.isRunning = false;
-                }
-                else
-                {
+                } else {
                     isLoginFailed = true;
-                    this.username = "";
-                    this.password = "";
+                    username = "";
+                    password = "";
                     isUsernameFocused = true;
                 }
             }
+        } else if (inputManager.isKeyPressed(KeyEvent.VK_F1)) {
+            this.returnCode = 9; // F1 키 -> 회원가입 화면 전환
+            this.isRunning = false;
         } else if (inputManager.isKeyPressed(KeyEvent.VK_TAB)) {
             isUsernameFocused = !isUsernameFocused; // Toggle focus
         } else if (inputManager.isKeyPressed(KeyEvent.VK_BACK_SPACE)) {
@@ -67,9 +62,7 @@ public class LoginScreen extends Screen {
             }
         } else {
             char typedChar = inputManager.getTypedKey();
-            if (typedChar >='a' && typedChar <= 'z'
-                    || typedChar >='A' && typedChar <= 'Z'
-                    || typedChar >='0' && typedChar <='9') {
+            if (Character.isLetterOrDigit(typedChar)) {
                 if (isUsernameFocused) {
                     username += typedChar;
                 } else {
@@ -78,18 +71,22 @@ public class LoginScreen extends Screen {
             }
         }
 
-        // Draw screen
         draw();
     }
 
+
     private void draw() {
         drawManager.initDrawing(this);
-        drawManager.drawCenteredText(this, "Login Screen", 100);
+        drawManager.drawCenteredText(this, "Login", 100);
         drawManager.drawCenteredText(this, "Username: " + username, 200);
         drawManager.drawCenteredText(this, "Password: " + "*".repeat(password.length()), 250);
         drawManager.drawCenteredText(this, isUsernameFocused ? ">>" : "  ", 200); // Indicate focus
         if(isLoginFailed)
             drawManager.drawCenteredText(this, "Login failed. Try again.", 130);
+
+        // Display instructions at the bottom
+        drawManager.drawCenteredText(this, "Press \"F1\" to Sign Up", this.height - 50);
+
         drawManager.completeDrawing(this);
     }
 }
