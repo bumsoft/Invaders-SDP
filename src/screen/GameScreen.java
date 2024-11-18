@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.concurrent.Callable;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Logger;
 
 
 import engine.*;
@@ -134,6 +135,8 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	private GameState gameState;
 
 	private int hitBullets;
+
+	private boolean isExit = false;
 
     /**
 	 * Constructor, establishes the properties of the screen.
@@ -332,6 +335,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	 */
 	protected final void update() {
 		super.update();
+		this.isExit = inputManager.isKeyDown(KeyEvent.VK_ESCAPE);
 		if (this.inputDelay.checkFinished() && !this.levelFinished) {
 			boolean player1Attacking = inputManager.isKeyDown(KeyEvent.VK_SPACE);
 			boolean player2Attacking = inputManager.isKeyDown(KeyEvent.VK_SHIFT);
@@ -481,10 +485,14 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		else
 			draw();
 
-		if ((this.enemyShipFormation.isEmpty() || this.lives <= 0)
+		if ((this.enemyShipFormation.isEmpty() || this.lives <= 0 || this.isExit)
 				&& !this.levelFinished) {
 			this.levelFinished = true;
-
+			if(this.isExit)
+			{
+				logger.info("ESC pressed. End the game.");
+				this.lives = 0;
+			}
 			soundManager.stopSound(soundManager.getCurrentBGM());
 			if (this.lives == 0)
 				soundManager.playSound(Sound.GAME_END);
