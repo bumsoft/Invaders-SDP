@@ -1,5 +1,7 @@
 package screen;
 
+import engine.UserManager;
+
 import java.awt.event.KeyEvent;
 
 /**
@@ -9,15 +11,24 @@ public class RegisterScreen extends Screen {
     private String username = "";
     private String password = "";
     private boolean isUsernameFocused = true;
+    private final UserManager userManager;
 
-    public RegisterScreen(final int width, final int height, final int fps) {
+    public RegisterScreen(final int width, final int height, final int fps, final UserManager userManager) {
         super(width, height, fps);
+        this.userManager = userManager;
     }
 
     @Override
     public void initialize() {
         super.initialize();
-        this.returnCode = 0; // Default return code
+        this.returnCode = 1; // Default return code
+    }
+
+    @Override
+    public int run()
+    {
+        super.run();
+        return returnCode;
     }
 
     @Override

@@ -52,7 +52,7 @@ public final class Core {
 
 	private static int DifficultySetting;// <- setting EASY(0), NORMAL(1), HARD(2);
 
-
+	private static UserManager userManager;
 	/**
 	 * Test implementation.
 	 * 
@@ -87,18 +87,16 @@ public final class Core {
 
 		AchievementManager achievementManager;
 		Wallet wallet = Wallet.getWallet();
+		userManager = new UserManager();
 
-		boolean isLogin = false;
-		while(!isLogin) {
-			// loginScreen
-			currentScreen = new LoginScreen(width, height, FPS);
-			LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
-					+ " login screen at " + FPS + " fps.");
-			frame.setScreen(currentScreen);
-			LOGGER.info("Closing login screen.");
-		}
+		// loginScreen
+		currentScreen = new LoginScreen(width, height, FPS, userManager);
+		LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
+				+ " login screen at " + FPS + " fps.");
 
-		int returnCode = 1;
+
+		int returnCode = frame.setScreen(currentScreen);
+		LOGGER.info("Closing login screen.");
 		do {
 			MAX_LIVES = wallet.getLives_lv()+2;
 			gameState = new GameState(1, 0, BASE_SHIP, MAX_LIVES, 0, 0, 0, "", 0, 0, 0 ,0, 0);

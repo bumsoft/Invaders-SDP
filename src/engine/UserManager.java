@@ -6,6 +6,9 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.logging.Logger;
 
+/**
+ * 로그인 후 UserManager를 통해 서버로 요청을 보내면 sessionCookie를 통해 서버는 사용자를 확인함
+ */
 public class UserManager {
     private String sessionCookie;
     private Logger logger = Core.getLogger();
@@ -60,7 +63,7 @@ public class UserManager {
         return false;
     }
 
-    public void login(String id, String pw)
+    public boolean login(String id, String pw)
     {
         try {
             // URL 설정
@@ -82,29 +85,31 @@ public class UserManager {
             try (OutputStream os = connection.getOutputStream()) {
                 byte[] input = urlParameters.getBytes("utf-8");
                 os.write(input, 0, input.length);
-            }
+                // 응답 코드 확인
+                int responseCode = connection.getResponseCode();
+                logger.info("Response Code: " + responseCode); //성공:200 실패:401로 서버에서 설정해둠
 
-            // 응답 코드 확인
-            int responseCode = connection.getResponseCode();
-            logger.info("Response Code: " + responseCode); //성공:200 실패:401로 서버에서 설정해둠
+                // 응답 본문 읽기
+                if (responseCode == HttpURLConnection.HTTP_OK) { //200
+                    logger.info("Login succeeded");
 
-            // 응답 본문 읽기
-            if (responseCode == HttpURLConnection.HTTP_OK) { //200
-                logger.info("Login succeeded");
-
-                //로그인 성공시 서버에서 세션 쿠키가 반환됨. 이걸 보관하며, 모든 요청에 이걸 포함에서 보내야 로그인된 사용자라는걸 서버가 알 수 있음.
-                String setCookieHeader = connection.getHeaderField("Set-Cookie");
-                if (setCookieHeader != null) {
-                    this.sessionCookie = setCookieHeader.split(";")[0];
-                    logger.info("sessionCookie saved.");
+                    //로그인 성공시 서버에서 세션 쿠키가 반환됨. 이걸 보관하며, 모든 요청에 이걸 포함에서 보내야 로그인된 사용자라는걸 서버가 알 수 있음.
+                    String setCookieHeader = connection.getHeaderField("Set-Cookie");
+                    if (setCookieHeader != null) {
+                        this.sessionCookie = setCookieHeader.split(";")[0];
+                        logger.info("sessionCookie saved.");
+                        return true;
+                    }
+                    else {
+                        //세션쿠키 다시 받는 처리(재로그인?)
+                        logger.info("sessionCookie not exists.");
+                    }
+                } else { //401
+                    //로그인 실패에 대한 처리
+                    logger.info("Login failed.");
                 }
-                else {
-                    //세션쿠키 다시 받는 처리(재로그인?)
-                    logger.info("sessionCookie not exists.");
-                }
-            } else { //401
-                //로그인 실패에 대한 처리
-                logger.info("Login failed.");
+            } catch (Exception e) {
+                logger.info("Wrong login url OR Server is not running.");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -112,6 +117,7 @@ public class UserManager {
         {
             connection.disconnect();
         }
+        return false;
     }
 
     private class RegisterDto {

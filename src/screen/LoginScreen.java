@@ -1,5 +1,7 @@
 package screen;
 
+import engine.UserManager;
+
 import java.awt.event.KeyEvent;
 
 /**
@@ -9,15 +11,26 @@ public class LoginScreen extends Screen {
     private String username = "";
     private String password = "";
     private boolean isUsernameFocused = true;
+    private final UserManager userManager;
 
-    public LoginScreen(final int width, final int height, final int fps) {
+    private boolean isLoginFailed = false;
+
+    public LoginScreen(final int width, final int height, final int fps, UserManager userManager) {
         super(width, height, fps);
+        this.userManager = userManager;
     }
 
     @Override
     public void initialize() {
         super.initialize();
-        this.returnCode = 0; // Default return code
+        this.returnCode = 1; // Default return code
+    }
+
+    @Override
+    public int run()
+    {
+        super.run();
+        return returnCode;
     }
 
     @Override
@@ -30,7 +43,20 @@ public class LoginScreen extends Screen {
                 logger.info("Username: " + username);
             }
             // Submit registration data
-            else this.isRunning = false; // Exit screen
+            else
+            {
+                if(userManager.login(username, password))
+                {
+                    this.isRunning = false;
+                }
+                else
+                {
+                    isLoginFailed = true;
+                    this.username = "";
+                    this.password = "";
+                    isUsernameFocused = true;
+                }
+            }
         } else if (inputManager.isKeyPressed(KeyEvent.VK_TAB)) {
             isUsernameFocused = !isUsernameFocused; // Toggle focus
         } else if (inputManager.isKeyPressed(KeyEvent.VK_BACK_SPACE)) {
@@ -43,7 +69,7 @@ public class LoginScreen extends Screen {
             char typedChar = inputManager.getTypedKey();
             if (typedChar >='a' && typedChar <= 'z'
                     || typedChar >='A' && typedChar <= 'Z'
-                    || typedChar >='0' && typedChar <=9) {
+                    || typedChar >='0' && typedChar <='9') {
                 if (isUsernameFocused) {
                     username += typedChar;
                 } else {
@@ -62,6 +88,8 @@ public class LoginScreen extends Screen {
         drawManager.drawCenteredText(this, "Username: " + username, 200);
         drawManager.drawCenteredText(this, "Password: " + "*".repeat(password.length()), 250);
         drawManager.drawCenteredText(this, isUsernameFocused ? ">>" : "  ", 200); // Indicate focus
+        if(isLoginFailed)
+            drawManager.drawCenteredText(this, "Login failed. Try again.", 130);
         drawManager.completeDrawing(this);
     }
 }
