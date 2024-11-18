@@ -89,14 +89,7 @@ public final class Core {
 		Wallet wallet = Wallet.getWallet();
 		userManager = new UserManager();
 
-		//registerScreen
-		currentScreen = new RegisterScreen(width, height, FPS, userManager);
-		LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
-				+ " register screen at " + FPS + " fps.");
-
-		frame.setScreen(currentScreen);
-		LOGGER.info("Closing register screen.");
-		// loginScreen
+		// 초기 화면: 로그인 화면
 		currentScreen = new LoginScreen(width, height, FPS, userManager);
 		LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 				+ " login screen at " + FPS + " fps.");
@@ -239,6 +232,20 @@ public final class Core {
 					currentScreen = new ScoreScreen(GameSettingScreen.getName(winnerNumber), width, height, FPS, gameState, wallet, achievementManager, true);
 					returnCode = frame.setScreen(currentScreen);
 					LOGGER.info("Closing score screen.");
+				}
+				case 9 -> { // 회원가입 화면으로 이동
+					currentScreen = new RegisterScreen(width, height, FPS, userManager);
+					LOGGER.info("Starting Register Screen");
+					returnCode = frame.setScreen(currentScreen);
+				}
+				case 10 -> { // 회원가입 성공 -> 로그인 화면으로 복귀
+					currentScreen = new LoginScreen(width, height, FPS, userManager);
+					LOGGER.info("Returning to Login Screen");
+					returnCode = frame.setScreen(currentScreen);
+				}
+				default -> { // Exit
+					LOGGER.info("Exiting game.");
+					returnCode = 0;
 				}
 			}
 
