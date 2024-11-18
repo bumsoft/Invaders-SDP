@@ -80,8 +80,7 @@ public class LoginScreen extends Screen {
         drawManager.drawCenteredText(this, "Login", 100);
         drawManager.drawCenteredText(this, "Username: " + username, 200);
         drawManager.drawCenteredText(this, "Password: " + "*".repeat(password.length()), 250);
-        drawManager.drawCenteredText(this, isUsernameFocused ? ">>" : "  ", 200); // Indicate focus
-        if(isLoginFailed)
+        if (isLoginFailed)
             drawManager.drawCenteredText(this, "Login failed. Try again.", 130);
 
         // Display instructions at the bottom
