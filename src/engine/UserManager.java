@@ -10,7 +10,8 @@ public class UserManager {
     private String sessionCookie;
     private Logger logger = Core.getLogger();
     private HttpURLConnection connection;
-    public void register(String id, String pw)
+
+    public boolean register(String id, String pw)
     {
         try {
             // URL 설정
@@ -40,9 +41,13 @@ public class UserManager {
             logger.info("Response Code: " + responseCode);
 
             // 응답 본문 읽기
-            if (responseCode == HttpURLConnection.HTTP_OK) {
+            if (responseCode == HttpURLConnection.HTTP_OK)
+            {
                 logger.info("Registered");
-            } else {
+                return true;
+            }
+            else
+            {
                 logger.info("Register failed");
             }
         } catch (Exception e) {
@@ -52,6 +57,7 @@ public class UserManager {
         {
             connection.disconnect();
         }
+        return false;
     }
 
     public void login(String id, String pw)
