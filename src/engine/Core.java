@@ -95,134 +95,134 @@ public final class Core {
 			GameSettings gameSetting = new GameSettings(4, 4, 60, 2500);
 
 			switch (returnCode) {
-			case 1:
-				// Main menu.
-				currentScreen = new TitleScreen(width, height, FPS, wallet);
-				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
-						+ " title screen at " + FPS + " fps.");
-				returnCode = frame.setScreen(currentScreen);
-				LOGGER.info("Closing title screen.");
-				break;
-			case 2:
-				// Game & score.
-				do {
-					// One extra live every few levels.
-					startTime = System.currentTimeMillis();
-					boolean bonusLife = gameState.getLevel()
-							% EXTRA_LIFE_FRECUENCY == 0
-							&& gameState.getLivesRemaining() < MAX_LIVES;
-					LOGGER.info("difficulty is " + DifficultySetting);
-					//add variation
-					gameSetting = gameSetting.LevelSettings(gameSetting.getFormationWidth(),
-							gameSetting.getFormationHeight(),
-							gameSetting.getBaseSpeed(),
-							gameSetting.getShootingFrecuency(),
-							gameState.getLevel(), DifficultySetting);
-
-					currentScreen = new GameScreen(gameState,
-							gameSetting,
-							bonusLife, width, height, FPS, wallet);
+				case 1 -> {
+					// Main menu.
+					currentScreen = new TitleScreen(width, height, FPS, wallet);
 					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
+							+ " title screen at " + FPS + " fps.");
+					returnCode = frame.setScreen(currentScreen);
+					LOGGER.info("Closing title screen.");
+				}
 
+				case 2 -> {
+					// Game & score.
+					do {
+						// One extra live every few levels.
+						startTime = System.currentTimeMillis();
+						boolean bonusLife = gameState.getLevel()
+								% EXTRA_LIFE_FRECUENCY == 0
+								&& gameState.getLivesRemaining() < MAX_LIVES;
+						LOGGER.info("difficulty is " + DifficultySetting);
+						//add variation
+						gameSetting = gameSetting.LevelSettings(gameSetting.getFormationWidth(),
+								gameSetting.getFormationHeight(),
+								gameSetting.getBaseSpeed(),
+								gameSetting.getShootingFrecuency(),
+								gameState.getLevel(), DifficultySetting);
+
+						currentScreen = new GameScreen(gameState,
+								gameSetting,
+								bonusLife, width, height, FPS, wallet);
+						LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
+
+								+ " game screen at " + FPS + " fps.");
+						frame.setScreen(currentScreen);
+						LOGGER.info("Closing game screen.");
+
+						gameState = ((GameScreen) currentScreen).getGameState();
+
+						gameState = new GameState(gameState, gameState.getLevel() + 1);
+						endTime = System.currentTimeMillis();
+						achievementManager.updatePlaying(gameState.getMaxCombo(), (int) (endTime - startTime) / 1000, MAX_LIVES, gameState.getLivesRemaining(), gameState.getLevel() - 1);
+					} while (gameState.getLivesRemaining() > 0);
+					achievementManager.updatePlayed(gameState.getAccuracy(), gameState.getScore());
+					achievementManager.updateAllAchievements();
+					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
+							+ " score screen at " + FPS + " fps, with a score of "
+							+ gameState.getScore() + ", "
+							+ gameState.getShipType().toString() + " ship, "
+							+ gameState.getLivesRemaining() + " lives remaining, "
+							+ gameState.getBulletsShot() + " bullets shot and "
+							+ gameState.getShipsDestroyed() + " ships destroyed.");
+					currentScreen = new ScoreScreen(GameSettingScreen.getName(0), width, height, FPS, gameState, wallet, achievementManager, false);
+
+					returnCode = frame.setScreen(currentScreen);
+					LOGGER.info("Closing score screen.");
+				}
+
+				case 3 -> {
+					//Shop
+					currentScreen = new ShopScreen(width, height, FPS, wallet);
+					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
+							+ " Shop screen at " + FPS + " fps.");
+					returnCode = frame.setScreen(currentScreen);
+					LOGGER.info("Closing Shop screen.");
+				}
+
+				case 4 -> {
+					// Achievement
+					currentScreen = new AchievementScreen(width, height, FPS, achievementManager);
+					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
+							+ " achievement screen at " + FPS + " fps.");
+					returnCode = frame.setScreen(currentScreen);
+					LOGGER.info("Closing Achievement screen.");
+				}
+
+				case 5 -> {
+					//Setting
+					currentScreen = new SettingScreen(width, height, FPS);
+					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
+							+ " setting screen at " + FPS + " fps.");
+					returnCode = frame.setScreen(currentScreen);
+					LOGGER.info("Closing Setting screen.");
+				}
+
+				case 6 -> {
+					//Game Setting
+					currentScreen = new GameSettingScreen(width, height, FPS);
+					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
+							+ " game setting screen at " + FPS + " fps.");
+					returnCode = frame.setScreen(currentScreen);
+					LOGGER.info("Closing game setting screen.");
+				}
+
+				case 7 -> {
+					//Credit Screen
+					currentScreen = new CreditScreen(width, height, FPS);
+					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
+							+ " credit screen at " + FPS + " fps.");
+					returnCode = frame.setScreen(currentScreen);
+					LOGGER.info("Closing credit screen.");
+				}
+
+				case 8 -> {
+					// TwoPlayerScreen
+					frame.setSize(WIDTH * 2, HEIGHT);
+					frame.moveToMiddle();
+
+					currentScreen = new TwoPlayerScreen(gameState, gameSetting, width, height, FPS, wallet);
+					LOGGER.info("Two player starting " + WIDTH + "x" + HEIGHT
 							+ " game screen at " + FPS + " fps.");
 					frame.setScreen(currentScreen);
 					LOGGER.info("Closing game screen.");
 
-					gameState = ((GameScreen) currentScreen).getGameState();
+					frame.setSize(WIDTH, HEIGHT);
+					frame.moveToMiddle();
 
-					gameState = new GameState(gameState, gameState.getLevel() + 1);
-					endTime = System.currentTimeMillis();
-					achievementManager.updatePlaying(gameState.getMaxCombo(),(int) (endTime - startTime) / 1000, MAX_LIVES, gameState.getLivesRemaining(), gameState.getLevel()-1);
-				} while (gameState.getLivesRemaining() > 0);
-				achievementManager.updatePlayed(gameState.getAccuracy(), gameState.getScore());
-                achievementManager.updateAllAchievements();
-				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
-						+ " score screen at " + FPS + " fps, with a score of "
-						+ gameState.getScore() + ", "
-						+ gameState.getShipType().toString() + " ship, "
-						+ gameState.getLivesRemaining() + " lives remaining, "
-						+ gameState.getBulletsShot() + " bullets shot and "
-						+ gameState.getShipsDestroyed() + " ships destroyed.");
-				currentScreen = new ScoreScreen(GameSettingScreen.getName(0), width, height, FPS, gameState, wallet, achievementManager, false);
+					gameState = ((TwoPlayerScreen) currentScreen).getWinnerGameState();
+					int winnerNumber = ((TwoPlayerScreen) currentScreen).getWinnerNumber();
 
-				returnCode = frame.setScreen(currentScreen);
-				LOGGER.info("Closing score screen.");
-				break;
-
-			case 3:
-				//Shop
-				currentScreen = new ShopScreen(width, height, FPS, wallet);
-				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
-						+ " Shop screen at " + FPS + " fps.");
-				returnCode = frame.setScreen(currentScreen);
-				LOGGER.info("Closing Shop screen.");
-				break;
-
-			case 4:
-				// Achievement
-				currentScreen = new AchievementScreen(width, height, FPS,achievementManager);
-				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
-						+ " achievement screen at " + FPS + " fps.");
-				returnCode = frame.setScreen(currentScreen);
-				LOGGER.info("Closing Achievement screen.");
-				break;
-
-			case 5:
-				//Setting
-				currentScreen = new SettingScreen(width, height, FPS);
-				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
-						+ " setting screen at " + FPS + " fps.");
-				returnCode = frame.setScreen(currentScreen);
-				LOGGER.info("Closing Setting screen.");
-				break;
-
-			case 6:
-				//Game Setting
-				currentScreen = new GameSettingScreen(width, height, FPS);
-				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
-						+ " game setting screen at " + FPS + " fps.");
-				returnCode = frame.setScreen(currentScreen);
-				LOGGER.info("Closing game setting screen.");
-        		break;
-
-			case 7:
-				//Credit Screen
-				currentScreen = new CreditScreen(width, height, FPS);
-				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
-						+ " credit screen at " + FPS + " fps.");
-				returnCode = frame.setScreen(currentScreen);
-				LOGGER.info("Closing credit screen.");
-				break;
-			case 8:
-				// TwoPlayerScreen
-				frame.setSize(WIDTH*2, HEIGHT);
-				frame.moveToMiddle();
-
-				currentScreen = new TwoPlayerScreen(gameState, gameSetting, width, height, FPS, wallet);
-				LOGGER.info("Two player starting " + WIDTH + "x" + HEIGHT
-						+ " game screen at " + FPS + " fps.");
-				frame.setScreen(currentScreen);
-				LOGGER.info("Closing game screen.");
-
-				frame.setSize(WIDTH, HEIGHT);
-				frame.moveToMiddle();
-
-				gameState = ((TwoPlayerScreen) currentScreen).getWinnerGameState();
-				int winnerNumber = ((TwoPlayerScreen) currentScreen).getWinnerNumber();
-
-				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
-						+ " score screen at " + FPS + " fps, with a score of "
-						+ gameState.getScore() + ", "
-						+ gameState.getLivesRemaining() + " lives remaining, "
-						+ gameState.getBulletsShot() + " bullets shot and "
-						+ gameState.getShipsDestroyed() + " ships destroyed.");
-				DrawManager.getInstance().setFrame(frame);
-				currentScreen = new ScoreScreen(GameSettingScreen.getName(winnerNumber), width, height, FPS, gameState, wallet, achievementManager, true);
-				returnCode = frame.setScreen(currentScreen);
-				LOGGER.info("Closing score screen.");
-				break;
-			default:
-				break;
+					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
+							+ " score screen at " + FPS + " fps, with a score of "
+							+ gameState.getScore() + ", "
+							+ gameState.getLivesRemaining() + " lives remaining, "
+							+ gameState.getBulletsShot() + " bullets shot and "
+							+ gameState.getShipsDestroyed() + " ships destroyed.");
+					DrawManager.getInstance().setFrame(frame);
+					currentScreen = new ScoreScreen(GameSettingScreen.getName(winnerNumber), width, height, FPS, gameState, wallet, achievementManager, true);
+					returnCode = frame.setScreen(currentScreen);
+					LOGGER.info("Closing score screen.");
+				}
 			}
 
 		} while (returnCode != 0);
