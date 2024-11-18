@@ -21,9 +21,9 @@ import entity.*;
 
 /**
  * Implements the game screen, where the action happens.
- *
+ * 
  * @author <a href="mailto:RobertoIA1987@gmail.com">Roberto Izquierdo Amo</a>
- *
+ * 
  */
 public class GameScreen extends Screen implements Callable<GameState> {
 
@@ -98,7 +98,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	/** Alert Message when a special enemy appears. */
 	private String alertMessage;
 	/** checks if it's executed. */
-	private boolean isExecuted = false;
+  	private boolean isExecuted = false;
 	/** timer.. */
 	private Timer timer;
 	private TimerTask timerTask;
@@ -135,13 +135,11 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 	private int hitBullets;
 
-	// 남
-	private boolean isPaused = false;
+	private boolean isExit = false;
 
-
-	/**
+    /**
 	 * Constructor, establishes the properties of the screen.
-	 *
+	 * 
 	 * @param gameState
 	 *            Current game state.
 	 * @param gameSettings
@@ -156,8 +154,8 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	 *            Frames per second, frame rate at which the game is run.
 	 */
 	public GameScreen(final GameState gameState,
-					  final GameSettings gameSettings, final boolean bonusLife,
-					  final int width, final int height, final int fps, final Wallet wallet) {
+			final GameSettings gameSettings, final boolean bonusLife,
+			final int width, final int height, final int fps, final Wallet wallet) {
 		super(width, height, fps);
 
 		this.gameSettings = gameSettings;
@@ -237,17 +235,6 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		};
 	}
 
-	// 남
-	public void togglePause() {
-		isPaused = !isPaused;
-//      if (isPaused) {
-//         soundManager.playSound(Sound.MENU_PAUSE);
-//      }
-//      else {
-//         soundManager.playSound(Sound.MENU_UNPAUSE);
-//      }
-	}
-
 	/**
 	 * Initializes basic screen properties, and adds necessary elements.
 	 */
@@ -256,10 +243,10 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 		enemyShipFormation = new EnemyShipFormation(this.gameSettings, this.gameState);
 		enemyShipFormation.attach(this);
-		// Appears each 10-30 seconds.
-		this.ship = ShipFactory.create(this.shipType, this.width / 2, this.height - 30);
+        // Appears each 10-30 seconds.
+        this.ship = ShipFactory.create(this.shipType, this.width / 2, this.height - 30);
 		logger.info("Player ship created " + this.shipType + " at " + this.ship.getPositionX() + ", " + this.ship.getPositionY());
-		ship.applyItem(wallet);
+        ship.applyItem(wallet);
 		//Create random Spider Web.
 		int web_count = 1 + level / 3;
 		web = new ArrayList<>();
@@ -303,7 +290,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		this.screenFinishedCooldown = Core.getCooldown(SCREEN_CHANGE_INTERVAL);
 		this.bullets = new HashSet<>();
 		this.barriers = new HashSet<>();
-		this.itemBoxes = new HashSet<>();
+        this.itemBoxes = new HashSet<>();
 		this.itemManager = new ItemManager(this.ship, this.enemyShipFormation, this.barriers, this.height, this.width, this.balance);
 
 		// Special input delay / countdown.
@@ -321,15 +308,15 @@ public class GameScreen extends Screen implements Callable<GameState> {
 			case 4: soundManager.loopSound(Sound.BGM_LV4); break;
 			case 5: soundManager.loopSound(Sound.BGM_LV5); break;
 			case 6: soundManager.loopSound(Sound.BGM_LV6); break;
-			case 7:
+            case 7:
 				// From level 7 and above, it continues to play at BGM_LV7.
-			default: soundManager.loopSound(Sound.BGM_LV7); break;
+            default: soundManager.loopSound(Sound.BGM_LV7); break;
 		}
 	}
 
 	/**
 	 * Starts the action.
-	 *
+	 * 
 	 * @return Next screen code.
 	 */
 	public final int run() {
@@ -347,12 +334,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	 */
 	protected final void update() {
 		super.update();
-
-		if (isPaused) {
-			return; // Skip the update if the game is paused
-		}
-
-
+		this.isExit = inputManager.isKeyDown(KeyEvent.VK_ESCAPE);
 		if (this.inputDelay.checkFinished() && !this.levelFinished) {
 			boolean player1Attacking = inputManager.isKeyDown(KeyEvent.VK_SPACE);
 			boolean player2Attacking = inputManager.isKeyDown(KeyEvent.VK_SHIFT);
@@ -502,10 +484,14 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		else
 			draw();
 
-		if ((this.enemyShipFormation.isEmpty() || this.lives <= 0)
+		if ((this.enemyShipFormation.isEmpty() || this.lives <= 0 || this.isExit)
 				&& !this.levelFinished) {
 			this.levelFinished = true;
-
+			if(this.isExit)
+			{
+				logger.info("ESC pressed. End the game.");
+				this.lives = 0;
+			}
 			soundManager.stopSound(soundManager.getCurrentBGM());
 			if (this.lives == 0)
 				soundManager.playSound(Sound.GAME_END);
@@ -514,138 +500,6 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 		if (this.levelFinished && this.screenFinishedCooldown.checkFinished()) {
 			//Reset alert message when level is finished
-			this.alertMessage = "";
-			this.isRunning = false;
-		}
-	}
-
-
-	private void handlePlayerAttacks() {
-		boolean player1Attacking = inputManager.isKeyDown(KeyEvent.VK_SPACE);
-		boolean player2Attacking = inputManager.isKeyDown(KeyEvent.VK_SHIFT);
-
-		if (player1Attacking && player2Attacking) {
-			if (this.ship.shoot(this.bullets, this.itemManager.getShotNum())) {
-				this.bulletsShot += this.itemManager.getShotNum();
-			}
-		} else {
-			switch (playerNumber) {
-				case 1:
-					if (player2Attacking) {
-						if (this.ship.shoot(this.bullets, this.itemManager.getShotNum(), balance)) {
-							this.bulletsShot += this.itemManager.getShotNum();
-						}
-					}
-					break;
-				case 0:
-					if (player1Attacking) {
-						if (this.ship.shoot(this.bullets, this.itemManager.getShotNum(), balance)) {
-							this.bulletsShot += this.itemManager.getShotNum();
-						}
-					}
-					break;
-				default:
-					if (player1Attacking) {
-						if (this.ship.shoot(this.bullets, this.itemManager.getShotNum(), balance)) {
-							this.bulletsShot += this.itemManager.getShotNum();
-						}
-					}
-					break;
-			}
-		}
-	}
-
-	private void updateElapsedTime() {
-		long currentTime = System.currentTimeMillis();
-		if (this.prevTime != null) {
-			this.elapsedTime += (int) (currentTime - this.prevTime);
-		}
-		this.prevTime = (int) currentTime;
-	}
-
-	private void updateShipColor() {
-		if (!itemManager.isGhostActive()) {
-			this.ship.setColor(Color.GREEN);
-		}
-	}
-
-	private void updateShipPosition() {
-		if (!this.ship.isDestroyed()) {
-			boolean moveRight = inputManager.isKeyDown(KeyEvent.VK_RIGHT);
-			boolean moveLeft = inputManager.isKeyDown(KeyEvent.VK_LEFT);
-			boolean isRightBorder = this.ship.getPositionX() + this.ship.getWidth() >= this.width;
-			boolean isLeftBorder = this.ship.getPositionX() <= 0;
-
-			if (moveRight && !isRightBorder) {
-				this.ship.moveRight();
-			}
-			if (moveLeft && !isLeftBorder) {
-				this.ship.moveLeft();
-			}
-
-			for (int i = 0; i < web.size(); i++) {
-				// Handle web interactions
-			}
-		}
-	}
-
-	private void handleSpecialEnemyShip() {
-		if (this.enemyShipSpecial != null) {
-			if (!this.enemyShipSpecial.isDestroyed()) {
-				// Handle special enemy ship logic
-			} else if (this.enemyShipSpecialExplosionCooldown.checkFinished()) {
-				this.enemyShipSpecial = null;
-			}
-		}
-
-		if (this.enemyShipSpecial == null && this.enemyShipSpecialCooldown.checkFinished()) {
-			this.enemyShipSpecial = new EnemyShip();
-			this.alertMessage = "";
-			this.enemyShipSpecialCooldown.reset();
-			soundManager.playSound(Sound.UFO_APPEAR, balance);
-			this.logger.info("A special ship appears");
-		}
-
-		if (this.enemyShipSpecial == null && this.enemyShipSpecialCooldown.checkAlert()) {
-			switch (this.enemyShipSpecialCooldown.checkAlertAnimation()) {
-				// Handle alert animation
-			}
-		}
-
-		if (this.enemyShipSpecial != null && this.enemyShipSpecial.getPositionX() > this.width) {
-			this.enemyShipSpecial = null;
-			this.logger.info("The special ship has escaped");
-		}
-	}
-
-	private void updateEnemyShipFormation() {
-		this.ship.update();
-		if (!itemManager.isTimeStopActive()) {
-			this.enemyShipFormation.update();
-			this.enemyShipFormation.shoot(this.bullets, this.level, balance);
-		}
-	}
-
-	private void drawGameElements() {
-		if (playerNumber >= 0) {
-			drawThread();
-		} else {
-			draw();
-		}
-	}
-
-	private boolean checkLevelFinished() {
-		return (this.enemyShipFormation.isEmpty() || this.lives <= 0) && !this.levelFinished;
-	}
-
-	private void handleLevelCompletion() {
-		this.levelFinished = true;
-		soundManager.stopSound(soundManager.getCurrentBGM());
-		if (this.lives == 0) {
-			// Handle game over logic
-		}
-		this.screenFinishedCooldown.reset();
-		if (this.levelFinished && this.screenFinishedCooldown.checkFinished()) {
 			this.alertMessage = "";
 			this.isRunning = false;
 		}
@@ -711,15 +565,15 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 			//Intermediate aggregation
 			if (this.level > 1){
-				if (countdown == 0) {
+                if (countdown == 0) {
 					//Reset mac combo and edit temporary values
-					this.lapTime = this.elapsedTime;
-					this.tempScore = this.score;
-					this.maxCombo = 0;
-				} else {
+                    this.lapTime = this.elapsedTime;
+                    this.tempScore = this.score;
+                    this.maxCombo = 0;
+                } else {
 					// Don't show it just before the game starts, i.e. when the countdown is zero.
-					drawManager.interAggre(this, this.level - 1, this.maxCombo, this.elapsedTime, this.lapTime, this.score, this.tempScore);
-				}
+                    drawManager.interAggre(this, this.level - 1, this.maxCombo, this.elapsedTime, this.lapTime, this.score, this.tempScore);
+                }
 			}
 		}
 
@@ -963,7 +817,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 					}
 				}
 
-			} else {   // Player ship's bullets
+			} else {	// Player ship's bullets
 				for (EnemyShip enemyShip : this.enemyShipFormation)
 					if (enemyShip != null && !enemyShip.isDestroyed()
 							&& checkCollision(bullet, enemyShip)) {
@@ -1027,7 +881,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 				for (Block block : this.block) {
 					if (checkCollision(bullet, block)) {
 						recyclable.add(bullet);
-						soundManager.playSound(Sound.BULLET_BLOCKING, balance);
+                        soundManager.playSound(Sound.BULLET_BLOCKING, balance);
 						break;
 					}
 				}
@@ -1054,7 +908,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 	/**
 	 * Checks if two entities are colliding.
-	 *
+	 * 
 	 * @param a
 	 *            First entity, the bullet.
 	 * @param b
@@ -1079,7 +933,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 	/**
 	 * Returns a GameState object representing the status of the game.
-	 *
+	 * 
 	 * @return Current game state.
 	 */
 	public final GameState getGameState() {
