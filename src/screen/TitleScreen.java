@@ -101,6 +101,9 @@ public class TitleScreen extends Screen {
 			this.returnCode = 6;
 		else if (this.returnCode == 6)
 			this.returnCode = 3;
+		//returncode 4를 건너뛰기
+		else if(this.returnCode == 3)
+			this.returnCode = 5;
 		else
 			this.returnCode++;
 	}
