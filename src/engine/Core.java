@@ -89,16 +89,9 @@ public final class Core {
 
 		AchievementManager achievementManager;
 		Wallet wallet = Wallet.getWallet();
+
 		userManager = new UserManager();
-
-		// 초기 화면: 로그인 화면
-		currentScreen = new LoginScreen(width, height, FPS, userManager);
-		LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
-				+ " login screen at " + FPS + " fps.");
-
-		int returnCode = frame.setScreen(currentScreen);
-		LOGGER.info("Closing login screen.");
-		userManager.getUsername();
+		int returnCode = 10;
 		do {
 			MAX_LIVES = wallet.getLives_lv()+2;
 			gameState = new GameState(1, 0, BASE_SHIP, MAX_LIVES, 0, 0, 0, "", 0, 0, 0 ,0, 0);
