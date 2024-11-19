@@ -156,7 +156,7 @@ public final class Core {
 							+ gameState.getLivesRemaining() + " lives remaining, "
 							+ gameState.getBulletsShot() + " bullets shot and "
 							+ gameState.getShipsDestroyed() + " ships destroyed.");
-					currentScreen = new ScoreScreen(GameSettingScreen.getName(0), width, height, FPS, gameState, wallet, achievementManager, false);
+					currentScreen = new ScoreScreen(GameSettingScreen.getName(0), width, height, FPS, gameState, wallet, achievementManager, false,userManager);
 
 					returnCode = frame.setScreen(currentScreen);
 					LOGGER.info("Closing score screen.");
@@ -172,12 +172,18 @@ public final class Core {
 				}
 
 				case 4 -> {
-					// Achievement
-					currentScreen = new AchievementScreen(width, height, FPS, achievementManager);
+//					// Achievement
+//					currentScreen = new AchievementScreen(width, height, FPS, achievementManager);
+//					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
+//							+ " achievement screen at " + FPS + " fps.");
+//					returnCode = frame.setScreen(currentScreen);
+//					LOGGER.info("Closing Achievement screen.");
+					//rank
+					currentScreen = new RankScreen(width,height,FPS,userManager);
 					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
-							+ " achievement screen at " + FPS + " fps.");
+					+ " rank screen at " + FPS + " fps.");
 					returnCode = frame.setScreen(currentScreen);
-					LOGGER.info("Closing Achievement screen.");
+					LOGGER.info("Closing Rank screen.");
 				}
 
 				case 5 -> {
@@ -231,7 +237,7 @@ public final class Core {
 							+ gameState.getBulletsShot() + " bullets shot and "
 							+ gameState.getShipsDestroyed() + " ships destroyed.");
 					DrawManager.getInstance().setFrame(frame);
-					currentScreen = new ScoreScreen(GameSettingScreen.getName(winnerNumber), width, height, FPS, gameState, wallet, achievementManager, true);
+					currentScreen = new ScoreScreen(GameSettingScreen.getName(winnerNumber), width, height, FPS, gameState, wallet, achievementManager, true,userManager);
 					returnCode = frame.setScreen(currentScreen);
 					LOGGER.info("Closing score screen.");
 				}

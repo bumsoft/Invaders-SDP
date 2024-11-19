@@ -715,7 +715,7 @@ public final class DrawManager {
 		String playString = "Play";
 		String shopString = "SHOP";
 		String coinString = "YOUR COIN: " + coin;
-		String achievementString = "ACHIEVEMENT";
+		String achievementString = "Rank"; //임시
 		String settingString = "SETTING";
 		String exitString = "EXIT";
 

@@ -195,6 +195,35 @@ public class UserManager {
         return null;
     }
 
+    public void updateScore(int score)
+    {
+        URL url;
+        try
+        {
+            url = new URL(Core.getServerUrl()+"updateRank/"+score);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Cookie", sessionCookie);
+
+            if(connection.getResponseCode() == HttpURLConnection.HTTP_OK)
+            {
+                logger.info("update Score");
+            }
+            else //서버에서 문제가 생긴경우(로그인 정보가 없는 등)
+            {
+                logger.info("ResponseCode:"+connection.getResponseCode());
+                logger.info("Cannot update Score");
+                //로그인 화면으로 다시 보내는게 베스트긴함
+            }
+        } catch (Exception e)
+        {
+            logger.info("Server error");
+        }finally
+        {
+            connection.disconnect();
+        }
+    }
+
     private class RegisterDto {
         private String username;
         private String password;

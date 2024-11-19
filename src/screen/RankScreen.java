@@ -32,7 +32,7 @@ public class RankScreen extends Screen {
 
     @Override
     protected void update() {
-        if (inputManager.isKeyPressed(KeyEvent.VK_ESCAPE)) {
+        if (inputManager.isKeyPressed(KeyEvent.VK_ESCAPE))
             isRunning = false;
 
         // Draw screen
@@ -44,10 +44,10 @@ public class RankScreen extends Screen {
     private void draw() {
         drawManager.initDrawing(this);
         drawManager.drawCenteredText(this, "Rank", 100);
-        for(int i=1;i<=10;i++)
+        for(int i=0;i<10 && i<scoreList.size();i++)
         {
-            user
-        }
+            UserScoreDto score = scoreList.get(i);
+            drawManager.drawCenteredText(this, i+1+" : " + score.getUsername()+"  "+score.getScore(), 130+30*i);
         }
         drawManager.completeDrawing(this);
     }
