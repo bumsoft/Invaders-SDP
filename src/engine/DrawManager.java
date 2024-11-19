@@ -341,42 +341,6 @@ public final class DrawManager {
                             + j * 2, 1, 1);
     }
 
-//	//Drawing an Entity (Blocker) that requires angle setting
-//	public void drawRotatedEntity(Entity entity, int x, int y, double angle) {
-//		Graphics2D g2d = (Graphics2D) backBufferGraphics; // Convert to Graphics2D
-//		AffineTransform oldTransform = g2d.getTransform(); // Save previous conversion
-//
-//		//Set center point to rotate
-//		int centerX = x + entity.getWidth() / 2;
-//		int centerY = y + entity.getHeight() / 2;
-//
-//		//rotate by a given angle
-//		g2d.rotate(Math.toRadians(angle), centerX, centerY);
-//
-//		//Drawing entities
-//		drawEntity(entity, x, y);
-//
-//		g2d.setTransform(oldTransform); // Restore to original conversion state
-//	}
-//
-//	//Drawing an Entity (Blocker) that requires angle setting
-//	public void drawRotatedEntity(Entity entity, int x, int y, double angle, final int threadNumber) {
-//		Graphics2D g2d = (Graphics2D) threadBufferGraphics[threadNumber]; // Convert to Graphics2D
-//		AffineTransform oldTransform = g2d.getTransform(); // Save previous conversion
-//
-//		//Set center point to rotate
-//		int centerX = x + entity.getWidth() / 2;
-//		int centerY = y + entity.getHeight() / 2;
-//
-//		//rotate by a given angle
-//		g2d.rotate(Math.toRadians(angle), centerX, centerY);
-//
-//		//Drawing entities
-//		drawEntity(entity, x, y, threadNumber);
-//
-//		g2d.setTransform(oldTransform); // Restore to original conversion state
-//	}
-
 	/**
 	 * For debugging purposes, draws the canvas borders.
 	 * 
