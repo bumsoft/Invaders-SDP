@@ -17,12 +17,18 @@ public final class InputManager implements KeyListener {
 	private static boolean[] keys;
 	/** Singleton instance of the class. */
 	private static InputManager instance;
+	/** Array to track if a key was processed. */
+	private static boolean[] processedKeys;
+	/** Last typed key. */
+	private static char lastTypedKey = '\0';
+
 
 	/**
 	 * Private constructor.
 	 */
 	private InputManager() {
 		keys = new boolean[NUM_KEYS];
+		processedKeys = new boolean[NUM_KEYS];
 	}
 
 	/**
@@ -60,6 +66,21 @@ public final class InputManager implements KeyListener {
 	}
 
 	/**
+	 * Returns true if the provided key is pressed and hasn't been processed yet.
+	 * Resets the processed state for that key.
+	 *
+	 * @param keyCode Key number to check.
+	 * @return True if the key is pressed and not yet processed.
+	 */
+	public boolean isKeyPressed(final int keyCode) {
+		if (keys[keyCode] && !processedKeys[keyCode]) {
+			processedKeys[keyCode] = true; // Mark as processed
+			return true;
+		}
+		return false;
+	}
+
+	/**
 	 * Changes the state of the key to not pressed.
 	 * 
 	 * @param key
@@ -69,6 +90,7 @@ public final class InputManager implements KeyListener {
 	public void keyReleased(final KeyEvent key) {
 		if (key.getKeyCode() >= 0 && key.getKeyCode() < NUM_KEYS)
 			keys[key.getKeyCode()] = false;
+			processedKeys[key.getKeyCode()] = false; // 처리 상태 초기화
 	}
 
 	/**
@@ -79,6 +101,17 @@ public final class InputManager implements KeyListener {
 	 */
 	@Override
 	public void keyTyped(final KeyEvent key) {
+		lastTypedKey = key.getKeyChar(); // 마지막 입력된 문자 저장
+	}
 
+	/**
+	 * Returns the last typed character.
+	 *
+	 * @return Last typed character, or '\0' if no character was typed.
+	 */
+	public char getTypedKey() {
+		char key = lastTypedKey;
+		lastTypedKey = '\0'; // Reset after returning
+		return key;
 	}
 }

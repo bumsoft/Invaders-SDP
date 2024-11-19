@@ -46,6 +46,7 @@ public class ScoreScreen extends Screen {
 	// e.g., lv1; score 100 * 0.1
 	private static final double[] COIN_RATIOS = {0.1, 0.13, 0.16, 0.19};
 
+
 	/**
 	 * Constructor, establishes the properties of the screen.
 	 * 
@@ -60,7 +61,7 @@ public class ScoreScreen extends Screen {
 	 */
 	public ScoreScreen(final String name1, final int width, final int height, final int fps,
 			final GameState gameState, final Wallet wallet, final AchievementManager achievementManager,
-		    final boolean isMultiplay) {
+		    final boolean isMultiplay, final UserManager userManager) {
 		super(width, height, fps);
 
 		this.name1 = name1;
@@ -82,6 +83,8 @@ public class ScoreScreen extends Screen {
 		// Since coins are in integer units, round the decimal points and convert to int
 		this.coinsEarned = (int)Math.round(gameState.getScore() * coin_ratio);
 		this.coinsEarned += achievementManager.getAchievementReward();
+
+		userManager.updateScore(gameState.getScore());
 
 		// deposit the earned coins to wallet
 		this.accuracy = gameState.getAccuracy();
