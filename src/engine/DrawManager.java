@@ -105,10 +105,6 @@ public final class DrawManager {
 		Web,
 		/** Obstacles preventing a player's bullet */
 		Block,
-		/** Obstruction 1 (satellite) */
-		Blocker1,
-		/** Obstruction 2 (Astronaut) */
-		Blocker2,
         /** 2nd player ship. */
         Ship2,
         /** 3rd player ship. */
@@ -154,8 +150,6 @@ public final class DrawManager {
 			spriteMap.put(SpriteType.ItemBox, new boolean[7][7]);
 			spriteMap.put(SpriteType.Web, new boolean[12][8]);
 			spriteMap.put(SpriteType.Block, new boolean[20][7]);
-			spriteMap.put(SpriteType.Blocker1, new boolean[182][93]); // artificial satellite
-			spriteMap.put(SpriteType.Blocker2, new boolean[82][81]); // astronaut
 			spriteMap.put(SpriteType.Ship2, new boolean[13][8]);
 			spriteMap.put(SpriteType.Ship3, new boolean[13][8]);
 			spriteMap.put(SpriteType.Ship4, new boolean[13][8]);
@@ -340,42 +334,6 @@ public final class DrawManager {
                     threadBufferGraphics[threadNumber].drawRect(positionX + i * 2, positionY
                             + j * 2, 1, 1);
     }
-
-	//Drawing an Entity (Blocker) that requires angle setting
-	public void drawRotatedEntity(Entity entity, int x, int y, double angle) {
-		Graphics2D g2d = (Graphics2D) backBufferGraphics; // Convert to Graphics2D
-		AffineTransform oldTransform = g2d.getTransform(); // Save previous conversion
-
-		//Set center point to rotate
-		int centerX = x + entity.getWidth() / 2;
-		int centerY = y + entity.getHeight() / 2;
-
-		//rotate by a given angle
-		g2d.rotate(Math.toRadians(angle), centerX, centerY);
-
-		//Drawing entities
-		drawEntity(entity, x, y);
-
-		g2d.setTransform(oldTransform); // Restore to original conversion state
-	}
-
-	//Drawing an Entity (Blocker) that requires angle setting
-	public void drawRotatedEntity(Entity entity, int x, int y, double angle, final int threadNumber) {
-		Graphics2D g2d = (Graphics2D) threadBufferGraphics[threadNumber]; // Convert to Graphics2D
-		AffineTransform oldTransform = g2d.getTransform(); // Save previous conversion
-
-		//Set center point to rotate
-		int centerX = x + entity.getWidth() / 2;
-		int centerY = y + entity.getHeight() / 2;
-
-		//rotate by a given angle
-		g2d.rotate(Math.toRadians(angle), centerX, centerY);
-
-		//Drawing entities
-		drawEntity(entity, x, y, threadNumber);
-
-		g2d.setTransform(oldTransform); // Restore to original conversion state
-	}
 
 	/**
 	 * For debugging purposes, draws the canvas borders.
