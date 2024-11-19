@@ -1,13 +1,15 @@
 package engine;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import entity.dto.UserScoreDto;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -17,6 +19,8 @@ public class UserManager {
     private String sessionCookie;
     private Logger logger = Core.getLogger();
     private HttpURLConnection connection;
+
+    private final ObjectMapper mapper = new ObjectMapper();
 
     public boolean register(String id, String pw)
     {
@@ -34,8 +38,7 @@ public class UserManager {
             RegisterDto registerDto = new RegisterDto(id, pw);
 
             // Jackson ObjectMapper를 사용해 객체를 JSON으로
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonInputString = objectMapper.writeValueAsString(registerDto);
+            String jsonInputString = mapper.writeValueAsString(registerDto);
 
             // 데이터 전송
             try (OutputStream os = connection.getOutputStream()) {
@@ -156,6 +159,40 @@ public class UserManager {
             connection.disconnect();
         }
         return "default_username";
+    }
+
+    public List<UserScoreDto> getRanking()
+    {
+        URL url;
+        try
+        {
+            url = new URL(Core.getServerUrl()+"ranking");
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            if(connection.getResponseCode() == HttpURLConnection.HTTP_OK)
+            {
+                return mapper.readValue(
+                        connection.getInputStream(),
+                        new TypeReference<List<UserScoreDto>>() {}
+                );
+            }
+            else
+            {
+                logger.info("ResponseCode:"+connection.getResponseCode());
+                logger.info("Cannot load the ranking from server.");
+                return null;
+            }
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            logger.info("Server error");
+        }finally
+        {
+            if(connection != null)
+                connection.disconnect();
+        }
+        return null;
     }
 
     private class RegisterDto {
