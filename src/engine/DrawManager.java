@@ -833,7 +833,7 @@ public final class DrawManager {
 	 * @param screen
 	 *            Screen to draw on.
 	 */
-	public void drawAchievementMenu(final Screen screen, final int totalScore, final int totalPlayTime, final int maxCombo,
+	/*public void drawAchievementMenu(final Screen screen, final int totalScore, final int totalPlayTime, final int maxCombo,
 									final int currentPerfectStage, final int nextPerfectStage, boolean checkFlawlessFailure) {
 		//high score section
 		String highScoreTitle = "High Scores";
@@ -1068,7 +1068,7 @@ public final class DrawManager {
 					screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()*5-5);
 
 			}
-	}
+	}*/
 
 	/**
 	 * Draws high scores.

@@ -87,15 +87,13 @@ public final class Core {
 
 		GameState gameState;
 
-		AchievementManager achievementManager;
 		Wallet wallet = Wallet.getWallet();
 
 		userManager = new UserManager();
-		int returnCode = 10;
+		int returnCode = 1;
 		do {
 			MAX_LIVES = wallet.getLives_lv()+2;
 			gameState = new GameState(1, 0, BASE_SHIP, MAX_LIVES, 0, 0, 0, "", 0, 0, 0 ,0, 0);
-			achievementManager = new AchievementManager();
 
 			GameSettings gameSetting = new GameSettings(4, 4, 60, 2500);
 
@@ -138,10 +136,7 @@ public final class Core {
 
 						gameState = new GameState(gameState, gameState.getLevel() + 1);
 						endTime = System.currentTimeMillis();
-						achievementManager.updatePlaying(gameState.getMaxCombo(), (int) (endTime - startTime) / 1000, MAX_LIVES, gameState.getLivesRemaining(), gameState.getLevel() - 1);
 					} while (gameState.getLivesRemaining() > 0);
-					achievementManager.updatePlayed(gameState.getAccuracy(), gameState.getScore());
-					achievementManager.updateAllAchievements();
 					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 							+ " score screen at " + FPS + " fps, with a score of "
 							+ gameState.getScore() + ", "
@@ -149,7 +144,7 @@ public final class Core {
 							+ gameState.getLivesRemaining() + " lives remaining, "
 							+ gameState.getBulletsShot() + " bullets shot and "
 							+ gameState.getShipsDestroyed() + " ships destroyed.");
-					currentScreen = new ScoreScreen(GameSettingScreen.getName(0), width, height, FPS, gameState, wallet, achievementManager, false,userManager);
+					currentScreen = new ScoreScreen(GameSettingScreen.getName(0), width, height, FPS, gameState, wallet, false,userManager);
 
 					returnCode = frame.setScreen(currentScreen);
 					LOGGER.info("Closing score screen.");
@@ -165,13 +160,7 @@ public final class Core {
 				}
 
 				case 4 -> {
-//					// Achievement
-//					currentScreen = new AchievementScreen(width, height, FPS, achievementManager);
-//					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
-//							+ " achievement screen at " + FPS + " fps.");
-//					returnCode = frame.setScreen(currentScreen);
-//					LOGGER.info("Closing Achievement screen.");
-					//rank
+//					//rank
 					currentScreen = new RankScreen(width,height,FPS,userManager);
 					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 					+ " rank screen at " + FPS + " fps.");
@@ -230,7 +219,7 @@ public final class Core {
 							+ gameState.getBulletsShot() + " bullets shot and "
 							+ gameState.getShipsDestroyed() + " ships destroyed.");
 					DrawManager.getInstance().setFrame(frame);
-					currentScreen = new ScoreScreen(GameSettingScreen.getName(winnerNumber), width, height, FPS, gameState, wallet, achievementManager, true,userManager);
+					currentScreen = new ScoreScreen(GameSettingScreen.getName(winnerNumber), width, height, FPS, gameState, wallet, true,userManager);
 					returnCode = frame.setScreen(currentScreen);
 					LOGGER.info("Closing score screen.");
 				}
