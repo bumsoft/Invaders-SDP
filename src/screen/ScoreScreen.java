@@ -60,7 +60,7 @@ public class ScoreScreen extends Screen {
 	 *            Current game state.
 	 */
 	public ScoreScreen(final String name1, final int width, final int height, final int fps,
-			final GameState gameState, final Wallet wallet, final AchievementManager achievementManager,
+			final GameState gameState, final Wallet wallet,
 		    final boolean isMultiplay, final UserManager userManager) {
 		super(width, height, fps);
 
@@ -82,7 +82,6 @@ public class ScoreScreen extends Screen {
 		// Adjust coin earning ratios based on the game level upgrade stage score
 		// Since coins are in integer units, round the decimal points and convert to int
 		this.coinsEarned = (int)Math.round(gameState.getScore() * coin_ratio);
-		this.coinsEarned += achievementManager.getAchievementReward();
 
 		userManager.updateScore(gameState.getScore());
 
