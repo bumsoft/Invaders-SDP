@@ -2,8 +2,10 @@ package screen.PVP;
 
 import engine.Core;
 import engine.UserManager;
+import entity.Ship;
 import screen.Screen;
 import socket.GameClient;
+import socket.PvpShip;
 import socket.Responses;
 
 import java.awt.event.KeyEvent;
@@ -15,7 +17,10 @@ public class PvpGameScreen extends Screen {
 
     private Responses responses;
 
+    private PvpShip myShip = new PvpShip(0,0);
+    private PvpShip opShip = new PvpShip(0,0);
 
+    private PositionResponse positionResponse;
 
     public PvpGameScreen(final int width, final int height, final int fps, UserManager userManager) {
         super(width, height, fps);
@@ -51,8 +56,24 @@ public class PvpGameScreen extends Screen {
         {
             gameClient.sendOrder("SHOOT",username);
         }
+        if(inputManager.isKeyPressed(KeyEvent.VK_A) || inputManager.isKeyPressed(KeyEvent.VK_LEFT))
+        {
+            gameClient.sendOrder("LEFT",username);
+        }
+        if(inputManager.isKeyPressed(KeyEvent.VK_D) || inputManager.isKeyPressed(KeyEvent.VK_RIGHT))
+        {
+            gameClient.sendOrder("RIGHT",username);
+        }
 
-
+        if(responses.getPositionResponse()!=null && positionResponse!=null
+            && positionResponse != responses.getPositionResponse())
+        {
+            positionResponse = responses.getPositionResponse();
+            myShip.setPositionX(positionResponse.getPlayerX());
+            myShip.setPositionY(positionResponse.getPlayerY());
+            opShip.setPositionX(positionResponse.getEnemyPlayerX());
+            opShip.setPositionY(positionResponse.getEnemyPlayerY());
+        }
 
         draw();
     }
@@ -60,20 +81,10 @@ public class PvpGameScreen extends Screen {
 
     private void draw() {
         drawManager.initDrawing(this);
-        drawManager.drawCenteredText(this, "Waiting Game Start", 100);
+        drawManager.drawCenteredText(this, "PVP Game Screen", 100);
 
-        if (isReady)
-            drawManager.drawCenteredText(this, "READY!", 130);
-        else
-            drawManager.drawCenteredText(this, username +"PRESS ENTER TO READY", 130);
-
-        if(responses.isGameJoin())
-            drawManager.drawCenteredText(this, "Opponent: "+responses.getOpponent(), 160);
-        else
-            drawManager.drawCenteredText(this, "Waiting Opponent", 160);
-
-        if(responses.isRoomOwner())
-            drawManager.drawCenteredBigString(this, "Access code: "+responses.getRoomCode(), 300);
+        drawManager.drawEntity(myShip, myShip.getPositionX(), myShip.getPositionY());
+        drawManager.drawEntity(opShip, opShip.getPositionX(), opShip.getPositionY());
 
         drawManager.completeDrawing(this);
     }

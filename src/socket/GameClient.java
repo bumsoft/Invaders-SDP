@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import engine.Core;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
+import screen.PVP.PositionResponse;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.logging.Logger;
@@ -48,6 +50,11 @@ public class GameClient extends WebSocketClient {
                 responses.setGameStarted(true);
             }
             case "UPDATE" ->{
+                try {
+                    responses.setPositionResponse(mapper.readValue(parts[1], PositionResponse.class));
+                }catch (IOException e){
+                    logger.info("cannot translate json to PositionResponse:"+e.getMessage());
+                }
             }
             default -> {
                 logger.info("Unknown command:"+message);
