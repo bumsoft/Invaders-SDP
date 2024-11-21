@@ -32,9 +32,9 @@ public class GameClient extends WebSocketClient {
     @Override
     public void onMessage(String message)
     {
-        message = message.toUpperCase();
         logger.info("Received:"+message);
         String[] parts = message.split("-");
+        parts[0] = parts[0].toUpperCase();
 
         switch(parts[0]){
             case "CREATED" ->{
