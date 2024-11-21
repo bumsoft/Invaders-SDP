@@ -65,7 +65,7 @@ public class PvpGameScreen extends Screen {
             gameClient.sendOrder("RIGHT",username);
         }
 
-        if(responses.getPositionResponse()!=null && positionResponse!=null
+        if(responses.getPositionResponse()!=null
             && positionResponse != responses.getPositionResponse())
         {
             positionResponse = responses.getPositionResponse();
