@@ -8,11 +8,8 @@ import socket.GameClient;
 import socket.Responses;
 
 import java.awt.event.KeyEvent;
-import java.net.URISyntaxException;
 
-/**
- * Login screen class.
- */
+
 public class PvpLobbyScreen extends Screen {
 
     private final String username;

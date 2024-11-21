@@ -1,12 +1,73 @@
 package socket;
 
+import screen.PVP.PositionResponse;
+
 public class Responses {
+
+    //before game starts
     private boolean isGameStarted = false;
     private boolean isRoomCreated = false;
     private String roomCode = "";
-
     private boolean isGameJoin = false;
     private String opponent = "";
+    private boolean isOpponentReady = false;
+    private boolean isRoomOwner = false;
+
+    //after game starts
+    private boolean isGameOver = false;
+    private boolean isWin = false;
+
+    PositionResponse positionResponse;
+
+    public boolean isGameOver()
+    {
+        return isGameOver;
+    }
+
+    public void setGameOver(boolean gameOver)
+    {
+        isGameOver = gameOver;
+    }
+
+    public boolean isWin()
+    {
+        return isWin;
+    }
+
+    public void setWin(boolean win)
+    {
+        isWin = win;
+    }
+
+    public PositionResponse getPositionResponse()
+    {
+        return positionResponse;
+    }
+
+    public void setPositionResponse(PositionResponse positionResponse)
+    {
+        this.positionResponse = positionResponse;
+    }
+
+    public boolean isOpponentReady()
+    {
+        return isOpponentReady;
+    }
+
+    public void setOpponentReady(boolean opponentReady)
+    {
+        isOpponentReady = opponentReady;
+    }
+
+    public boolean isRoomOwner()
+    {
+        return isRoomOwner;
+    }
+
+    public void setRoomOwner(boolean roomOwner)
+    {
+        isRoomOwner = roomOwner;
+    }
 
     public boolean isGameJoin()
     {
@@ -56,14 +117,5 @@ public class Responses {
     public void setRoomCode(String roomCode)
     {
         this.roomCode = roomCode;
-    }
-
-    public void reset()
-    {
-        isGameStarted = false;
-        isRoomCreated = false;
-        roomCode = "";
-        isGameJoin = false;
-        opponent = "";
     }
 }

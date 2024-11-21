@@ -8,15 +8,16 @@ import socket.Responses;
 
 import java.awt.event.KeyEvent;
 
-
-public class WaitingRoomScreen extends Screen {
+public class PvpGameScreen extends Screen {
 
     private final String username;
     private GameClient gameClient;
-    private boolean isReady = false;
+
     private Responses responses;
 
-    public WaitingRoomScreen(final int width, final int height, final int fps, UserManager userManager) {
+
+
+    public PvpGameScreen(final int width, final int height, final int fps, UserManager userManager) {
         super(width, height, fps);
         this.username = userManager.getUsername();
 
@@ -34,7 +35,7 @@ public class WaitingRoomScreen extends Screen {
     @Override
     public void initialize() {
         super.initialize();
-        this.returnCode = 13; // 게임화면으로 바꾸기
+        this.returnCode = 14; //게임결과화면으로.
     }
 
     @Override
@@ -46,21 +47,13 @@ public class WaitingRoomScreen extends Screen {
 
     @Override
     protected void update() {
-        if (inputManager.isKeyPressed(KeyEvent.VK_ENTER) && responses.isGameJoin()) //상대가 있는 경우만 READY가능
+        if (inputManager.isKeyPressed(KeyEvent.VK_SPACE))
         {
-            gameClient.readyRoom(username);
-            isReady = true;
+            gameClient.sendOrder("SHOOT",username);
         }
-        if(inputManager.isKeyPressed(KeyEvent.VK_ESCAPE)) //esc누르면 메뉴로
-        {
-            Core.removeGameClient();
-            this.isRunning = false;
-            this.returnCode = 1;
-        }
-        if(responses.isGameStarted())
-        {
-            isRunning = false;
-        }
+
+
+
         draw();
     }
 

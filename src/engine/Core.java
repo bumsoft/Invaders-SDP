@@ -25,8 +25,8 @@ import socket.Responses;
  */
 public final class Core {
 
-	private static final String serverUrl = "http://localhost:8080/";
-	private static final String serverWSUrl = "ws://localhost:8080/game";
+	private static final String serverUrl = "http://192.168.219.105:8080/";
+	private static final String serverWSUrl = "ws://192.168.219.105:8080/game";
 	/** Width of current screen. */
 	private static final int WIDTH = 600;
 	/** Height of current screen. */
