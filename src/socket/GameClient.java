@@ -30,6 +30,7 @@ public class GameClient extends WebSocketClient {
     @Override
     public void onMessage(String message)
     {
+        message = message.toUpperCase();
         logger.info("Received:"+message);
 
         if(message.startsWith("CREATED-"))//방장이 받는 메시지

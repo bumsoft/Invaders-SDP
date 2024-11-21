@@ -13,6 +13,7 @@ import entity.Ship;
 import entity.Wallet;
 import screen.*;
 import screen.PVP.PvpLobbyScreen;
+import screen.PVP.WaitingRoomScreen;
 import socket.GameClient;
 import socket.Responses;
 
@@ -241,6 +242,13 @@ public final class Core {
 					currentScreen = new PvpLobbyScreen(width,height,FPS,userManager);
 					LOGGER.info("Starting PVP Lobby Screen");
 					returnCode = frame.setScreen(currentScreen);
+					LOGGER.info("Closing PVP Lobby Screen.");
+				}
+				case 12 ->{
+					currentScreen = new WaitingRoomScreen(width,height,FPS,userManager);
+					LOGGER.info("Starting Waiting Room Screen");
+					returnCode = frame.setScreen(currentScreen);
+					LOGGER.info("Closing Waiting Room Screen.");
 				}
 
 				default -> { // Exit

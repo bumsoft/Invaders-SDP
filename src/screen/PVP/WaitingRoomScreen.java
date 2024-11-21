@@ -70,6 +70,7 @@ public class WaitingRoomScreen extends Screen {
         if(responses.isGameJoin())
             drawManager.drawCenteredText(this, responses.getOpponent()+" is not ready!", 160);
 
+        drawManager.drawCenteredBigString(this, "Access code: "+responses.getRoomCode(), 300);
 
         drawManager.completeDrawing(this);
     }
