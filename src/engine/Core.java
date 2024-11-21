@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import entity.Ship;
 import entity.Wallet;
 import screen.*;
+import screen.PVP.PvpGameScreen;
 import screen.PVP.PvpLobbyScreen;
 import screen.PVP.WaitingRoomScreen;
 import socket.GameClient;
@@ -249,6 +250,12 @@ public final class Core {
 					LOGGER.info("Starting Waiting Room Screen");
 					returnCode = frame.setScreen(currentScreen);
 					LOGGER.info("Closing Waiting Room Screen.");
+				}
+				case 13 ->{
+					currentScreen = new PvpGameScreen(width,height,FPS,userManager);
+					LOGGER.info("Starting PVP Game Screen");
+					returnCode = frame.setScreen(currentScreen);
+					LOGGER.info("Closing PVP Game Screen.");
 				}
 
 				default -> { // Exit
