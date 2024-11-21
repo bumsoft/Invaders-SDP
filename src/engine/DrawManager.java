@@ -18,6 +18,7 @@ import javax.imageio.ImageIO;
 
 import entity.*;
 import screen.GameSettingScreen;
+import screen.PVP.PvpLobbyScreen;
 import screen.Screen;
 
 /**
@@ -69,6 +70,36 @@ public final class DrawManager {
 	private static BufferedImage img_coin;
 	private static BufferedImage img_coingain;
 	private static BufferedImage img_shotinterval;
+
+	public void drawPvpLobby(Screen screen, int option, boolean isCodeWrite, String code)
+	{
+		String createString = "CREATE ROOM";
+		String joinString = "JOIN ROOM";
+
+
+		if (option == 0)
+			backBufferGraphics.setColor(Color.GREEN);
+		else
+			backBufferGraphics.setColor(Color.WHITE);
+		drawCenteredRegularString(screen, createString,
+				screen.getHeight() / 7 * 4);
+
+		if (option == 1)
+			backBufferGraphics.setColor(Color.GREEN);
+		else
+			backBufferGraphics.setColor(Color.WHITE);
+		drawCenteredRegularString(screen, joinString, screen.getHeight()
+				/ 7 * 4 + fontRegularMetrics.getHeight() * 2);
+
+		if(isCodeWrite)
+		{
+			backBufferGraphics.setColor(Color.ORANGE);
+			drawCenteredRegularString(screen, "Enter code: " +code, screen.getHeight()
+				/ 7 * 4 + fontRegularMetrics.getHeight() * 3);
+		}
+
+
+	}
 
 
 	/** Sprite types. */
@@ -676,6 +707,7 @@ public final class DrawManager {
 	 *            Option selected.
 	 */
 	public void drawMenu(final Screen screen, final int option, final int coin) {
+		String PvpString = "PVP";
 		String playString = "Play";
 		String shopString = "SHOP";
 		String coinString = "YOUR COIN: " + coin;
@@ -683,6 +715,13 @@ public final class DrawManager {
 		String settingString = "SETTING";
 		String exitString = "EXIT";
 
+
+		if(option==11)
+			backBufferGraphics.setColor(Color.GREEN);
+		else
+			backBufferGraphics.setColor(Color.WHITE);
+		drawCenteredRegularString(screen, PvpString,
+				screen.getHeight() / 7 * 4 - fontRegularMetrics.getHeight() * 2);
 
 		if (option == 6) /*option2 => Game Settings */
 			backBufferGraphics.setColor(Color.GREEN);

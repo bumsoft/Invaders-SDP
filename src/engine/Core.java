@@ -1,6 +1,7 @@
 package engine;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
@@ -10,8 +11,10 @@ import java.util.logging.Logger;
 
 import entity.Ship;
 import entity.Wallet;
-import entity.dto.UserScoreDto;
 import screen.*;
+import screen.PVP.PvpLobbyScreen;
+import socket.GameClient;
+import socket.Responses;
 
 /**
  * Implements core game logic.
@@ -22,7 +25,7 @@ import screen.*;
 public final class Core {
 
 	private static final String serverUrl = "http://localhost:8080/";
-
+	private static final String serverWSUrl = "ws://localhost:8080/game";
 	/** Width of current screen. */
 	private static final int WIDTH = 600;
 	/** Height of current screen. */
@@ -55,6 +58,8 @@ public final class Core {
 	private static int DifficultySetting;// <- setting EASY(0), NORMAL(1), HARD(2);
 
 	private static UserManager userManager;
+
+	private static GameClient gameClient;
 	/**
 	 * Test implementation.
 	 * 
@@ -86,7 +91,6 @@ public final class Core {
 		int height = frame.getHeight();
 
 		GameState gameState;
-
 		Wallet wallet = Wallet.getWallet();
 
 		userManager = new UserManager();
@@ -233,6 +237,12 @@ public final class Core {
 					LOGGER.info("Returning to Login Screen");
 					returnCode = frame.setScreen(currentScreen);
 				}
+				case 11 ->{
+					currentScreen = new PvpLobbyScreen(width,height,FPS,userManager);
+					LOGGER.info("Starting PVP Lobby Screen");
+					returnCode = frame.setScreen(currentScreen);
+				}
+
 				default -> { // Exit
 					LOGGER.info("Exiting game.");
 					returnCode = 0;
@@ -329,5 +339,23 @@ public final class Core {
 	public static String getServerUrl()
 	{
 		return serverUrl;
+	}
+	public static String getServerWSUrl()
+	{
+		return serverWSUrl;
+	}
+	public static GameClient getGameClient() throws URISyntaxException, InterruptedException
+    {
+		if(gameClient == null)
+		{
+			gameClient = new GameClient();
+			gameClient.connectBlocking();
+		}
+		return gameClient;
+	}
+	public static void removeGameClient()
+	{
+		gameClient.close();
+		gameClient = null;
 	}
 }
