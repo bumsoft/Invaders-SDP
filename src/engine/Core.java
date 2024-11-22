@@ -2,7 +2,6 @@ package engine;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.List;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
@@ -16,7 +15,6 @@ import screen.PVP.PvpGameScreen;
 import screen.PVP.PvpLobbyScreen;
 import screen.PVP.WaitingRoomScreen;
 import socket.GameClient;
-import socket.Responses;
 
 /**
  * Implements core game logic.

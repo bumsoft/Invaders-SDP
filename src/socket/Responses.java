@@ -1,5 +1,6 @@
 package socket;
 
+import screen.PVP.GameStateDTO;
 import screen.PVP.PositionResponse;
 
 public class Responses {
@@ -16,8 +17,29 @@ public class Responses {
     //after game starts
     private boolean isGameOver = false;
     private boolean isWin = false;
+    private boolean isError = false;
 
-    PositionResponse positionResponse;
+    GameStateDTO gameStateDTO;
+
+    public boolean isError()
+    {
+        return isError;
+    }
+
+    public void setError(boolean error)
+    {
+        isError = error;
+    }
+
+    public GameStateDTO getGameStateDTO()
+    {
+        return gameStateDTO;
+    }
+
+    public void setGameStateDTO(GameStateDTO gameStateDTO)
+    {
+        this.gameStateDTO = gameStateDTO;
+    }
 
     public boolean isGameOver()
     {
@@ -37,16 +59,6 @@ public class Responses {
     public void setWin(boolean win)
     {
         isWin = win;
-    }
-
-    public PositionResponse getPositionResponse()
-    {
-        return positionResponse;
-    }
-
-    public void setPositionResponse(PositionResponse positionResponse)
-    {
-        this.positionResponse = positionResponse;
     }
 
     public boolean isOpponentReady()

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import engine.Core;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
+import screen.PVP.GameStateDTO;
 import screen.PVP.PositionResponse;
 
 import java.io.IOException;
@@ -51,10 +52,18 @@ public class GameClient extends WebSocketClient {
             }
             case "UPDATE" ->{
                 try {
-                    responses.setPositionResponse(mapper.readValue(parts[1], PositionResponse.class));
+                    responses.setGameStateDTO(mapper.readValue(parts[1], GameStateDTO.class));
+
                 }catch (IOException e){
                     logger.info("cannot translate json to PositionResponse:"+e.getMessage());
                 }
+            }
+            case "GAMEOVER" ->{ //"GAMEOVER-WIN or -LOSE
+                responses.setGameOver(true);
+                if(parts[1].equals("WIN")) responses.setWin(true);
+            }
+            case "ERROR" ->{
+                responses.setError(true);
             }
             default -> {
                 logger.info("Unknown command:"+message);
@@ -66,6 +75,7 @@ public class GameClient extends WebSocketClient {
     public void onClose(int code, String reason, boolean remote)
     {
         logger.info("Connection closed: " + reason);
+        responses.setError(true);
     }
 
     @Override
