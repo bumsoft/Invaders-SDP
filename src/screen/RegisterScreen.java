@@ -2,6 +2,7 @@ package screen;
 
 import engine.UserManager;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 
 /**
@@ -50,8 +51,8 @@ public class RegisterScreen extends Screen {
                 }
             }
         } else if (inputManager.isKeyPressed(KeyEvent.VK_TAB)) {
-            isUsernameFocused = !isUsernameFocused; // 포커스 전환 (Username ↔ Password)
-        }  else if (inputManager.isKeyPressed(KeyEvent.VK_BACK_SPACE)) {
+            isUsernameFocused = !isUsernameFocused; // Toggle focus
+        } else if (inputManager.isKeyPressed(KeyEvent.VK_BACK_SPACE)) {
             // 입력값 삭제
             if (isUsernameFocused && !username.isEmpty()) {
                 username = username.substring(0, username.length() - 1);
@@ -74,18 +75,28 @@ public class RegisterScreen extends Screen {
         draw();
     }
 
-
-
     private void draw() {
         drawManager.initDrawing(this);
-        drawManager.drawCenteredText(this, "Register", 100);
-        drawManager.drawCenteredText(this, "Username: " + username, 200);
-        drawManager.drawCenteredText(this, "Password: " + "*".repeat(password.length()), 250);
-        drawManager.drawCenteredText(this, isUsernameFocused ? ">>" : "  ", 200); // 포커스 표시
+
+        // 1. REGISTER 제목 표시
+        drawManager.drawLoginTitle(this, "REGISTER");
+
+        // 2. ID 입력 필드와 관련된 텍스트 및 박스 표시
+        drawManager.drawCenteredRegularString(this, "ID", this.height / 3 - 20, isUsernameFocused);
+        drawManager.drawInputBox(this, username, this.height / 3, isUsernameFocused, Color.GREEN);
+
+        // 3. PW 입력 필드와 관련된 텍스트 및 박스 표시
+        drawManager.drawCenteredRegularString(this, "PW", this.height / 3 + 60, !isUsernameFocused);
+        drawManager.drawInputBox(this, "*".repeat(password.length()), this.height / 3 + 80, !isUsernameFocused, Color.GREEN);
+
+        // 4. 회원가입 실패 메시지 표시
         if (isRegisterFailed) {
-            // 회원가입 실패 메시지 표시
-            drawManager.drawCenteredText(this, "Register failed. Try again.", 130);
+            drawManager.drawCenteredRegularString(this, "REGISTER FAILED. TRY AGAIN.", this.height / 2 + 40, false);
         }
+
+        // 5. 하단에 회원가입 메시지 표시
+        drawManager.drawCenteredRegularString(this, "PRESS ENTER TO SUBMIT", this.height - 50, false);
+
         drawManager.completeDrawing(this);
     }
 }
