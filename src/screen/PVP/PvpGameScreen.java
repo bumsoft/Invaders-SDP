@@ -26,7 +26,6 @@ public class PvpGameScreen extends Screen {
     private List<myBullet> myBullets = new ArrayList<>();
     private List<enBullet> enBullets = new ArrayList<>();
 
-    private PositionResponse positionResponse;
     private GameStateDTO gameStateDTO;
 
     public PvpGameScreen(final int width, final int height, final int fps, UserManager userManager) {
