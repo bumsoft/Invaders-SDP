@@ -56,6 +56,15 @@ public class PvpLobbyScreen extends Screen {
 
     @Override
     protected void update() {
+        if(responses.isError())
+        {
+            this.isRunning=false;
+            this.returnCode = 1;
+            Core.removeGameClient();
+            logger.info("Connection closed. Return to Title Screen");
+            return;
+        }
+
         if(responses.isGameJoin() || responses.isRoomCreated())
         {
             this.returnCode = 12; // WaitingRoomScreen

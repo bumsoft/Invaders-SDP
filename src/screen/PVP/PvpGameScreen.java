@@ -2,6 +2,7 @@ package screen.PVP;
 
 import engine.Core;
 import engine.UserManager;
+import entity.Bullet;
 import entity.Ship;
 import screen.Screen;
 import socket.GameClient;
@@ -9,6 +10,8 @@ import socket.PvpShip;
 import socket.Responses;
 
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PvpGameScreen extends Screen {
 
@@ -20,7 +23,11 @@ public class PvpGameScreen extends Screen {
     private PvpShip myShip = new PvpShip(0,0);
     private PvpShip opShip = new PvpShip(0,0);
 
+    private List<myBullet> myBullets = new ArrayList<>();
+    private List<enBullet> enBullets = new ArrayList<>();
+
     private PositionResponse positionResponse;
+    private GameStateDTO gameStateDTO;
 
     public PvpGameScreen(final int width, final int height, final int fps, UserManager userManager) {
         super(width, height, fps);
@@ -52,6 +59,20 @@ public class PvpGameScreen extends Screen {
 
     @Override
     protected void update() {
+        if(responses.isError())
+        {
+            this.isRunning=false;
+            this.returnCode = 1;
+            Core.removeGameClient();
+            logger.info("Connection closed. Return to Title Screen");
+            return;
+        }
+        if(responses.isGameOver())
+        {
+            this.isRunning=false;
+            this.returnCode = 14;
+            return;
+        }
         if (inputManager.isKeyPressed(KeyEvent.VK_SPACE))
         {
             gameClient.sendOrder("SHOOT",username);
@@ -65,14 +86,23 @@ public class PvpGameScreen extends Screen {
             gameClient.sendOrder("RIGHT",username);
         }
 
-        if(responses.getPositionResponse()!=null
-            && positionResponse != responses.getPositionResponse())
+        if(responses.getGameStateDTO() != null
+            && gameStateDTO != responses.getGameStateDTO())
         {
-            positionResponse = responses.getPositionResponse();
-            myShip.setPositionX(positionResponse.getPlayerX());
-            myShip.setPositionY(positionResponse.getPlayerY());
-            opShip.setPositionX(positionResponse.getEnemyPlayerX());
-            opShip.setPositionY(positionResponse.getEnemyPlayerY());
+            gameStateDTO = responses.getGameStateDTO();
+            myShip.setPositionX(gameStateDTO.getPlayer1X());
+            myShip.setPositionY(gameStateDTO.getPlayer1Y());
+            opShip.setPositionX(gameStateDTO.getPlayer2X());
+            opShip.setPositionY(gameStateDTO.getPlayer2Y());
+
+            for(BulletPositionDTO bulletPositionDTO : gameStateDTO.getPlayer1BulletPositionDTO())
+            {
+                myBullets.add(new myBullet(bulletPositionDTO.getBulletX(), bulletPositionDTO.getBulletY()));
+            }
+            for(BulletPositionDTO bulletPositionDTO : gameStateDTO.getPlayer2BulletPositionDTO())
+            {
+                enBullets.add(new enBullet(bulletPositionDTO.getBulletX(), bulletPositionDTO.getBulletY()));
+            }
         }
 
         draw();
@@ -85,6 +115,15 @@ public class PvpGameScreen extends Screen {
 
         drawManager.drawEntity(myShip, myShip.getPositionX(), myShip.getPositionY());
         drawManager.drawEntity(opShip, opShip.getPositionX(), opShip.getPositionY());
+
+        for(myBullet myBullet : myBullets)
+        {
+            drawManager.drawEntity(myBullet, myBullet.getPositionX(), myBullet.getPositionY());
+        }
+        for(enBullet enBullet : enBullets)
+        {
+            drawManager.drawEntity(enBullet, enBullet.getPositionX(), enBullet.getPositionY());
+        }
 
         drawManager.completeDrawing(this);
     }

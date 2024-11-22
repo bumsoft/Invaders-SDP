@@ -46,6 +46,14 @@ public class WaitingRoomScreen extends Screen {
 
     @Override
     protected void update() {
+        if(responses.isError())
+        {
+            this.isRunning=false;
+            this.returnCode = 1;
+            Core.removeGameClient();
+            logger.info("Connection closed. Return to Title Screen");
+            return;
+        }
         if (inputManager.isKeyPressed(KeyEvent.VK_ENTER) && responses.isGameJoin()) //상대가 있는 경우만 READY가능
         {
             gameClient.readyRoom(username);
