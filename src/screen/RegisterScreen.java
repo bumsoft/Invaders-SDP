@@ -79,7 +79,7 @@ public class RegisterScreen extends Screen {
         drawManager.initDrawing(this);
 
         // 1. REGISTER 제목 표시
-        drawManager.drawLoginTitle(this, "REGISTER");
+        drawManager.drawTitle(this, "REGISTER");
 
         // 2. ID 입력 필드와 관련된 텍스트 및 박스 표시
         drawManager.drawCenteredRegularString(this, "ID", this.height / 3 - 20, isUsernameFocused);

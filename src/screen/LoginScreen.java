@@ -80,7 +80,7 @@ public class LoginScreen extends Screen {
         drawManager.initDrawing(this);
 
         // 1. LOGIN 제목 표시
-        drawManager.drawLoginTitle(this, "LOGIN");
+        drawManager.drawTitle(this, "LOGIN");
 
         // 2. ID 입력 필드와 관련된 텍스트 및 박스 표시
         drawManager.drawCenteredRegularString(this, "ID", this.height / 3 - 20, isUsernameFocused);

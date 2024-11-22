@@ -647,7 +647,7 @@ public final class DrawManager {
 		drawCenteredBigString(screen, titleString, screen.getHeight() / 5);
 	}
 
-	public void drawLoginTitle(final Screen screen, String titleText) {
+	public void drawTitle(final Screen screen, String titleText) {
 		backBufferGraphics.setColor(Color.GREEN);
 		drawCenteredBigString(screen, titleText, screen.getHeight() / 5);
 	}
