@@ -2,6 +2,7 @@ package screen;
 
 import engine.UserManager;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 
 /**
@@ -77,14 +78,25 @@ public class LoginScreen extends Screen {
 
     private void draw() {
         drawManager.initDrawing(this);
-        drawManager.drawCenteredText(this, "Login", 100);
-        drawManager.drawCenteredText(this, "Username: " + username, 200);
-        drawManager.drawCenteredText(this, "Password: " + "*".repeat(password.length()), 250);
-        if (isLoginFailed)
-            drawManager.drawCenteredText(this, "Login failed. Try again.", 130);
 
-        // Display instructions at the bottom
-        drawManager.drawCenteredText(this, "Press \"F1\" to Sign Up", this.height - 50);
+        // 1. LOGIN 제목 표시
+        drawManager.drawLoginTitle(this, "LOGIN");
+
+        // 2. ID 입력 필드와 관련된 텍스트 및 박스 표시
+        drawManager.drawCenteredRegularString(this, "ID", this.height / 3 - 20, isUsernameFocused);
+        drawManager.drawInputBox(this, username, this.height / 3, isUsernameFocused, Color.GREEN);
+
+        // 3. PW 입력 필드와 관련된 텍스트 및 박스 표시
+        drawManager.drawCenteredRegularString(this, "PW", this.height / 3 + 60, !isUsernameFocused);
+        drawManager.drawInputBox(this, "*".repeat(password.length()), this.height / 3 + 80, !isUsernameFocused, Color.GREEN);
+
+        // 4. 로그인 실패 메시지 표시
+        if (isLoginFailed) {
+            drawManager.drawCenteredRegularString(this, "LOGIN FAILED. TRY AGAIN.", this.height / 2 + 40, false);
+        }
+
+        // 5. 하단에 회원가입 메시지 표시
+        drawManager.drawCenteredRegularString(this, "PRESS F1 TO SIGN UP", this.height - 50, false);
 
         drawManager.completeDrawing(this);
     }
