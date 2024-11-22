@@ -1946,6 +1946,13 @@ public final class DrawManager {
 		g.drawString(text, xPosition + 10, yPosition + 20);
 	}
 
+	public void drawRegularString(final Screen screen, final String string, final int x, final int y) {
+		backBufferGraphics.setFont(fontRegular);
+		backBufferGraphics.setColor(Color.WHITE);
+		backBufferGraphics.drawString(string, x, y);
+	}
+
+
 
 
 }
