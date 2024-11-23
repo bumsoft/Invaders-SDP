@@ -62,6 +62,8 @@ public class GameOverScreen extends Screen {
     private void draw() {
         drawManager.initDrawing(this);
 
+        drawManager.drawCenteredText(this,"Result",100);
+
         if(responses.isWin())
             drawManager.drawCenteredBigString(this,"YOU WIN!",300);
         else
