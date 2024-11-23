@@ -3,8 +3,6 @@ package screen.PVP;
 import engine.Core;
 import engine.DrawManager;
 import engine.UserManager;
-import entity.Bullet;
-import entity.Ship;
 import screen.Screen;
 import socket.GameClient;
 import socket.PvpShip;
@@ -111,11 +109,11 @@ public class PvpGameScreen extends Screen {
 
             for(BulletPositionDTO bulletPositionDTO : gameStateDTO.getP1b())
             {
-                myBullets.add(new myBullet(bulletPositionDTO.getbX(), bulletPositionDTO.getbY()));
+                myBullets.add(new myBullet(bulletPositionDTO.getBx(), bulletPositionDTO.getBy()));
             }
             for(BulletPositionDTO bulletPositionDTO : gameStateDTO.getP2b())
             {
-                enBullets.add(new enBullet(bulletPositionDTO.getbX(), bulletPositionDTO.getbY()));
+                enBullets.add(new enBullet(bulletPositionDTO.getBx(), bulletPositionDTO.getBy()));
             }
         }
 
