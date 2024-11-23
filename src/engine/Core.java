@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import entity.Ship;
 import entity.Wallet;
 import screen.*;
+import screen.PVP.GameOverScreen;
 import screen.PVP.PvpGameScreen;
 import screen.PVP.PvpLobbyScreen;
 import screen.PVP.WaitingRoomScreen;
@@ -254,6 +255,12 @@ public final class Core {
 					LOGGER.info("Starting PVP Game Screen");
 					returnCode = frame.setScreen(currentScreen);
 					LOGGER.info("Closing PVP Game Screen.");
+				}
+				case 14 ->{
+					currentScreen = new GameOverScreen(width, height, FPS, userManager);
+					LOGGER.info("Starting Game Over Screen");
+					returnCode = frame.setScreen(currentScreen);
+					LOGGER.info("Closing Game Over Screen.");
 				}
 
 				default -> { // Exit
