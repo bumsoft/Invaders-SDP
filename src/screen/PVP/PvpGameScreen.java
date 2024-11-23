@@ -102,20 +102,20 @@ public class PvpGameScreen extends Screen {
             && gameStateDTO != responses.getGameStateDTO())
         {
             gameStateDTO = responses.getGameStateDTO();
-            myShip.setPositionX(gameStateDTO.getPlayer1X());
-            myShip.setPositionY(gameStateDTO.getPlayer1Y());
-            opShip.setPositionX(gameStateDTO.getPlayer2X());
-            opShip.setPositionY(gameStateDTO.getPlayer2Y());
+            myShip.setPositionX(gameStateDTO.getP1X());
+            myShip.setPositionY(gameStateDTO.getP1Y());
+            opShip.setPositionX(gameStateDTO.getP2X());
+            opShip.setPositionY(gameStateDTO.getP2Y());
             myBullets = new ArrayList<>();
             enBullets = new ArrayList<>();
 
-            for(BulletPositionDTO bulletPositionDTO : gameStateDTO.getPlayer1BulletPositionDTO())
+            for(BulletPositionDTO bulletPositionDTO : gameStateDTO.getP1b())
             {
-                myBullets.add(new myBullet(bulletPositionDTO.getBulletX(), bulletPositionDTO.getBulletY()));
+                myBullets.add(new myBullet(bulletPositionDTO.getbX(), bulletPositionDTO.getbY()));
             }
-            for(BulletPositionDTO bulletPositionDTO : gameStateDTO.getPlayer2BulletPositionDTO())
+            for(BulletPositionDTO bulletPositionDTO : gameStateDTO.getP2b())
             {
-                enBullets.add(new enBullet(bulletPositionDTO.getBulletX(), bulletPositionDTO.getBulletY()));
+                enBullets.add(new enBullet(bulletPositionDTO.getbX(), bulletPositionDTO.getbY()));
             }
         }
 
