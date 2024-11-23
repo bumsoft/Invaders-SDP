@@ -1,5 +1,6 @@
 package screen.PVP;
 
+import engine.Cooldown;
 import engine.Core;
 import engine.DrawManager;
 import engine.UserManager;
@@ -14,7 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PvpGameScreen extends Screen {
-
+    private static final int SHOT_INTERVAL = 500;
+    private static final int MOVE_INTERVAL = 100;
     private final String username;
     private GameClient gameClient;
 
@@ -28,10 +30,19 @@ public class PvpGameScreen extends Screen {
 
     private GameStateDTO gameStateDTO;
 
+    /** cooldown for shot interval*/
+    private Cooldown shotCooldown;
+
+    /** cooldown for moving interval*/
+    private Cooldown moveCooldown;
+
     public PvpGameScreen(final int width, final int height, final int fps, UserManager userManager) {
         super(width, height, fps);
+        moveCooldown = Core.getCooldown(MOVE_INTERVAL);
+        shotCooldown = Core.getCooldown(SHOT_INTERVAL);
+        moveCooldown.reset();
+        shotCooldown.reset();
         this.username = userManager.getUsername();
-
         try{
             this.gameClient = Core.getGameClient();
             responses = gameClient.getResponses();
@@ -84,16 +95,19 @@ public class PvpGameScreen extends Screen {
             this.returnCode = 14;
             return;
         }
-        if (inputManager.isKeyDown(KeyEvent.VK_SPACE))
+        if (shotCooldown.checkFinished() && inputManager.isKeyDown(KeyEvent.VK_SPACE))
         {
+            shotCooldown.reset();
             gameClient.sendOrder("SHOOT",username);
         }
-        if(inputManager.isKeyDown(KeyEvent.VK_A) || inputManager.isKeyDown(KeyEvent.VK_LEFT))
+        if(moveCooldown.checkFinished() && inputManager.isKeyDown(KeyEvent.VK_A) || inputManager.isKeyDown(KeyEvent.VK_LEFT))
         {
+            moveCooldown.reset();
             gameClient.sendOrder("LEFT",username);
         }
-        if(inputManager.isKeyDown(KeyEvent.VK_D) || inputManager.isKeyDown(KeyEvent.VK_RIGHT))
+        if(moveCooldown.checkFinished() && inputManager.isKeyDown(KeyEvent.VK_D) || inputManager.isKeyDown(KeyEvent.VK_RIGHT))
         {
+            moveCooldown.reset();
             gameClient.sendOrder("RIGHT",username);
         }
 
