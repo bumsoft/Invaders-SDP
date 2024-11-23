@@ -24,9 +24,6 @@ public class WaitingRoomScreen extends Screen {
         try{
             this.gameClient = Core.getGameClient();
             responses = gameClient.getResponses();
-            String users = responses.getOpponent();
-            String[] parts = users.split("-");
-            opponent = parts[0].equals(username) ? parts[1] : parts[0];
         }catch(Exception e){
             logger.info(e.getStackTrace().toString());
             this.returnCode = 1;
@@ -57,6 +54,12 @@ public class WaitingRoomScreen extends Screen {
             Core.removeGameClient();
             logger.info("Connection closed. Return to Title Screen");
             return;
+        }
+        if(responses.isGameJoin())
+        {
+            String users = responses.getOpponent();
+            String[] parts = users.split("-");
+            opponent = parts[0].equals(username) ? parts[1] : parts[0];
         }
         if (inputManager.isKeyPressed(KeyEvent.VK_ENTER) && responses.isGameJoin()) //상대가 있는 경우만 READY가능
         {
@@ -90,7 +93,7 @@ public class WaitingRoomScreen extends Screen {
             drawManager.drawCenteredRegularString(this, "PRESS ENTER TO READY", this.height/6 * 2);
 
         if(responses.isGameJoin())
-            drawManager.drawCenteredBigString(this, "Opponent: "+responses.getOpponent(), this.height/6 * 3);
+            drawManager.drawCenteredBigString(this, "Opponent: "+opponent, this.height/6 * 3);
         else
             drawManager.drawCenteredBigString(this, "Waiting Opponent", this.height/6 * 3);
 
