@@ -45,7 +45,7 @@ public class GameClient extends WebSocketClient {
             }
             case "JOINED" ->{
                 responses.setGameJoin(true);
-                responses.setOpponent(parts[1]); //상대이름
+                responses.setOpponent(parts[1]+"-"+parts[2]); //user1-user2
             }
             case "START" ->{
                 responses.setGameStarted(true);

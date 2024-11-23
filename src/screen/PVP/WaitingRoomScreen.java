@@ -15,6 +15,7 @@ public class WaitingRoomScreen extends Screen {
     private GameClient gameClient;
     private boolean isReady = false;
     private Responses responses;
+    private String opponent;
 
     public WaitingRoomScreen(final int width, final int height, final int fps, UserManager userManager) {
         super(width, height, fps);
@@ -23,6 +24,9 @@ public class WaitingRoomScreen extends Screen {
         try{
             this.gameClient = Core.getGameClient();
             responses = gameClient.getResponses();
+            String users = responses.getOpponent();
+            String[] parts = users.split("-");
+            opponent = parts[0].equals(username) ? parts[1] : parts[0];
         }catch(Exception e){
             logger.info(e.getStackTrace().toString());
             this.returnCode = 1;
@@ -75,20 +79,23 @@ public class WaitingRoomScreen extends Screen {
 
     private void draw() {
         drawManager.initDrawing(this);
-        drawManager.drawCenteredText(this, "Waiting Game Start", 100);
+        drawManager.drawCenteredText(this, "Waiting Room", this.height/6);
 
         if (isReady)
-            drawManager.drawCenteredText(this, "READY!", 130);
-        else
-            drawManager.drawCenteredText(this, username +"PRESS ENTER TO READY", 130);
+        {
+            drawManager.drawCenteredBigString(this, "READY!", this.height / 6 * 2);
+            drawManager.drawCenteredRegularString(this, "Waiting " + opponent + " to get ready", this.height / 6 * 2 + 30);
+        }
+        else if(responses.isGameJoin())
+            drawManager.drawCenteredRegularString(this, "PRESS ENTER TO READY", this.height/6 * 2);
 
         if(responses.isGameJoin())
-            drawManager.drawCenteredText(this, "Opponent: "+responses.getOpponent(), 160);
+            drawManager.drawCenteredBigString(this, "Opponent: "+responses.getOpponent(), this.height/6 * 3);
         else
-            drawManager.drawCenteredText(this, "Waiting Opponent", 160);
+            drawManager.drawCenteredBigString(this, "Waiting Opponent", this.height/6 * 3);
 
         if(responses.isRoomOwner())
-            drawManager.drawCenteredBigString(this, "Access code: "+responses.getRoomCode(), 300);
+            drawManager.drawCenteredBigString(this, "Access code: "+responses.getRoomCode(), this.height/6 * 5);
 
         drawManager.completeDrawing(this);
     }

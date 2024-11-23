@@ -81,23 +81,25 @@ public final class DrawManager {
 			backBufferGraphics.setColor(Color.GREEN);
 		else
 			backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen, createString,
-				screen.getHeight() / 7 * 4);
+		drawCenteredBigString(screen, createString,
+				screen.getHeight() / 6 * 2);
 
-		if (option == 1)
-			backBufferGraphics.setColor(Color.GREEN);
-		else
-			backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen, joinString, screen.getHeight()
-				/ 7 * 4 + fontRegularMetrics.getHeight() * 2);
-
+		if(!isCodeWrite)
+		{
+			if (option == 1)
+				backBufferGraphics.setColor(Color.GREEN);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredBigString(screen, joinString, screen.getHeight()
+					/ 6 * 4);
+		}
 		if(isCodeWrite)
 		{
 			backBufferGraphics.setColor(Color.ORANGE);
-			drawCenteredRegularString(screen, "Enter code: " +code, screen.getHeight()
-				/ 7 * 4 + fontRegularMetrics.getHeight() * 3);
+			drawCenteredBigString(screen, "Enter code: " +code, screen.getHeight()
+				/ 6 * 4);
 		}
-
+		drawCenteredText(screen,"Press Enter to select.",screen.getHeight() / 6 * 5);
 
 	}
 

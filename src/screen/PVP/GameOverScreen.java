@@ -61,12 +61,11 @@ public class GameOverScreen extends Screen {
 
     private void draw() {
         drawManager.initDrawing(this);
-        drawManager.drawCenteredText(this, "PVP Game Over Screen", 100);
 
         if(responses.isWin())
-            drawManager.drawCenteredBigString(this,"YOU WIN!",150);
+            drawManager.drawCenteredBigString(this,"YOU WIN!",300);
         else
-            drawManager.drawCenteredBigString(this,"YOU LOST!",150);
+            drawManager.drawCenteredBigString(this,"YOU LOST!",300);
 
         drawManager.completeDrawing(this);
     }

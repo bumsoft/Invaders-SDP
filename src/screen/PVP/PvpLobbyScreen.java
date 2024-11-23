@@ -132,8 +132,6 @@ public class PvpLobbyScreen extends Screen {
 
         drawManager.drawPvpLobby(this,this.select,this.isCodeWrite,this.code);
 
-        drawManager.drawCenteredText(this,"Press Enter to select.",400);
-
         drawManager.completeDrawing(this);
     }
 }
