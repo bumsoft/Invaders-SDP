@@ -8,6 +8,7 @@ import socket.GameClient;
 import socket.PvpShip;
 import socket.Responses;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,13 +37,13 @@ public class PvpGameScreen extends Screen {
             responses = gameClient.getResponses();
             if(responses.isRoomOwner())
             {
-                myShip = new PvpShip(0,0, DrawManager.SpriteType.Ship);
-                opShip = new PvpShip(0,0, DrawManager.SpriteType.PvpEnemy);
+                myShip = new PvpShip(0,0, DrawManager.SpriteType.Ship, Color.blue);
+                opShip = new PvpShip(0,0, DrawManager.SpriteType.PvpEnemy, Color.red);
             }
             else
             {
-                myShip = new PvpShip(0,0, DrawManager.SpriteType.PvpEnemy);
-                opShip = new PvpShip(0,0, DrawManager.SpriteType.Ship);
+                myShip = new PvpShip(0,0, DrawManager.SpriteType.PvpEnemy, Color.blue);
+                opShip = new PvpShip(0,0, DrawManager.SpriteType.Ship, Color.red);
             }
 
 

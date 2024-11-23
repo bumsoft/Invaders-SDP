@@ -23,6 +23,6 @@ public class enBullet extends Entity {
 	 * Sets correct sprite for the bullet, based on speed.
 	 */
 	public final void setSprite() {
-		this.spriteType = SpriteType.Bullet;
+		this.spriteType = SpriteType.PvpBullet;
 	}
 }

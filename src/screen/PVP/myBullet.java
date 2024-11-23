@@ -15,7 +15,7 @@ public class myBullet extends Entity {
 
 
 	public myBullet(final int positionX, final int positionY) {
-		super(positionX, positionY, 3 * 2, 5 * 2, Color.WHITE);
+		super(positionX, positionY, 3 * 2, 5 * 2, Color.blue);
 
 		setSprite();
 	}
@@ -24,6 +24,6 @@ public class myBullet extends Entity {
 	 * Sets correct sprite for the bullet, based on speed.
 	 */
 	public final void setSprite() {
-			this.spriteType = SpriteType.Bullet;
+			this.spriteType = SpriteType.PvpBullet;
 	}
 }
