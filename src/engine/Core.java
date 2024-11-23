@@ -54,8 +54,6 @@ public final class Core {
 	/** Initialize singleton instance of SoundManager and return that */
 	private static final SoundManager soundManager = SoundManager.getInstance();
 
-	private static long startTime, endTime;
-
 	private static int DifficultySetting;// <- setting EASY(0), NORMAL(1), HARD(2);
 
 	private static UserManager userManager;
@@ -116,7 +114,6 @@ public final class Core {
 					// Game & score.
 					do {
 						// One extra live every few levels.
-						startTime = System.currentTimeMillis();
 						boolean bonusLife = gameState.getLevel()
 								% EXTRA_LIFE_FRECUENCY == 0
 								&& gameState.getLivesRemaining() < MAX_LIVES;
@@ -140,7 +137,6 @@ public final class Core {
 						gameState = ((GameScreen) currentScreen).getGameState();
 
 						gameState = new GameState(gameState, gameState.getLevel() + 1);
-						endTime = System.currentTimeMillis();
 					} while (gameState.getLivesRemaining() > 0);
 					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 							+ " score screen at " + FPS + " fps, with a score of "
