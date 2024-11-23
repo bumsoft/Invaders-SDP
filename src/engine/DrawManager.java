@@ -154,6 +154,7 @@ public final class DrawManager {
 		EnemyShipE1,
 		/** Fifth enemy ship - second form. */
 		EnemyShipE2,
+		PvpEnemy,
 		/** Elite enemy ship - first form. */
 		EnemyShipF1
 	};
@@ -195,6 +196,7 @@ public final class DrawManager {
 			spriteMap.put(SpriteType.EnemyShipE1, new boolean[12][8]);
 			spriteMap.put(SpriteType.EnemyShipE2, new boolean[12][8]);
 			spriteMap.put(SpriteType.EnemyShipF1, new boolean[16][7]);
+			spriteMap.put(SpriteType.PvpEnemy, new boolean[13][8]);
 
 			fileManager.loadSprite(spriteMap);
 			logger.info("Finished loading the sprites.");

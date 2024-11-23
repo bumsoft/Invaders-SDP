@@ -9,7 +9,7 @@ public class PvpShip extends Entity {
 
     public PvpShip(int positionX, int positionY)
     {
-        super(positionX, positionY, 13 * 2, 8 * 2, Color.GREEN);
-        this.spriteType = DrawManager.SpriteType.Ship;
+        super(positionX, positionY, 26, 16, Color.GREEN);
+        this.spriteType = DrawManager.SpriteType.PvpEnemy;
     }
 }
