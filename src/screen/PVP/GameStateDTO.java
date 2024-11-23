@@ -4,75 +4,75 @@ import java.util.List;
 
 public class GameStateDTO {
 
-    private int player1X;
-    private int player1Y;
-    private List<BulletPositionDTO> player1BulletPositionDTO;
+    private int p1X;
+    private int p1Y;
+    private List<BulletPositionDTO> p1b;
 
-    private int player2X;
-    private int player2Y;
-    private List<BulletPositionDTO> player2BulletPositionDTO;
+    private int p2X;
+    private int p2Y;
+    private List<BulletPositionDTO> p2b;
 
     public GameStateDTO()
     {
     }
 
-    public int getPlayer1X()
+    public int getP1X()
     {
-        return player1X;
+        return p1X;
     }
 
-    public void setPlayer1X(int player1X)
+    public void setP1X(int p1X)
     {
-        this.player1X = player1X;
+        this.p1X = p1X;
     }
 
-    public int getPlayer1Y()
+    public int getP1Y()
     {
-        return player1Y;
+        return p1Y;
     }
 
-    public void setPlayer1Y(int player1Y)
+    public void setP1Y(int p1Y)
     {
-        this.player1Y = player1Y;
+        this.p1Y = p1Y;
     }
 
-    public List<BulletPositionDTO> getPlayer1BulletPositionDTO()
+    public List<BulletPositionDTO> getP1b()
     {
-        return player1BulletPositionDTO;
+        return p1b;
     }
 
-    public void setPlayer1BulletPositionDTO(List<BulletPositionDTO> player1BulletPositionDTO)
+    public void setP1b(List<BulletPositionDTO> p1b)
     {
-        this.player1BulletPositionDTO = player1BulletPositionDTO;
+        this.p1b = p1b;
     }
 
-    public int getPlayer2X()
+    public int getP2X()
     {
-        return player2X;
+        return p2X;
     }
 
-    public void setPlayer2X(int player2X)
+    public void setP2X(int p2X)
     {
-        this.player2X = player2X;
+        this.p2X = p2X;
     }
 
-    public int getPlayer2Y()
+    public int getP2Y()
     {
-        return player2Y;
+        return p2Y;
     }
 
-    public void setPlayer2Y(int player2Y)
+    public void setP2Y(int p2Y)
     {
-        this.player2Y = player2Y;
+        this.p2Y = p2Y;
     }
 
-    public List<BulletPositionDTO> getPlayer2BulletPositionDTO()
+    public List<BulletPositionDTO> getP2b()
     {
-        return player2BulletPositionDTO;
+        return p2b;
     }
 
-    public void setPlayer2BulletPositionDTO(List<BulletPositionDTO> player2BulletPositionDTO)
+    public void setP2b(List<BulletPositionDTO> p2b)
     {
-        this.player2BulletPositionDTO = player2BulletPositionDTO;
+        this.p2b = p2b;
     }
 }

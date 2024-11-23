@@ -1,30 +1,30 @@
 package screen.PVP;
 
 public class BulletPositionDTO {
-    private int bulletX;
-    private int bulletY;
+    private int bX;
+    private int bY;
 
     public BulletPositionDTO()
     {
     }
 
-    public int getBulletX()
+    public int getbX()
     {
-        return bulletX;
+        return bX;
     }
 
-    public void setBulletX(int bulletX)
+    public void setbX(int bX)
     {
-        this.bulletX = bulletX;
+        this.bX = bX;
     }
 
-    public int getBulletY()
+    public int getbY()
     {
-        return bulletY;
+        return bY;
     }
 
-    public void setBulletY(int bulletY)
+    public void setbY(int bY)
     {
-        this.bulletY = bulletY;
+        this.bY = bY;
     }
 }
