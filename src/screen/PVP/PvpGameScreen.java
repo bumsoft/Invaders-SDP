@@ -20,8 +20,8 @@ public class PvpGameScreen extends Screen {
 
     private Responses responses;
 
-    private PvpShip myShip = new PvpShip(0,0);
-    private PvpShip opShip = new PvpShip(0,0);
+    private PvpShip myShip = new PvpShip(0,0, responses.isRoomOwner());
+    private PvpShip opShip = new PvpShip(0,0, responses.isRoomOwner());
 
     private List<myBullet> myBullets = new ArrayList<>();
     private List<enBullet> enBullets = new ArrayList<>();
