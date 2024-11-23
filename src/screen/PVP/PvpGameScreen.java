@@ -20,8 +20,8 @@ public class PvpGameScreen extends Screen {
 
     private Responses responses;
 
-    private PvpShip myShip = new PvpShip(0,0, responses.isRoomOwner());
-    private PvpShip opShip = new PvpShip(0,0, responses.isRoomOwner());
+    private PvpShip myShip;
+    private PvpShip opShip;
 
     private List<myBullet> myBullets = new ArrayList<>();
     private List<enBullet> enBullets = new ArrayList<>();
@@ -35,6 +35,8 @@ public class PvpGameScreen extends Screen {
         try{
             this.gameClient = Core.getGameClient();
             responses = gameClient.getResponses();
+            myShip = new PvpShip(0,0, responses.isRoomOwner());
+            opShip = new PvpShip(0,0, responses.isRoomOwner());
         }catch(Exception e){
             logger.info(e.getStackTrace().toString());
             this.returnCode = 1;
