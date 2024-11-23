@@ -1,6 +1,7 @@
 package screen.PVP;
 
 import engine.Core;
+import engine.DrawManager;
 import engine.UserManager;
 import entity.Bullet;
 import entity.Ship;
@@ -35,8 +36,18 @@ public class PvpGameScreen extends Screen {
         try{
             this.gameClient = Core.getGameClient();
             responses = gameClient.getResponses();
-            myShip = new PvpShip(0,0, responses.isRoomOwner());
-            opShip = new PvpShip(0,0, responses.isRoomOwner());
+            if(responses.isRoomOwner())
+            {
+                myShip = new PvpShip(0,0, DrawManager.SpriteType.Ship);
+                opShip = new PvpShip(0,0, DrawManager.SpriteType.PvpEnemy);
+            }
+            else
+            {
+                myShip = new PvpShip(0,0, DrawManager.SpriteType.PvpEnemy);
+                opShip = new PvpShip(0,0, DrawManager.SpriteType.Ship);
+            }
+
+
         }catch(Exception e){
             logger.info(e.getStackTrace().toString());
             this.returnCode = 1;
