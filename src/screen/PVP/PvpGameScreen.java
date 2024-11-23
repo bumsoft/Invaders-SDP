@@ -138,7 +138,6 @@ public class PvpGameScreen extends Screen {
 
     private void draw() {
         drawManager.initDrawing(this);
-        drawManager.drawCenteredText(this, "PVP Game Screen", 100);
 
         drawManager.drawEntity(myShip, myShip.getPositionX(), myShip.getPositionY());
         drawManager.drawEntity(opShip, opShip.getPositionX(), opShip.getPositionY());
