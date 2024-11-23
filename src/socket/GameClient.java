@@ -81,7 +81,7 @@ public class GameClient extends WebSocketClient {
     @Override
     public void onError(Exception ex) {
         logger.info(ex.getMessage());
-        ex.printStackTrace();
+        responses.setError(true);
     }
 
     public void createRoom(String username)

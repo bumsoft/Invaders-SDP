@@ -85,15 +85,15 @@ public class PvpGameScreen extends Screen {
             this.returnCode = 14;
             return;
         }
-        if (inputManager.isKeyPressed(KeyEvent.VK_SPACE))
+        if (inputManager.isKeyDown(KeyEvent.VK_SPACE))
         {
             gameClient.sendOrder("SHOOT",username);
         }
-        if(inputManager.isKeyPressed(KeyEvent.VK_A) || inputManager.isKeyPressed(KeyEvent.VK_LEFT))
+        if(inputManager.isKeyDown(KeyEvent.VK_A) || inputManager.isKeyDown(KeyEvent.VK_LEFT))
         {
             gameClient.sendOrder("LEFT",username);
         }
-        if(inputManager.isKeyPressed(KeyEvent.VK_D) || inputManager.isKeyPressed(KeyEvent.VK_RIGHT))
+        if(inputManager.isKeyDown(KeyEvent.VK_D) || inputManager.isKeyDown(KeyEvent.VK_RIGHT))
         {
             gameClient.sendOrder("RIGHT",username);
         }
