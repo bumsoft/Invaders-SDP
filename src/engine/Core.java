@@ -90,7 +90,7 @@ public final class Core {
 		Wallet wallet = Wallet.getWallet();
 
 		userManager = new UserManager();
-		int returnCode = 10;
+		int returnCode = 1;
 		do {
 			MAX_LIVES = wallet.getLives_lv()+2;
 			gameState = new GameState(1, 0, BASE_SHIP, MAX_LIVES, 0, 0, 0, "", 0, 0, 0 ,0, 0);
@@ -117,11 +117,7 @@ public final class Core {
 								&& gameState.getLivesRemaining() < MAX_LIVES;
 						LOGGER.info("difficulty is " + DifficultySetting);
 						//add variation
-						gameSetting = gameSetting.LevelSettings(gameSetting.getFormationWidth(),
-								gameSetting.getFormationHeight(),
-								gameSetting.getBaseSpeed(),
-								gameSetting.getShootingFrecuency(),
-								gameState.getLevel(), DifficultySetting);
+						gameSetting.LevelSettings(gameState.getLevel(), DifficultySetting);
 
 						currentScreen = new GameScreen(gameState,
 								gameSetting,
