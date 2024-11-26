@@ -20,6 +20,9 @@ jobs:
           distribution: 'temurin'
           java-package: 'jdk'
 
+      - name: List all Java source files
+        run: find src -name "*.java"
+
       - name: Compile Java files
         run: |
           mkdir -p out
