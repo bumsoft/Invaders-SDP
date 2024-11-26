@@ -1,7 +1,6 @@
 package engine;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
@@ -10,7 +9,6 @@ import java.util.logging.Logger;
 
 import entity.Ship;
 import entity.Wallet;
-import entity.dto.UserScoreDto;
 import screen.*;
 
 /**
