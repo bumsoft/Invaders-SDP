@@ -20,9 +20,10 @@ jobs:
           distribution: 'temurin'
           java-package: 'jdk'
 
-
       - name: Compile Java files
-        run: javac -d out src/**/*.java
+        run: |
+          mkdir -p out
+          javac -d out -cp "lib/*" src/**/*.java
 
       - name: Run Java program
-        run: java -cp out engine.Core
+        run: java -cp "out:lib/*" engine.Core
