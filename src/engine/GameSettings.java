@@ -147,7 +147,7 @@ public class GameSettings {
 			default -> {
 				break;
 			}
-		};
+		}
 	}
 
 	/**
