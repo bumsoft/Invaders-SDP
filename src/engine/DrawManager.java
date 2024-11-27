@@ -1451,16 +1451,16 @@ public final class DrawManager {
 			int startAngle = 90;
 			int endAngle = 0;
 			switch(Core.BASE_SHIP){
-				case Ship.ShipType.VoidReaper:
+				case VoidReaper:
 					endAngle = 360 * (int)remainingTime / (int)(750 * 0.4);
 				    break;
-				case Ship.ShipType.CosmicCruiser:
+				case CosmicCruiser:
 					endAngle = 360 * (int)remainingTime / (int)(750 * 1.6);
 				    break;
-				case Ship.ShipType.StarDefender:
+				case StarDefender:
 					endAngle = 360 * (int)remainingTime / (int)(750 * 1.0);
 					break;
-				case Ship.ShipType.GalacticGuardian:
+				case GalacticGuardian:
 					endAngle = 360 * (int)remainingTime / (int)(750 * 1.2);
 					break;
 
@@ -1495,16 +1495,16 @@ public final class DrawManager {
 			int startAngle = 90;
 			int endAngle = 0;
 			switch(Core.BASE_SHIP){
-				case Ship.ShipType.VoidReaper:
+				case VoidReaper:
 					endAngle = 360 * (int)remainingTime / (int)(750 * 0.4);
 					break;
-				case Ship.ShipType.CosmicCruiser:
+				case CosmicCruiser:
 					endAngle = 360 * (int)remainingTime / (int)(750 * 1.6);
 					break;
-				case Ship.ShipType.StarDefender:
+				case StarDefender:
 					endAngle = 360 * (int)remainingTime / (int)(750 * 1.0);
 					break;
-				case Ship.ShipType.GalacticGuardian:
+				case GalacticGuardian:
 					endAngle = 360 * (int)remainingTime / (int)(750 * 1.2);
 					break;
 			}
