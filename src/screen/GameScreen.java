@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
+
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 import java.util.Timer;
@@ -58,11 +58,11 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	private Cooldown enemyShipSpecialExplosionCooldown;
 	/** Time from finishing the level to screen change. */
 	private Cooldown screenFinishedCooldown;
-	private Cooldown shootingCooldown;
+
 	/** Set of all bullets fired by on screen ships. */
 	private Set<Bullet> bullets;
 	/** Current score. */
-	private String name1;
+
 
 	private int score;
 	/** tempScore records the score up to the previous level. */
