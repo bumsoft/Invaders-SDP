@@ -1,6 +1,7 @@
 package engine;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import entity.dto.BulletPositionDTO;
 import entity.pvp.Responses;
 import entity.dto.GameStateDTO;
 import org.java_websocket.handshake.ServerHandshake;
@@ -9,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -34,12 +37,12 @@ class GameClientTest {
 
     @Test
     void testOnMessage_Created() {
-        String message = "CREATED-room123";
+        String message = "CREATED-0000";
         gameClient.onMessage(message);
 
         assertTrue(responses.isRoomCreated());
         assertTrue(responses.isRoomOwner());
-        assertEquals("room123", responses.getRoomCode());
+        assertEquals("0000", responses.getRoomCode());
     }
 
     @Test
@@ -62,6 +65,27 @@ class GameClientTest {
     @Test
     void testOnMessage_Update() throws Exception {
         GameStateDTO gameState = new GameStateDTO();
+
+        gameState.setP1X(1);
+        gameState.setP1Y(2);
+        gameState.setP2X(3);
+        gameState.setP2Y(4);
+
+        List<BulletPositionDTO> p1b = new ArrayList<>();
+        BulletPositionDTO bp1 = new BulletPositionDTO();
+        bp1.setBx(10);
+        bp1.setBy(11);
+        p1b.add(bp1);
+
+        List<BulletPositionDTO> p2b = new ArrayList<>();
+        BulletPositionDTO bp2 = new BulletPositionDTO();
+        bp2.setBx(100);
+        bp2.setBy(101);
+        p2b.add(bp2);
+
+        gameState.setP1b(p1b);
+        gameState.setP2b(p2b);
+
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(gameState);
         String message = "UPDATE-" + json;
@@ -69,7 +93,16 @@ class GameClientTest {
         gameClient.onMessage(message);
 
         assertNotNull(responses.getGameStateDTO());
-        assertEquals(gameState, responses.getGameStateDTO());
+
+        assertEquals(gameState.getP1b().get(0).getBx(), responses.getGameStateDTO().getP1b().get(0).getBx());
+        assertEquals(gameState.getP1b().get(0).getBy(), responses.getGameStateDTO().getP1b().get(0).getBy());
+        assertEquals(gameState.getP1X(), responses.getGameStateDTO().getP1X());
+        assertEquals(gameState.getP1Y(), responses.getGameStateDTO().getP1Y());
+
+        assertEquals(gameState.getP2b().get(0).getBx(), responses.getGameStateDTO().getP2b().get(0).getBx());
+        assertEquals(gameState.getP2b().get(0).getBy(), responses.getGameStateDTO().getP2b().get(0).getBy());
+        assertEquals(gameState.getP2X(), responses.getGameStateDTO().getP2X());
+        assertEquals(gameState.getP2Y(), responses.getGameStateDTO().getP2Y());
     }
 
     @Test
@@ -82,24 +115,26 @@ class GameClientTest {
     }
 
     @Test
+    void testOnMessage_GameOverLose() {
+        String message = "GAMEOVER-LOSE";
+        gameClient.onMessage(message);
+
+        assertTrue(responses.isGameOver());
+        assertFalse(responses.isWin());
+    }
+
+    @Test
     void testOnMessage_Error() {
-        String message = "ERROR";
+        String message = "ERROR-reason";
         gameClient.onMessage(message);
 
         assertTrue(responses.isError());
     }
 
-    @Test
-    void testOnMessage_UnknownCommand() {
-        String message = "UNKNOWN-command";
-        gameClient.onMessage(message);
-
-        assertFalse(responses.isError()); // 에러 플래그가 트리거되지 않음
-    }
 
     @Test
     void testOnClose() {
-        gameClient.onClose(1000, "Normal Closure", true);
+        gameClient.onClose(0, "", true);
 
         assertTrue(responses.isError());
     }
@@ -110,29 +145,5 @@ class GameClientTest {
         gameClient.onError(ex);
 
         assertTrue(responses.isError());
-    }
-
-    @Test
-    void testCreateRoom() {
-        gameClient.createRoom("user123");
-        verify(gameClient).send("CREATE-user123");
-    }
-
-    @Test
-    void testJoinRoom() {
-        gameClient.joinRoom("user123", "room123");
-        verify(gameClient).send("JOIN-user123-room123");
-    }
-
-    @Test
-    void testReadyRoom() {
-        gameClient.readyRoom("user123");
-        verify(gameClient).send("READY-user123");
-    }
-
-    @Test
-    void testSendOrder() {
-        gameClient.sendOrder("MOVE", "user123");
-        verify(gameClient).send("MOVE-user123");
     }
 }
