@@ -1,10 +1,6 @@
 package engine;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -687,6 +683,11 @@ public final class DrawManager {
 		drawCenteredBigString(screen, titleString, screen.getHeight() / 5);
 	}
 
+	public void drawTitle(final Screen screen, String titleText) {
+		backBufferGraphics.setColor(Color.GREEN);
+		drawCenteredBigString(screen, titleText, screen.getHeight() / 5);
+	}
+
 	public void drawGameTitle(final Screen screen) {
 		String titleString = "Invaders";
 		backBufferGraphics.setColor(Color.DARK_GRAY);
@@ -1150,7 +1151,7 @@ public final class DrawManager {
 	 * @param height
 	 *            Height of the drawing.
 	 */
-	private void drawCenteredSmallString(final Screen screen, final String string, final int height) {
+	public void drawCenteredSmallString(final Screen screen, final String string, final int height) {
 		backBufferGraphics.setFont(fontSmall);
 		backBufferGraphics.drawString(string, screen.getWidth() / 2
 				- fontSmallMetrics.stringWidth(string) / 2, height);
@@ -1966,6 +1967,33 @@ public final class DrawManager {
 		backBufferGraphics.setColor(Color.WHITE);
 		int x = (screen.getWidth() - fontRegularMetrics.stringWidth(text)) / 2;
 		backBufferGraphics.drawString(text, x, y);
+	}
+
+	public void drawInputBox(Screen screen, String text, int yPosition, boolean isFocused, Color borderColor) {
+		Graphics2D g = (Graphics2D) backBufferGraphics;
+		int boxWidth = 250;
+		int boxHeight = 30;
+		int xPosition = (screen.getWidth() - boxWidth) / 2;
+
+		// 테두리
+		g.setColor(isFocused ? borderColor : Color.GRAY);
+		g.setStroke(new BasicStroke(isFocused ? 3 : 1));
+		g.drawRect(xPosition, yPosition, boxWidth, boxHeight);
+
+		// 배경
+		g.setColor(Color.BLACK);
+		g.fillRect(xPosition + 1, yPosition + 1, boxWidth - 1, boxHeight - 1);
+
+		// 텍스트
+		g.setColor(Color.WHITE);
+		g.setFont(fontRegular);
+		g.drawString(text, xPosition + 10, yPosition + 20);
+	}
+
+	public void drawRegularString(final Screen screen, final String string, final int x, final int y) {
+		backBufferGraphics.setFont(fontRegular);
+		backBufferGraphics.setColor(Color.WHITE);
+		backBufferGraphics.drawString(string, x, y);
 	}
 
 
