@@ -1,7 +1,7 @@
 package engine;
 
 import java.io.IOException;
-import java.util.List;
+import java.net.URISyntaxException;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
@@ -10,8 +10,11 @@ import java.util.logging.Logger;
 
 import entity.Ship;
 import entity.Wallet;
-import entity.dto.UserScoreDto;
 import screen.*;
+import screen.pvp.GameOverScreen;
+import screen.pvp.PvpGameScreen;
+import screen.pvp.PvpLobbyScreen;
+import screen.pvp.WaitingRoomScreen;
 
 /**
  * Implements core game logic.
@@ -21,8 +24,8 @@ import screen.*;
  */
 public final class Core {
 
-	private static final String serverUrl = "http://localhost:8080/";
-
+	private static final String serverUrl = "http://192.168.219.105:8080/";
+	private static final String serverWSUrl = "ws://192.168.219.105:8080/game";
 	/** Width of current screen. */
 	private static final int WIDTH = 600;
 	/** Height of current screen. */
@@ -50,11 +53,11 @@ public final class Core {
 	/** Initialize singleton instance of SoundManager and return that */
 	private static final SoundManager soundManager = SoundManager.getInstance();
 
-	private static long startTime, endTime;
-
 	private static int DifficultySetting;// <- setting EASY(0), NORMAL(1), HARD(2);
 
 	private static UserManager userManager;
+
+	private static GameClient gameClient;
 	/**
 	 * Test implementation.
 	 * 
@@ -86,7 +89,6 @@ public final class Core {
 		int height = frame.getHeight();
 
 		GameState gameState;
-
 		Wallet wallet = Wallet.getWallet();
 
 		userManager = new UserManager();
@@ -111,7 +113,6 @@ public final class Core {
 					// Game & score.
 					do {
 						// One extra live every few levels.
-						startTime = System.currentTimeMillis();
 						boolean bonusLife = gameState.getLevel()
 								% EXTRA_LIFE_FRECUENCY == 0
 								&& gameState.getLivesRemaining() < MAX_LIVES;
@@ -135,7 +136,6 @@ public final class Core {
 						gameState = ((GameScreen) currentScreen).getGameState();
 
 						gameState = new GameState(gameState, gameState.getLevel() + 1);
-						endTime = System.currentTimeMillis();
 					} while (gameState.getLivesRemaining() > 0);
 					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 							+ " score screen at " + FPS + " fps, with a score of "
@@ -233,6 +233,31 @@ public final class Core {
 					LOGGER.info("Returning to Login Screen");
 					returnCode = frame.setScreen(currentScreen);
 				}
+				case 11 ->{
+					currentScreen = new PvpLobbyScreen(width,height,FPS,userManager);
+					LOGGER.info("Starting PVP Lobby Screen");
+					returnCode = frame.setScreen(currentScreen);
+					LOGGER.info("Closing PVP Lobby Screen.");
+				}
+				case 12 ->{
+					currentScreen = new WaitingRoomScreen(width,height,FPS,userManager);
+					LOGGER.info("Starting Waiting Room Screen");
+					returnCode = frame.setScreen(currentScreen);
+					LOGGER.info("Closing Waiting Room Screen.");
+				}
+				case 13 ->{
+					currentScreen = new PvpGameScreen(width,height,FPS,userManager);
+					LOGGER.info("Starting PVP Game Screen");
+					returnCode = frame.setScreen(currentScreen);
+					LOGGER.info("Closing PVP Game Screen.");
+				}
+				case 14 ->{
+					currentScreen = new GameOverScreen(width, height, FPS, userManager);
+					LOGGER.info("Starting Game Over Screen");
+					returnCode = frame.setScreen(currentScreen);
+					LOGGER.info("Closing Game Over Screen.");
+				}
+
 				default -> { // Exit
 					LOGGER.info("Exiting game.");
 					returnCode = 0;
@@ -329,5 +354,23 @@ public final class Core {
 	public static String getServerUrl()
 	{
 		return serverUrl;
+	}
+	public static String getServerWSUrl()
+	{
+		return serverWSUrl;
+	}
+	public static GameClient getGameClient() throws URISyntaxException, InterruptedException
+    {
+		if(gameClient == null)
+		{
+			gameClient = new GameClient();
+			gameClient.connectBlocking();
+		}
+		return gameClient;
+	}
+	public static void removeGameClient()
+	{
+		gameClient.close();
+		gameClient = null;
 	}
 }

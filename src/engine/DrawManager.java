@@ -63,6 +63,38 @@ public final class DrawManager {
 	private static BufferedImage img_coingain;
 	private static BufferedImage img_shotinterval;
 
+	public void drawPvpLobby(Screen screen, int option, boolean isCodeWrite, String code)
+	{
+		String createString = "CREATE ROOM";
+		String joinString = "JOIN ROOM";
+
+
+		if (option == 0)
+			backBufferGraphics.setColor(Color.GREEN);
+		else
+			backBufferGraphics.setColor(Color.WHITE);
+		drawCenteredBigString(screen, createString,
+				screen.getHeight() / 6 * 2);
+
+		if(!isCodeWrite)
+		{
+			if (option == 1)
+				backBufferGraphics.setColor(Color.GREEN);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredBigString(screen, joinString, screen.getHeight()
+					/ 6 * 4);
+		}
+		if(isCodeWrite)
+		{
+			backBufferGraphics.setColor(Color.ORANGE);
+			drawCenteredBigString(screen, "Enter code: " +code, screen.getHeight()
+				/ 6 * 4);
+		}
+		drawCenteredText(screen,"Press Enter to select.",screen.getHeight() / 6 * 5);
+
+	}
+
 
 	/** Sprite types. */
 	public static enum SpriteType {
@@ -116,6 +148,8 @@ public final class DrawManager {
 		EnemyShipE1,
 		/** Fifth enemy ship - second form. */
 		EnemyShipE2,
+		PvpEnemy,
+		PvpBullet,
 		/** Elite enemy ship - first form. */
 		EnemyShipF1
 	};
@@ -157,6 +191,8 @@ public final class DrawManager {
 			spriteMap.put(SpriteType.EnemyShipE1, new boolean[12][8]);
 			spriteMap.put(SpriteType.EnemyShipE2, new boolean[12][8]);
 			spriteMap.put(SpriteType.EnemyShipF1, new boolean[16][7]);
+			spriteMap.put(SpriteType.PvpEnemy, new boolean[13][8]);
+			spriteMap.put(SpriteType.PvpBullet, new boolean[3][5]);
 
 			fileManager.loadSprite(spriteMap);
 			logger.info("Finished loading the sprites.");
@@ -674,6 +710,7 @@ public final class DrawManager {
 	 *            Option selected.
 	 */
 	public void drawMenu(final Screen screen, final int option, final int coin) {
+		String PvpString = "PVP";
 		String playString = "Play";
 		String shopString = "SHOP";
 		String coinString = "YOUR COIN: " + coin;
@@ -681,6 +718,13 @@ public final class DrawManager {
 		String settingString = "SETTING";
 		String exitString = "EXIT";
 
+
+		if(option==11)
+			backBufferGraphics.setColor(Color.GREEN);
+		else
+			backBufferGraphics.setColor(Color.WHITE);
+		drawCenteredRegularString(screen, PvpString,
+				screen.getHeight() / 7 * 4 - fontRegularMetrics.getHeight() * 2);
 
 		if (option == 6) /*option2 => Game Settings */
 			backBufferGraphics.setColor(Color.GREEN);
@@ -1408,16 +1452,16 @@ public final class DrawManager {
 			int startAngle = 90;
 			int endAngle = 0;
 			switch(Core.BASE_SHIP){
-				case Ship.ShipType.VoidReaper:
+				case VoidReaper:
 					endAngle = 360 * (int)remainingTime / (int)(750 * 0.4);
 				    break;
-				case Ship.ShipType.CosmicCruiser:
+				case CosmicCruiser:
 					endAngle = 360 * (int)remainingTime / (int)(750 * 1.6);
 				    break;
-				case Ship.ShipType.StarDefender:
+				case StarDefender:
 					endAngle = 360 * (int)remainingTime / (int)(750 * 1.0);
 					break;
-				case Ship.ShipType.GalacticGuardian:
+				case GalacticGuardian:
 					endAngle = 360 * (int)remainingTime / (int)(750 * 1.2);
 					break;
 
@@ -1452,16 +1496,16 @@ public final class DrawManager {
 			int startAngle = 90;
 			int endAngle = 0;
 			switch(Core.BASE_SHIP){
-				case Ship.ShipType.VoidReaper:
+				case VoidReaper:
 					endAngle = 360 * (int)remainingTime / (int)(750 * 0.4);
 					break;
-				case Ship.ShipType.CosmicCruiser:
+				case CosmicCruiser:
 					endAngle = 360 * (int)remainingTime / (int)(750 * 1.6);
 					break;
-				case Ship.ShipType.StarDefender:
+				case StarDefender:
 					endAngle = 360 * (int)remainingTime / (int)(750 * 1.0);
 					break;
-				case Ship.ShipType.GalacticGuardian:
+				case GalacticGuardian:
 					endAngle = 360 * (int)remainingTime / (int)(750 * 1.2);
 					break;
 			}

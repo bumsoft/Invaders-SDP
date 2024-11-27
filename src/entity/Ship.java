@@ -15,7 +15,7 @@ import engine.SoundManager;
  * @author <a href="mailto:RobertoIA1987@gmail.com">Roberto Izquierdo Amo</a>
  * 
  */
-public abstract class Ship extends Entity {
+public class Ship extends Entity {
 
 	/** Time between shots. */
 	private static int SHOOTING_INTERVAL = 750;
@@ -81,6 +81,7 @@ public abstract class Ship extends Entity {
 		this.lastShootTime = 0;
 		this.soundCooldown = Core.getCooldown(SOUND_COOLDOWN_INTERVAL);
 	}
+
 
 	/**
 	 * Types of ships available.
