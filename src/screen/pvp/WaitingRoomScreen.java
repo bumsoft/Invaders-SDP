@@ -1,10 +1,10 @@
-package screen.PVP;
+package screen.pvp;
 
 import engine.Core;
 import engine.UserManager;
 import screen.Screen;
-import socket.GameClient;
-import socket.Responses;
+import engine.GameClient;
+import entity.pvp.Responses;
 
 import java.awt.event.KeyEvent;
 

@@ -1,13 +1,17 @@
-package screen.PVP;
+package screen.pvp;
 
 import engine.Cooldown;
 import engine.Core;
 import engine.DrawManager;
 import engine.UserManager;
+import entity.dto.BulletPositionDTO;
+import entity.dto.GameStateDTO;
+import entity.pvp.enBullet;
+import entity.pvp.myBullet;
 import screen.Screen;
-import socket.GameClient;
-import socket.PvpShip;
-import socket.Responses;
+import engine.GameClient;
+import entity.pvp.PvpShip;
+import entity.pvp.Responses;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;

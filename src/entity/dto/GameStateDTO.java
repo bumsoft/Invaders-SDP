@@ -1,4 +1,4 @@
-package screen.PVP;
+package entity.dto;
 
 import java.util.List;
 

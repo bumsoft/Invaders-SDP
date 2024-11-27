@@ -11,11 +11,10 @@ import java.util.logging.Logger;
 import entity.Ship;
 import entity.Wallet;
 import screen.*;
-import screen.PVP.GameOverScreen;
-import screen.PVP.PvpGameScreen;
-import screen.PVP.PvpLobbyScreen;
-import screen.PVP.WaitingRoomScreen;
-import socket.GameClient;
+import screen.pvp.GameOverScreen;
+import screen.pvp.PvpGameScreen;
+import screen.pvp.PvpLobbyScreen;
+import screen.pvp.WaitingRoomScreen;
 
 /**
  * Implements core game logic.

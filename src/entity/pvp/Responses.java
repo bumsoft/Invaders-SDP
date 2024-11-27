@@ -1,7 +1,6 @@
-package socket;
+package entity.pvp;
 
-import screen.PVP.GameStateDTO;
-import screen.PVP.PositionResponse;
+import entity.dto.GameStateDTO;
 
 public class Responses {
 

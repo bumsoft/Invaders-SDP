@@ -1,4 +1,4 @@
-package screen.PVP;
+package entity.dto;
 
 public class BulletPositionDTO {
     private int bx;

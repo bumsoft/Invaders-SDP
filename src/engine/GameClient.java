@@ -1,11 +1,10 @@
-package socket;
+package engine;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import engine.Core;
+import entity.pvp.Responses;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
-import screen.PVP.GameStateDTO;
-import screen.PVP.PositionResponse;
+import entity.dto.GameStateDTO;
 
 import java.io.IOException;
 import java.net.URI;

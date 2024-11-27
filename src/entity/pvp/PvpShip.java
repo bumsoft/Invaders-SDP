@@ -1,4 +1,4 @@
-package socket;
+package entity.pvp;
 
 import engine.DrawManager;
 import entity.Entity;
