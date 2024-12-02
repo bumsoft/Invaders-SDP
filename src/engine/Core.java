@@ -90,7 +90,7 @@ public final class Core {
 		Wallet wallet = Wallet.getWallet();
 
 		userManager = new UserManager();
-		int returnCode = 1;
+		int returnCode = 10;
 		do {
 			MAX_LIVES = wallet.getLives_lv()+2;
 			gameState = new GameState(1, 0, BASE_SHIP, MAX_LIVES, 0, 0, 0, "", 0, 0, 0 ,0, 0);
