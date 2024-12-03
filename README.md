@@ -11,8 +11,25 @@ Space Invaders Client는 서버와 통신하여 Space Invaders 게임을 실행�
 - 서버 컴퓨터의 IPv4 주소를 받아와 Core.url 에 붙여넣기!
 - 서버 관련은 서버 리포지토리 README 참고
 
-## 주의사항
+## Notes
 - 프로그램 실행 시 로그인 및 회원가입 화면으로 연결되므로, 서버가 실행중이어야 클라이언트가 정상적으로 동작할 수 있습니다.  
+
+# Space Invaders Client
+Space Invaders Client is an application that communicates with the server to play the Space Invaders game.
+The client requires the server's IPv4 address to be configured before running.
+
+## Server Repository
+Server repository URL: https://github.com/bumsoft/Invaders-SDP-server
+
+## Set up
+- Java Version: 17
+- Network Requirement: Both the client and server must be connected to the same network.
+- Configure URL: Retrieve the server computer's IPv4 address and paste it into Core.url.
+- Server Details: Refer to the server repository's README for further instructions.
+
+## Notes
+The program will redirect to the login or signup screen upon execution. The server must be running for the client to function properly.
+
 
 # Space Invaders
 
