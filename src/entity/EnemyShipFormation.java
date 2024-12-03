@@ -108,7 +108,7 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 		LEFT,
 		/** Movement to the bottom of the screen. */
 		DOWN
-	};
+	}
 
 	/**
 	 * Constructor, sets the initial conditions.
@@ -220,8 +220,7 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 
 		int movementX = 0;
 		int movementY = 0;
-		double remainingProportion = (double) this.shipCount
-				/ (this.nShipsHigh * this.nShipsWide);
+
 		this.movementSpeed = this.baseSpeed;
 		this.movementSpeed += MINIMUM_SPEED;
 

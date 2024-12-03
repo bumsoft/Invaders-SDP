@@ -73,120 +73,81 @@ public class GameSettings {
 		return shootingFrecuency;
 	}
 
+	public void setFormation(int n) {
+		if (this.formationWidth == this.formationHeight) {
+			if (this.formationWidth < 14) this.formationWidth += n;
+		} else {
+			if (this.formationHeight < 10) this.formationHeight += n;
+		}
+	}
+	public void setBaseSpeed(int n) {
+		if (this.baseSpeed - n > 0) this.baseSpeed -= n;
+		else this.baseSpeed = 0;
+	}
+	public void setShootingFrecuency(int n) {
+		if(this.shootingFrecuency-n > 100) this.shootingFrecuency -= n;
+		else this.shootingFrecuency = 100;
+
+	}
 	/**
 	 *
-	 * @param formationWidth control Enemy width
-	 * @param formationHeight control Enemy height
-	 * @param baseSpeed control Enemy speed
-	 * @param shootingFrecuency control Enemy shooting Frequency
 	 * @param level Level
 	 * @param difficulty set difficulty
-	 * @return return type GameSettings
 	 */
-	public GameSettings LevelSettings(int formationWidth, int formationHeight,
-									  int baseSpeed, int shootingFrecuency, int level, int difficulty) {
+	public void LevelSettings(int level, int difficulty) {
 		this.difficulty = difficulty;
-		return switch (difficulty) {
+		switch (difficulty) {
 			case 0 -> {
 				if(level < 5){
-					if(level%3 == 0) {
-						if (formationWidth == formationHeight) {
-							if (formationWidth < 14) formationWidth += 1;
-						} else {
-							if (formationHeight < 10) formationHeight += 1;
-						}
-					}
+					if(level%3 == 0)
+						setFormation(1);
                 }else if(level < 10){
 					if(level % 2 == 0) {
-						if (formationWidth == formationHeight) {
-							if (formationWidth < 14) formationWidth += 1;
-						} else {
-							if (formationHeight < 10) formationHeight += 1;
-						}
-						if (baseSpeed - 10 > 0) baseSpeed -= 10;
-						else baseSpeed = 0;
+						setFormation(1);
+						setBaseSpeed(10);
 					}
 				}else {
-					if(formationWidth == formationHeight){
-						if(formationWidth < 14) formationWidth += 1;
-					} else {
-						if(formationHeight < 10) formationHeight += 1;
-					}
-					if(baseSpeed-10 > 0)baseSpeed -= 10;
-					else baseSpeed = 0;
+					setFormation(1);
+					setBaseSpeed(10);
 				}
-				if(shootingFrecuency-100 > 100) shootingFrecuency -= 100;
-				else shootingFrecuency = 100;
-                yield new GameSettings(formationWidth, formationHeight, baseSpeed, shootingFrecuency);
+				setShootingFrecuency(100);
 			}
 			case 1 -> {
 				if(level < 5){
-					if (shootingFrecuency - 100 > 100) shootingFrecuency -= 100;
-					else shootingFrecuency = 100;
+					setShootingFrecuency(100);
 					if(level%2 == 0) {
-						if (formationWidth == formationHeight) {
-							if (formationWidth < 14) formationWidth += 1;
-						} else {
-							if (formationHeight < 10) formationHeight += 1;
-						}
-						if (baseSpeed - 10 > 0) baseSpeed -= 10;
-						else baseSpeed = 0;
+						setFormation(1);
+						setBaseSpeed(10);
 					}
 				}else if(level < 10){
-					if (shootingFrecuency - 200 > 100) shootingFrecuency -= 200; //Adjust firing interval
-					else shootingFrecuency = 100;
+					setShootingFrecuency(200);
 					if(level % 2 == 0) {
-						if (formationWidth == formationHeight) {
-							if (formationWidth < 14) formationWidth += 1;
-						} else {
-							if (formationHeight < 10) formationHeight += 1;
-						}
-						if (baseSpeed - 10 > 0) baseSpeed -= 10; //speed control
-						else baseSpeed = 0;
+						setFormation(1);
+						setBaseSpeed(10);
 					}
 				}else{
-					if(formationWidth == formationHeight){
-						if(formationWidth < 14) formationWidth += 1;
-					} else {
-						if(formationHeight < 10) formationHeight += 1;
-					}
-					if(baseSpeed-10 > 0)baseSpeed -= 10; //speed control
-					else baseSpeed = 0;
-					if(shootingFrecuency-300 > 100) shootingFrecuency -= 300; //Adjust firing interval
-					else shootingFrecuency = 100;
+					setFormation(1);
+					setBaseSpeed(10);
+					setShootingFrecuency(300);
 				}
-                yield new GameSettings(formationWidth, formationHeight, baseSpeed, shootingFrecuency);
 			}
 			case 2 -> {
 				if(level < 5){
-					if(shootingFrecuency-200 > 100) shootingFrecuency -= 200;
-					else shootingFrecuency = 100;
+					setShootingFrecuency(300);
 					if(level%2 == 0) {
-						if (formationWidth == formationHeight) {
-							if (formationWidth < 14) formationWidth += 1;
-						} else {
-							if (formationHeight < 10) formationHeight += 1;
-						}
-						if (baseSpeed - 20 > 0) baseSpeed -= 20;
-						else baseSpeed = 0;
+						setFormation(1);
+						setBaseSpeed(20);
 					}
 				}else{
-					if(formationWidth == formationHeight){
-						if(formationWidth < 14) formationWidth += 2;
-					} else {
-						if(formationHeight < 10) formationHeight += 2;
-					}
-					if(baseSpeed-20 > 0)baseSpeed -= 20;
-					else baseSpeed = 0;
-					if(shootingFrecuency-300 > 300) shootingFrecuency -= 300;
-					else shootingFrecuency = 100;
+					setFormation(2);
+					setBaseSpeed(20);
+					setShootingFrecuency(300);
 				}
-                yield new GameSettings(formationWidth, formationHeight, baseSpeed, shootingFrecuency);
 			}
 			default -> {
-				yield null;
+				break;
 			}
-		};
+		}
 	}
 
 	/**

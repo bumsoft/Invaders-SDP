@@ -118,11 +118,7 @@ public final class Core {
 								&& gameState.getLivesRemaining() < MAX_LIVES;
 						LOGGER.info("difficulty is " + DifficultySetting);
 						//add variation
-						gameSetting = gameSetting.LevelSettings(gameSetting.getFormationWidth(),
-								gameSetting.getFormationHeight(),
-								gameSetting.getBaseSpeed(),
-								gameSetting.getShootingFrecuency(),
-								gameState.getLevel(), DifficultySetting);
+						gameSetting.LevelSettings(gameState.getLevel(), DifficultySetting);
 
 						currentScreen = new GameScreen(gameState,
 								gameSetting,
